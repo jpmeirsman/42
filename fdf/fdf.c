@@ -31,7 +31,11 @@ int my_key_funct(int keycode, data_t *data)
 	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
 	printf("%i\n",keycode);
 	if (keycode == 65307)
-		return 1;
+	{
+		mlx_destroy_window(data->mlx_ptr,data->mlx_win);
+		printf("Fin du programme\n");
+		exit(0);
+	}
 	return (0);
 }
 
