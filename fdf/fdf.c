@@ -1,3 +1,6 @@
+#include "fdf.h"
+
+/*
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,6 +27,8 @@ void fdf_line(data_t *data,int xi,int yi,int xf,int yf, int color)
 		mlx_pixel_put(data->mlx_ptr, data->mlx_win, x, y, color);
 		}
 }
+*/
+
 
 int my_key_funct(int keycode, data_t *data)
 {

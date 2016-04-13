@@ -1,47 +1,27 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: qmuntada <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2014/11/07 16:04:22 by qmuntada          #+#    #+#              #
-#    Updated: 2015/01/17 16:44:29 by qmuntada         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = fdf
-CFLAGS = -Wall -Werror -Wextra
-SRC = fdf.c
-OBJ = $(SRC:.c=.o)
-LIBX = -lm -I/usr/X11/include -L/usr/X11/lib -lX11 -lXext -lmlx -L libs/
-LIBXL = -lm -L libs/  -L/usr/lib/X11 -lmlx -lXext -lX11
+FLAGS = -Wall -Wextra -Werror
+OBJDIR = ./obj
+SRCDIR = ./
+INCDIR = ./libs/
+FCT = $(shell find $(SRCDIR) | grep "\.c" | cut -d / -f 3-4 | cut -d . -f 1)
+SRC = $(FCT:%=$(SRCDIR)/%.c)
+OBJ = $(FCT:%=$(OBJDIR)/%.o)
+INC = $(INCDIR:%=-I %)
 
+all: $(NAME)
 
-all : $(NAME)
+$(OBJ):$(SRC)
+	@mkdir -p $(OBJDIR)
+	@(cd $(OBJDIR) ; mkdir -p $(shell find $(SRCDIR) | grep -v "\.c" | cut -d / -f 3))
+	@gcc -c $(SRCDIR)/$(shell echo $@ | cut -d / -f 2-3 | cut -d . -f 1).c $(FLAGS) $(INC) -o $@
 
-.PHONY : linux libft clean fclean re norme
+$(NAME): $(OBJ)
+	@ar rcus $@ $^
 
-$(NAME) : libs
-	@echo "Creating MAC executable $(NAME) ..."
-	@gcc $(CFLAGS) -c $(SRC)
-	@gcc -o $(NAME) $(OBJ) $(LIBX)
-
-linux: libs
-	@echo "Creating LINUX executable $(NAME) ..."
-	@gcc $(CFLAGS) -c $(SRC)
-	@gcc -o $(NAME) $(OBJ) $(LIBXL)
-
-libft:
-	@make -C libft fclean
-	@make -C libft
-
-clean :
-	@echo "Removing object files ..."
+clean:
 	@rm -f $(OBJ)
 
-fclean : clean
-	@echo "Removing $(NAME) ..."
+fclean: clean
 	@rm -f $(NAME)
 
-re : fclean all
+re: fclean all

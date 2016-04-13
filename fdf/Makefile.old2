@@ -1,0 +1,31 @@
+NAME = fdf
+PREFIX=.
+SRCDIR=$(PREFIX)
+INCDIR=$(PREFIX)/libs
+OBJDIR=$(PREFIX)/obj
+CFLAGS = -Wall -Werror -Wextra
+LIBX = -lm -I/usr/X11/include -L/usr/X11/lib -lX11 -lXext -lmlx -L libs/
+LIBXL = -lm -L libs/  -L/usr/lib/X11 -lmlx -lXext -lX11
+
+CC=gcc
+
+all: $(NAME)
+
+%.o: %.c
+    @gcc $(CFLAGS) -o $@ -c $< $(CFLAGS)
+
+#.PHONY: clean mrproper
+
+$(NAME) : .
+	@echo "Creating MAC executable $(NAME) ..."
+	@gcc $(CFLAGS) -c $(SRC)
+	@gcc -o $(NAME) $(OBJ) $(LIBX)
+
+clean:
+    rm -f $(OBJDIR)/*.o
+
+fclean : clean
+	@echo "Removing $(NAME) ..."
+	@rm -f $(NAME)
+
+re : fclean all
