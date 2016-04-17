@@ -1,6 +1,6 @@
 #include <string.h>
 
-void reverse(char s[])
+void reverse2(char s[])
 {
 	int i, j;
 	char c;
@@ -25,5 +25,5 @@ void itoa(int n, char s[])
 	if (sign < 0)
 		s[i++] = '-';
 	s[i] = '\0';
-	reverse(s);
+	reverse2(s);
 }

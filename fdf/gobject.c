@@ -104,10 +104,28 @@ char		*colour4toString(tcolour4 tc)
 	return (s);
 }
 
-char		*Vector2toString(tcolour4 tc)
+tVector2	setVector2(double X, double Y)
+{
+	tVector2	Vector2;
+
+	Vector2.x = X;
+	Vector2.y = Y;
+	return (Vector2);
+}
+char		*Vector2toString(tVector2 tv)
 {
 	char		*s;
-// ++++
+	char		buf[40];
+
+	s = malloc(100);
+	memset(s,0,100);
+	strcat(s,"{X:");
+	ftoa(tv.x, buf,6);
+	strcat(s,buf);
+	strcat(s," Y:");
+	ftoa(tv.y, buf,6);
+	strcat(s,buf);
+	strcat(s,"}");
 	return (s);
 }
 
@@ -169,7 +187,7 @@ double	lengthSquaredVector2(tVector2 myVector)
 {
 	double	lengthVector2;
 
-	lengthVector2= myVector.x * myVector.x + myVector.y 
+	lengthVector2 = myVector.x * myVector.x + myVector.y 
 		* myVector.y;
 	return (lengthVector2);
 }
@@ -216,7 +234,7 @@ tVector2	NormalizeVector2(tVector2 source)
 	return (temp);
 }
 
-tVector2 MinimizeVector2(tVector2 left, tVector2 right)
+tVector2	MinimizeVector2(tVector2 left, tVector2 right)
 {
 	tVector2	temp;
 
@@ -225,7 +243,7 @@ tVector2 MinimizeVector2(tVector2 left, tVector2 right)
 	return (temp);
 }
 
-tVector2 MaximizeVector2(tVector2 left, tVector2 right)
+tVector2	MaximizeVector2(tVector2 left, tVector2 right)
 {
 	tVector2	temp;
 
@@ -234,12 +252,46 @@ tVector2 MaximizeVector2(tVector2 left, tVector2 right)
 	return (temp);
 }
 
-char		*Vector3toString(tcolour4 tc)
+tVector2	TransformVector2(tVector2 vector, tmatrix transformation)
+{
+	tVector2	temp;
+
+	temp.x = (vector.x * transformation.m[0]) + (vector.y * transformation.m[4]);
+	temp.y = (vector.x * transformation.m[1]) + (vector.y * transformation.m[5]);
+	return temp;
+}
+
+double		DistanceSquaredVector2(tVector2 value1, tVector2 value2)
+{
+	return (sqrt(DistanceSquaredVector2(value1, value2)));
+}
+
+double		DistanceVector2(tVector2 value1, tVector2 value2)
+{
+	double		x;
+	double		y;
+
+	x = value1.x - value2.x;
+	y = value1.y - value2.y;
+	return ((x * x) + (y * y));
+}
+char		*Vector3toString(tVector3 tv)
 {
 	char		*s;
-// +++
-//
+	char		buf[40];
 
+	s = malloc(100);
+	memset(s,0,100);
+	strcat(s,"{X:");
+	ftoa(tv.x, buf,6);
+	strcat(s,buf);
+	strcat(s," Y:");
+	ftoa(tv.y, buf,6);
+	strcat(s,buf);
+	strcat(s," Z:");
+	ftoa(tv.z, buf,6);
+	strcat(s,buf);
+	strcat(s,"}");
 	return (s);
 }
 
@@ -345,12 +397,13 @@ tVector3	normalizeVector3(tVector3 myVector)
 	return (temp);
 }
 
-tVector3	FromArrayVector3(tVector3 myVector)
+tVector3	FromArrayVector3(array, short offset)
 {
 	tVector3	temp;
 
-	hhhhh
-	return (temp);
+	if (!offset)
+		offset = 0;
+	return (setVector3(array[offset], array[offset + 1], array[offset + 2]));
 }
 
 tVector3	setVector3(double X, double Y, double Z)
@@ -456,7 +509,8 @@ bool		MatrixisIdentity(tmatrix matrix)
 
 void render(tdevice device, tcam camera, tmesh meshes)
 {
-	ViewMatrix viewMatrix = MatrixLookAtLH(camera.Position, camera.Target, Vector3Up());
+/*
+ViewMatrix viewMatrix = MatrixLookAtLH(camera.Position, camera.Target, Vector3Up());
 	ProjectionMatrix projectionMatrix = MatrixPerspectiveFovLH(0.78, workingWidth / workingHeight, 0.01, 1);
 	for (int index = 0, index < meshes.length, index++)
 	{
@@ -465,5 +519,5 @@ void render(tdevice device, tcam camera, tmesh meshes)
 	+++
 	TransformMatrix TransformMatrix(worldMatrix
 	}
-
+*/
 }

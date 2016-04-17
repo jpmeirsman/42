@@ -41,11 +41,3 @@ void ftoa(float n, char *res, int afterpoint)
 	}
 }
 
-int main()
-{
-	char res[20];
-	float n = 233.007;
-	ftoa(n, res, 4);
-	printf("\n\"%s\"\n", res);
-	return 0;
-}
