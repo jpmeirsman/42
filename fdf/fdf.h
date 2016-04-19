@@ -10,6 +10,7 @@ typedef struct		data_s
 {
 	void			*mlx_ptr;
 	void			*mlx_win;
+	void			*mlx_display;
 } data_t;
 
 void fdf_line(data_t *data,int xi,int yi,int xf,int yf, int color);

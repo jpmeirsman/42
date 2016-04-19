@@ -1,27 +1,51 @@
-NAME = fdf
-FLAGS = -Wall -Wextra -Werror
-OBJDIR = ./obj
-SRCDIR = ./
-INCDIR = ./libs/
-FCT = $(shell find $(SRCDIR) | grep "\.c" | cut -d / -f 3-4 | cut -d . -f 1)
-SRC = $(FCT:%=$(SRCDIR)/%.c)
-OBJ = $(FCT:%=$(OBJDIR)/%.o)
-INC = $(INCDIR:%=-I %)
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: adjivas <adjivas@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2014/01/09 22:16:41 by adjivas           #+#    #+#              #
+#    Updated: 2014/02/18 17:26:40 by adjivas          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME += a.out
+DIRC += ./
+FLAG += -Wall -Wextra -Werror -O3
+INDS += -I./
+INDS += -I./Libft/
+SRCA += ./Libft/libft.a
+SRCS += readmap.c
+SRCS += get_next_line.c
+LSTC += $(patsubst %,$(DIRC)%,$(SRCS))
+COMP += clang
+OBJO += $(LSTC:.c=.o)
+
+.PHONY: default all clean fclean re
+
+default: all
 
 all: $(NAME)
 
-$(OBJ):$(SRC)
-	@mkdir -p $(OBJDIR)
-	@(cd $(OBJDIR) ; mkdir -p $(shell find $(SRCDIR) | grep -v "\.c" | cut -d / -f 3))
-	@gcc -c $(SRCDIR)/$(shell echo $@ | cut -d / -f 2-3 | cut -d . -f 1).c $(FLAGS) $(INC) -o $@
+$(NAME): $(OBJO)
+	@make -C ./Libft/ all
+	@$(COMP) $(FLAG) $^ -o $@ $(SRCA)
 
-$(NAME): $(OBJ)
-	@ar rcus $@ $^
+%.o: %.c
+	@$(COMP) $(FLAG) -c $< -o $@ $(INDS)
 
 clean:
-	@rm -f $(OBJ)
+	@/bin/rm -rf $(OBJO)
+	@make -C ./Libft/ clean
 
-fclean: clean
-	@rm -f $(NAME)
+fclean:
+	@/bin/rm -rf $(OBJO)
+	@/bin/rm -rf $(NAME)
+	@make -C ./Libft/ fclean
 
-re: fclean all
+re:
+	@/bin/rm -rf $(OBJO)
+	@/bin/rm -rf $(NAME)
+	@make -C ./Libft/ re
+	@make -C ./ all
