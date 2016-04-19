@@ -38,7 +38,14 @@ typedef struct typemesh
 	tfaces			*faces;
 	tVector3		Rotation;
 	tVector3		Position;
+	long long		length;
 } tmesh;
+
+typedef struct		typetabmesh
+{
+	long long		length;
+	tmesh			*m;
+} tabmesh;
 
 typedef struct typecamera
 {
@@ -56,23 +63,25 @@ typedef struct typecanvas
 typedef struct typedevice
 {
 	tcanvas		workingCanvas;
+	double		workingWidth;
+	double		workingHeight;
 	char		*workingContext;
 } tdevice;
 
-typedef struct typecolour4
+typedef struct typecolor4
 {
 	short		r;
 	short		g;
 	short		b;
 	short		a;
-} tcolour4;
+} tcolor4;
 
 int	canvaslength;
 int canvasheight;
 
-tcolour4	setcolour4(short R, short G, short B, short A)
+tcolor4	newColor4(short R, short G, short B, short A)
 {
-	tcolour4	tc;
+	tcolor4	tc;
 
 	tc.r = R;
 	tc.g = G;
@@ -81,7 +90,7 @@ tcolour4	setcolour4(short R, short G, short B, short A)
 	return (tc);
 }
 
-char		*colour4toString(tcolour4 tc)
+char		*color4toString(tcolor4 tc)
 {
 	char		*s;
 	char		buf[4];
@@ -104,7 +113,7 @@ char		*colour4toString(tcolour4 tc)
 	return (s);
 }
 
-tVector2	setVector2(double X, double Y)
+tVector2	newVector2(double X, double Y)
 {
 	tVector2	Vector2;
 
@@ -515,32 +524,6 @@ double		DistanceVector3(tVector3 value1, tVector3 value2)
 	return ((x * x) + (y * y) + (z * z));
 }
 
-tcam		*newcam(long posx, long posy, long posz, long targetx, long targety, long targetz)
-{
-	tcam	*camera;
-
-	camera = malloc(sizeof(tcam));
-	camera->Position.x = posx;
-	camera->Position.y = posy;
-	camera->Position.z = posz;
-	camera->Target.x = targetx;
-	camera->Target.y = targety;
-	camera->Target.z = targetz;
-	return (camera);
-}
-
-tmesh		*newmesh(char *name, long nbVector3, long nbfaces)
-{
-	tmesh		*mymesh;
-
-	mymesh = malloc(sizeof(tmesh));
-	mymesh->name = malloc(strlen(name));
-	strcpy(mymesh->name, name);
-	mymesh->vertices = malloc(sizeof(tVector3) * nbVector3);
-	mymesh->faces = malloc(sizeof(tfaces) * nbfaces);
-	return mymesh;
-}
-
 void		putVector3(tVector3 *Vector3, double x, double y, double z)
 {
 	Vector3->x = x;
@@ -555,31 +538,134 @@ void		putface(tfaces *face, double A, double B, double C)
 	face->C = C;
 }
 
-tmesh		*newcube(char *name)
+tcam		newCam()
 {
-	tmesh		*mycube;
-	mycube = newmesh(name, 8, 12);
-	putVector3(&mycube->vertices[0], -1,  1,  1);
-	putVector3(&mycube->vertices[1],  1,  1,  1);
-	putVector3(&mycube->vertices[2], -1, -1,  1);
-	putVector3(&mycube->vertices[3],  1, -1,  1);
-	putVector3(&mycube->vertices[4], -1,  1, -1);
-	putVector3(&mycube->vertices[5],  1,  1, -1);
-	putVector3(&mycube->vertices[6],  1, -1, -1);
-	putVector3(&mycube->vertices[7], -1, -1, -1);
-	putface(&mycube->faces[0],  0, 1, 2);
-	putface(&mycube->faces[1],  1, 2, 3);
-	putface(&mycube->faces[2],  1, 3, 6);
-	putface(&mycube->faces[3],  1, 5, 6);
-	putface(&mycube->faces[4],  0, 1, 4);
-	putface(&mycube->faces[5],  1, 4, 5);
-	putface(&mycube->faces[6],  2, 3, 7);
-	putface(&mycube->faces[7],  3, 6, 7);
-	putface(&mycube->faces[8],  0, 2, 7);
-	putface(&mycube->faces[9],  0, 4, 7);
-	putface(&mycube->faces[10], 4, 5, 6);
-	putface(&mycube->faces[11], 4, 6, 7);
+	tcam		result;
 
+	result.Position = ZeroVector3();
+	result.Target = ZeroVector3();
+	return (result);
+}
+
+tcam		setCam(long posx, long posy, long posz, long targetx, long targety, long targetz)
+{
+	tcam	camera;
+
+	camera.Position.x = posx;
+	camera.Position.y = posy;
+	camera.Position.z = posz;
+	camera.Target.x = targetx;
+	camera.Target.y = targety;
+	camera.Target.z = targetz;
+	return (camera);
+}
+
+tmesh		newMesh(char *name, long long verticesCount)
+{
+	tmesh	result;
+
+	strcpy(result.name, name);
+	result.vertices = malloc(sizeof(tVector3) * verticesCount);
+	result.Rotation = ZeroVector3();
+	result.Position = ZeroVector3();
+	result.length = verticesCount;
+	return (result);
+}
+
+tmesh		newmesh(char *name, long long verticesCount, long long nbfaces)
+{
+	tmesh		result;
+
+	result.name = malloc(strlen(name));
+	strcpy(result.name, name);
+	result.vertices = malloc(sizeof(tVector3) * verticesCount);
+	result.faces = malloc(sizeof(tfaces) * nbfaces);
+	result.length = verticesCount;
+	return (result);
+}
+
+tdevice		setDevice(tcanvas canvas)
+{
+	tdevice		result;
+
+	result.workingCanvas = canvas;
+	result.workingWidth = canvas.width;
+	result.workingHeight = canvas.height;
+	//A implémenter si besoin
+	//	result.workingContext = getContextCanvas(result.workingContext"2d");
+	return (result);
+}
+
+void		clearDevice(tdevice *device)
+{
+	/*
+	   device
+	   this.workingContext.clearRect(0, 0, this.workingWidth, this.workingHeight);
+	   this.backbuffer = this.workingContext.getImageData(0, 0, this.workingWidth, this.workingHeight);
+	   */
+}
+
+void		presentDevice(tdevice device)
+{
+	//	device.workingContext.putImageData(this.backbuffer, 0, 0);
+}
+
+void		putPixel(tdevice *device, long x, long y, tcolor4 color)
+{
+	/*
+	   this.backbufferdata = this.backbuffer.data;
+	   var index = ((x >> 0) + (y >> 0) * this.workingWidth) * 4;
+	   this.backbufferdata[index] = color.r * 255;
+	   this.backbufferdata[index + 1] = color.g * 255;
+	   this.backbufferdata[index + 2] = color.b * 255;
+	   this.backbufferdata[index + 3] = color.a * 255;
+	   */
+}
+
+tVector2	projectDevice(tdevice device, tVector3 coord, tmatrix transMat)
+{
+	tVector3	point;
+	double		x;
+	double		y;
+
+	point = TransformCoordinatesVector3(coord, transMat);
+	//	x = round((point.x * device.workingWidth) + (device.workingWidth / 2.0)) >> 0;
+	x = round((point.x * device.workingWidth) + (device.workingWidth / 2.0));
+	y = round((point.y * device.workingHeight) + (device.workingHeight / 2.0));
+	return (newVector2(x, y));
+}
+
+void		drawPointDevice(tdevice device, tVector2 point)
+{
+	if(point.x >= 0 && point.y >= 0 && point.x < device.workingWidth && point.y < device.workingHeight) {
+		putPixel(&device, point.x, point.y, newColor4(1, 1, 0, 1));
+	}
+}
+
+tmesh		newcube(char *name)
+{
+	tmesh		mycube;
+	mycube = newmesh(name, 8, 12);
+	putVector3(&mycube.vertices[0], -1,  1,  1);
+	putVector3(&mycube.vertices[1],  1,  1,  1);
+	putVector3(&mycube.vertices[2], -1, -1,  1);
+	putVector3(&mycube.vertices[3],  1, -1,  1);
+	putVector3(&mycube.vertices[4], -1,  1, -1);
+	putVector3(&mycube.vertices[5],  1,  1, -1);
+	putVector3(&mycube.vertices[6],  1, -1, -1);
+	putVector3(&mycube.vertices[7], -1, -1, -1);
+	putface(&mycube.faces[0],  0, 1, 2);
+	putface(&mycube.faces[1],  1, 2, 3);
+	putface(&mycube.faces[2],  1, 3, 6);
+	putface(&mycube.faces[3],  1, 5, 6);
+	putface(&mycube.faces[4],  0, 1, 4);
+	putface(&mycube.faces[5],  1, 4, 5);
+	putface(&mycube.faces[6],  2, 3, 7);
+	putface(&mycube.faces[7],  3, 6, 7);
+	putface(&mycube.faces[8],  0, 2, 7);
+	putface(&mycube.faces[9],  0, 4, 7);
+	putface(&mycube.faces[10], 4, 5, 6);
+	putface(&mycube.faces[11], 4, 6, 7);
 	return mycube;
 }
 
@@ -695,7 +781,7 @@ tmatrix		invertMatrix(tmatrix matrix)
 	return (matrix);
 }
 
-tmatrix		multiplyMarix(tmatrix matrix, tmatrix other)
+tmatrix		multiplyMatrix(tmatrix matrix, tmatrix other)
 {
 	tmatrix		result;
 
@@ -718,17 +804,271 @@ tmatrix		multiplyMarix(tmatrix matrix, tmatrix other)
 	return (result);
 }
 
-void render(tdevice device, tcam camera, tmesh meshes)
+int			equalsMatrix(tmatrix value, tmatrix matrix)
 {
-	/*
-	   ViewMatrix viewMatrix = MatrixLookAtLH(camera.Position, camera.Target, Vector3Up());
-	   ProjectionMatrix projectionMatrix = MatrixPerspectiveFovLH(0.78, workingWidth / workingHeight, 0.01, 1);
-	   for (int index = 0, index < meshes.length, index++)
-	   {
-	   tmesh cMesh = meshes[index];
-	   WorldMatrix worldMatrix = MatrixRotationYawPitchRoll(cMesh.Rotation.y,cMesh.Rotation.x, cMesh.Rotation.z)
-	   +++
-	   TransformMatrix TransformMatrix(worldMatrix
-	   }
-	   */
+	return (matrix.m[0] == value.m[0] && matrix.m[1] == value.m[1] && matrix.m[2] == value.m[2] && matrix.m[3] == value.m[3] && matrix.m[4] == value.m[4] && matrix.m[5] == value.m[5] && matrix.m[6] == value.m[6] && matrix.m[7] == value.m[7] && matrix.m[8] == value.m[8] && matrix.m[9] == value.m[9] && matrix.m[10] == value.m[10] && matrix.m[11] == value.m[11] && matrix.m[12] == value.m[12] && matrix.m[13] == value.m[13] && matrix.m[14] == value.m[14] && matrix.m[15] == value.m[15]);
 }
+
+tmatrix		FromValuesMatrix(double initialM11, double initialM12, double initialM13, double initialM14, double initialM21, double initialM22, double initialM23, double initialM24, double initialM31, double initialM32, double initialM33, double initialM34, double initialM41, double initialM42, double initialM43, double initialM44)
+{
+	tmatrix		result;
+
+	result.m[0] = initialM11;
+	result.m[1] = initialM12;
+	result.m[2] = initialM13;
+	result.m[3] = initialM14;
+	result.m[4] = initialM21;
+	result.m[5] = initialM22;
+	result.m[6] = initialM23;
+	result.m[7] = initialM24;
+	result.m[8] = initialM31;
+	result.m[9] = initialM32;
+	result.m[10] = initialM33;
+	result.m[11] = initialM34;
+	result.m[12] = initialM41;
+	result.m[13] = initialM42;
+	result.m[14] = initialM43;
+	result.m[15] = initialM44;
+	return (result);
+}
+
+tmatrix		IdentityMatrix()
+{
+	return (FromValuesMatrix(1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 1.0));
+}
+
+tmatrix		ZeroMatrix()
+{
+	return (FromValuesMatrix(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+}
+
+tmatrix		CopyMatrix(tmatrix source)
+{
+	return (FromValuesMatrix(source.m[0], source.m[1], source.m[2], source.m[3], source.m[4], source.m[5], source.m[6], source.m[7], source.m[8], source.m[9], source.m[10], source.m[11], source.m[12], source.m[13], source.m[14], source.m[15]));
+}
+
+tmatrix		RotationXMatrix(double angle)
+{
+	tmatrix		result;
+	double		c;
+	double		s;
+
+	result = ZeroMatrix();
+	s = sin(angle);
+	c = cos(angle);
+	result.m[0] = 1.0;
+	result.m[15] = 1.0;
+	result.m[5] = c;
+	result.m[10] = c;
+	result.m[9] = -s;
+	result.m[6] = s;
+	return (result);
+}
+
+tmatrix		RotationYMatrix(double angle)
+{
+	tmatrix		result;
+	double		c;
+	double		s;
+
+	result = ZeroMatrix();
+	s = sin(angle);
+	c = cos(angle);
+	result.m[5] = 1.0;
+	result.m[15] = 1.0;
+	result.m[0] = c;
+	result.m[2] = -s;
+	result.m[8] = s;
+	result.m[10] = c;
+	return (result);
+}
+
+tmatrix		RotationZMatrix(double angle)
+{
+	tmatrix		result;
+	double		c;
+	double		s;
+
+	result = ZeroMatrix();
+	s = sin(angle);
+	c = cos(angle);
+	result.m[10] = 1.0;
+	result.m[15] = 1.0;
+	result.m[0] = c;
+	result.m[1] = s;
+	result.m[4] = -s;
+	result.m[5] = c;
+	return (result);
+}
+
+tmatrix		RotationAxisMatrix(tVector3 axis, double angle)
+{
+	tmatrix		result;
+	double		s;
+	double		c;
+	double		c1;
+
+	s = sin(-angle);
+	c = cos(-angle);
+	c1 = 1 - c;
+	axis = normalizeVector3(axis);
+	result = ZeroMatrix();
+	result.m[0] = (axis.x * axis.x) * c1 + c;
+	result.m[1] = (axis.x * axis.y) * c1 - (axis.z * s);
+	result.m[2] = (axis.x * axis.z) * c1 + (axis.y * s);
+	result.m[3] = 0.0;
+	result.m[4] = (axis.y * axis.x) * c1 + (axis.z * s);
+	result.m[5] = (axis.y * axis.y) * c1 + c;
+	result.m[6] = (axis.y * axis.z) * c1 - (axis.x * s);
+	result.m[7] = 0.0;
+	result.m[8] = (axis.z * axis.x) * c1 - (axis.y * s);
+	result.m[9] = (axis.z * axis.y) * c1 + (axis.x * s);
+	result.m[10] = (axis.z * axis.z) * c1 + c;
+	result.m[11] = 0.0;
+	result.m[15] = 1.0;
+	return result;
+}
+
+tmatrix		RotationYawPitchRollMatrix(double yaw, double pitch, double roll)
+{
+	tmatrix		result;
+
+	result = multiplyMatrix(multiplyMatrix(RotationZMatrix(roll), RotationXMatrix(pitch)), RotationYMatrix(yaw));
+	return (result);
+}
+
+tmatrix		ScalingMatrix(double x, double y, double z)
+{
+	tmatrix		result;
+
+	result = ZeroMatrix();
+	result.m[0] = x;
+	result.m[5] = y;
+	result.m[10] = z;
+	result.m[15] = 1.0;
+	return (result);
+}
+
+tmatrix		TranslationMatrix(double x, double y, double z)
+{
+	tmatrix		result;
+
+	result = IdentityMatrix();
+	result.m[12] = x;
+	result.m[13] = y;
+	result.m[14] = z;
+	return (result);
+}
+
+tmatrix		LookAtLHMatrix(tVector3 eye, tVector3 target, tVector3 up)
+{
+	tVector3	xAxis;
+	tVector3	yAxis;
+	tVector3	zAxis;
+	double		ex;
+	double		ey;
+	double		ez;
+
+	zAxis = subtractVector3(target, eye);
+	zAxis = normalizeVector3(zAxis);
+	xAxis = CrossVector3(up, zAxis);
+	xAxis = normalizeVector3(xAxis);
+	yAxis = CrossVector3(zAxis, xAxis);
+	yAxis = normalizeVector3(yAxis);
+	ex = -DotVector3(xAxis, eye);
+	ey = -DotVector3(yAxis, eye);
+	ez = -DotVector3(zAxis, eye);
+	return (FromValuesMatrix(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z, yAxis.z, zAxis.z, 0, ex, ey, ez, 1));
+}
+
+tmatrix		PerspectiveLHMatrix(double width, double height, double znear, double zfar)
+{
+	tmatrix matrix;
+
+	matrix = ZeroMatrix();
+	matrix.m[0] = (2.0 * znear) / width;
+	matrix.m[1] = matrix.m[2] = matrix.m[3] = 0.0;
+	matrix.m[5] = (2.0 * znear) / height;
+	matrix.m[4] = matrix.m[6] = matrix.m[7] = 0.0;
+	matrix.m[10] = -zfar / (znear - zfar);
+	matrix.m[8] = matrix.m[9] = 0.0;
+	matrix.m[11] = 1.0;
+	matrix.m[12] = matrix.m[13] = matrix.m[15] = 0.0;
+	matrix.m[14] = (znear * zfar) / (znear - zfar);
+	return (matrix);
+}
+
+tmatrix		PerspectiveFovLHMatrix(double fov, double aspect, double znear, double zfar)
+{
+	tmatrix		matrix;
+	double		tang;
+
+	matrix = ZeroMatrix();
+	tang = 1.0 / (tan(fov * 0.5));
+	matrix.m[0] = tang / aspect;
+	matrix.m[1] = matrix.m[2] = matrix.m[3] = 0.0;
+	matrix.m[5] = tang;
+	matrix.m[4] = matrix.m[6] = matrix.m[7] = 0.0;
+	matrix.m[8] = matrix.m[9] = 0.0;
+	matrix.m[10] = -zfar / (znear - zfar);
+	matrix.m[11] = 1.0;
+	matrix.m[12] = matrix.m[13] = matrix.m[15] = 0.0;
+	matrix.m[14] = (znear * zfar) / (znear - zfar);
+	return (matrix);
+}
+
+tmatrix		TransposeMatrix(tmatrix matrix)
+{
+	tmatrix		result;
+
+	result.m[0] = matrix.m[0];
+	result.m[1] = matrix.m[4];
+	result.m[2] = matrix.m[8];
+	result.m[3] = matrix.m[12];
+	result.m[4] = matrix.m[1];
+	result.m[5] = matrix.m[5];
+	result.m[6] = matrix.m[9];
+	result.m[7] = matrix.m[13];
+	result.m[8] = matrix.m[2];
+	result.m[9] = matrix.m[6];
+	result.m[10] = matrix.m[10];
+	result.m[11] = matrix.m[14];
+	result.m[12] = matrix.m[3];
+	result.m[13] = matrix.m[7];
+	result.m[14] = matrix.m[11];
+	result.m[15] = matrix.m[15];
+	return (result);
+}
+
+void render(tdevice device, tcam camera, tabmesh *meshes)
+{
+	tmatrix		viewMatrix;
+	tmatrix		projectionMatrix;
+	tmatrix		worldMatrix;
+	tmatrix		transformMatrix;
+	long long	index;
+	long long	indexvertices;
+	tmesh		cMesh;
+	tVector2	projectedPoint;
+
+	viewMatrix = LookAtLHMatrix(camera.Position, camera.Target, 
+		UpVector3());
+	projectionMatrix = PerspectiveFovLHMatrix(0.78, 
+		device.workingWidth / device.workingHeight, 0.01, 1);
+	for (index = 0; index < meshes->length; index++)
+	{
+		tmesh cMesh = meshes->m[index];
+		worldMatrix = multiplyMatrix(RotationYawPitchRollMatrix(
+			cMesh.Rotation.y, cMesh.Rotation.x, cMesh.Rotation.z),
+			TranslationMatrix(cMesh.Position.x, cMesh.Position.y, 
+			cMesh.Position.z));
+			transformMatrix = multiplyMatrix(worldMatrix,multiplyMatrix(
+				viewMatrix,projectionMatrix));
+		for (indexvertices = 0; indexvertices < cMesh.length; indexvertices++)
+		{
+			projectedPoint = projectDevice(device, cMesh.vertices[indexvertices], transformMatrix);
+			drawPointDevice (device, projectedPoint);
+		}
+	}
+}
+
