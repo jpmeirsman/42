@@ -4,7 +4,8 @@
 //#include <string.h>
 #include <libc.h>
 #include "get_next_line.h"
-
+#include "readmap.c"
+/*
 typedef struct			typefic
 {
 	long long			nbrows;
@@ -99,7 +100,7 @@ void		chargeMap(List *myList, tfic *tf, int fd)
 		tf->nbrows++;
 	}
 }
-/*
+*/
 int main(int argc, char **argv)
 {
 	int			fd;
@@ -115,4 +116,3 @@ int main(int argc, char **argv)
 	close(fd);
 	return 0;
 }
-*/
