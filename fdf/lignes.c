@@ -25,13 +25,19 @@ void fdf_bline(data_t *data,int xi,int yi,int xf,int yf, int color)
 	double	err;
 	double	e2;
 
+//printf("----%p\n",data);
 	dx = abs(xf - xi);
 	dy = abs(yf - yi);
 	sx = (xi < xf) ? 1 : -1;
 	sy = (yi < yf) ? 1 : -1;
 	err = dx - dy;
+printf("??? %d\n",data->put_in_canvas);
 	while (true) {
-		mlx_pixel_put(data->mlx_ptr, data->mlx_win, xi, yi, color);
+		if (data->put_in_canvas)
+			mlx_pixel_put2(data, xi, yi, color);
+			else
+			mlx_pixel_put(data->mlx_ptr, data->mlx_win, xi, yi, color);
+//		mlx_pixel_put2(data, xi, yi, color);
 		if ((xi == xf) && (yi == yf)) break;
 			e2 = 2 * err;
 		if (e2 > -dy)

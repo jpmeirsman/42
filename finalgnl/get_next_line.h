@@ -5,9 +5,18 @@
 #include <unistd.h>
 #include "./libft/includes/libft.h"
 
-# define BUFF_SIZE 1
+# define BUFF_SIZE 32
 
-
+typedef struct TElement
+//struct TElement
+{
+	char buff[BUFF_SIZE];
+	long long FilePosition;
+	long long FileNbCharRead;
+	int fd;
+	struct TElement *next;
+} Elem;
+/*
 typedef struct TElement Elem;
 struct TElement
 {
@@ -17,6 +26,7 @@ struct TElement
 	int fd;
 	Elem *next;
 };
+*/
 /*
 typedef struct TList List;
 struct TList

@@ -1,108 +1,63 @@
 #include "fdf.h"
-//#include "readmap.c"
 
-#define KeyPressMask		(1L<<0)
-#define KeyPress			2
-#define ButtonPressMask		(1L<<2)
-#define ButtonPress			4
-#define Button1MotionMask	(1L<<8)
-#define ButtonMotionMask	(1L<<13)
-#define Button1				1
-#define Button2				2
-#define Button3				3
-#define Button4				4
-#define Button5				5
-#define PointerMotionMask	(1L<<6)
-#define MotionNotify		6
 
-void		switch_buffer(data_t *data)
+void		print_menu(data_t *data)
 {
-	short		temp;
-	int			result;
+	int			increment;
+	int			pas;
 
-printf("fb: %d, bb: %d\n", data->front_buffer, data->back_buffer);
-	temp = data->front_buffer;
-	data->front_buffer = data->back_buffer;
-	data->back_buffer = temp;
-	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win, data->canvas[data->front_buffer], 0, 0);
+	increment = 1;
+	pas = 12;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "   M E N U    ");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Quitter  : Esc");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Camera");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Zoom+   : Q");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Zoom-   : S");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Default : D");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Scene");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x+      : 7");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x-      : 8");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y+      : 4");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y-      : 5");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z+      : 1");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z-      : 2");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Elevation");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " +       : W");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " -       : X");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Default : C");
 }
 
-int my_key_funct(int keycode, data_t *data)
+void			print_fdf(data_t *data)
+{
+	data->put_in_canvas = true;
+	fdf_bline(data,0,0,data->canvas_width - 1,data->canvas_height - 1,0x00FFFFFF);
+	
+}
+
+int win_start(void)
 {
 	int retour;
-
-	retour = mlx_do_key_autorepeaton(data->mlx_ptr);
-	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 100, 30, 0x00FFFFFF);
-	printf("%i\n",keycode);
-printf("pointeur: %p\n",data->canvas[data->front_buffer]);
-	switch_buffer(data);
-	if (keycode == 65307)
-	{
-		mlx_destroy_window(data->mlx_ptr,data->mlx_win);
-		printf("Fin du programme\n");
-		exit(0);
-	}
-	return (0);
-}
-
-int mouvement(int keycode, data_t *data)
-{
-	int retour;
-
-//	printf("*****%i\n",keycode);
-	return (0);
-}
-
-int my_expose_funct(data_t *data)
-{
-// cette fonction est appelée lorsque l'on replie la fenêtre puis
-// lorsque l'on la réactive et que l'on génère un évènement clavier 
-// ou souris sur mac sinon osx gère corrextement cela pour nous.
-	printf("*");
-	return (0);
-}
-
-int my_loop_funct(data_t *data)
-{
-//	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
-//	printf("*%llu",compteur);
-//	compteur++;
-	return (0);
-}
-
-int mouse(int button, int x, int y, data_t *data)
-{
-	printf("Button: %d x: %d y: %d\n",button, x ,y);
-	return (0);
-}
-
-int my_mouse_funct(int button, int x, int y, data_t *data)
-{
-//	printf("Button: %d x: %d y: %d\n",button, x ,y);
-	return (0);
-}
-
-void printarr(data_t *data)
-{
-int i,j,k,*b;
-
-b=data->canvas[data->front_buffer];
-i=0;
-for (i=0;i<10;i++)
-{
-	for(j=0;j<10;j++)
-	{
-		k=b[i*10+j];
-		printf("%x-",k);
-	}
-	printf("\n");
-}
-}
-
-int main(void)
-{
-	int retour;
-	int retour2;
 	data_t data;
 
 	if ((data.mlx_ptr = mlx_init()) == NULL)
@@ -110,35 +65,67 @@ int main(void)
 		printf("I can't open the display\n");
 		return (EXIT_FAILURE);
 	}
-	data.screen_width = 10;
-	data.screen_height = 10;
+	data.screen_width = 640;
+	data.screen_height = 480;
+	data.canvas_width = data.screen_width - 100;
+	data.canvas_height = data.screen_height;
 	data.back_buffer = 1;
 	data.front_buffer = 0;
-	if ((data.mlx_win = mlx_new_window(data.mlx_ptr, data.screen_width, data.screen_height, "Hello world")) == NULL)
+	data.anime = 1;
+	if ((data.mlx_win = mlx_new_window(data.mlx_ptr, data.screen_width,
+		data.screen_height, "Hello world")) == NULL)
 		return (EXIT_FAILURE);
-	retour = mlx_key_hook(data.mlx_win, my_key_funct, &data);
+	retour = mlx_key_hook(data.mlx_win, my_key_on_release_funct, &data);
 	retour = mlx_loop_hook(data.mlx_ptr, my_loop_funct, &data);
-	retour = mlx_mouse_hook(data.mlx_win,my_mouse_funct, &data);
+	retour = mlx_mouse_hook(data.mlx_win,my_mouse_on_click_funct, &data);
 	retour = mlx_expose_hook(data.mlx_win, my_expose_funct, &data);
-	fdf_line(&data,1,1,300,300,0x00FF00FF);
-	data.canvas[data.front_buffer] = mlx_new_image(data.mlx_ptr, data.screen_width, data.screen_height);
-//	fdf_line(&data,1,1,300,300,0x00FF00FF);
-	fdf_bline(&data,0,0,9,9,0x00FF00FF);
-	data.canvas[data.back_buffer] = mlx_new_image(data.mlx_ptr, data.screen_width, data.screen_height);
+	retour = mlx_hook(data.mlx_win, KeyPress, KeyPressMask,
+		my_key_on_maintain_funct, &data);
+	retour = mlx_hook(data.mlx_win, MotionNotify, PointerMotionMask,
+		my_mouse_on_move_funct, &data);
+	retour = mlx_hook(data.mlx_win, ButtonRelease, ButtonReleaseMask,
+		my_mouse_on_release_funct, &data);
 
-printarr(&data);
-return 0;
+	print_menu(&data);
+	data.put_in_canvas = false;
+	fdf_bline(&data,data.canvas_width,0,data.canvas_width,data.screen_height
+		- 1,0x00FFFFFF);
+	data.put_in_canvas = true;
 
+	data.img[data.back_buffer] = mlx_new_image(data.mlx_ptr, data.canvas_width
+		- 100, data.canvas_height);
+	data.canvas[data.back_buffer] = (int *) mlx_get_data_addr(
+		data.img[data.back_buffer], &data.bpp, &data.sizeline, &data.endian);
+	data.img[data.front_buffer] = mlx_new_image(data.mlx_ptr, data.canvas_width
+		-100, data.canvas_height);
+	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
+		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
+	fdf_bline(&data,0,0,100,100,0x00FFFFFF);
+	print_fdf(&data);
+	switch_buffer(&data);
+	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
+		data.img[data.front_buffer], 0, 0);
 
-
-
-	mlx_string_put(data.mlx_ptr, data.mlx_win, 30, 30, 0X00FFFFFF, "Coucou");
 	if (retour == 1)
 		return 0;
-	mlx_hook(data.mlx_win, KeyPress, KeyPressMask, mouvement, &data);
-	mlx_hook(data.mlx_win, MotionNotify, PointerMotionMask, mouse, &data);
 	retour = mlx_do_key_autorepeaton(data.mlx_ptr);
 	mlx_loop(data.mlx_ptr);
 	return (EXIT_SUCCESS);
+}
+
+int main(int argc, char **argv)
+{
+	int			fd;
+	tfic		tf;
+	List		*myList;
+
+	if ((argc != 2) || (fd = open(argv[1],O_RDONLY)) <= 0)
+		return (-1);
+	myList = initialisation();
+	chargeMap(myList, &tf, fd);
+	createMap(myList, &tf);
+	win_start();
+	close(fd);
+	return 0;
 }

@@ -4,19 +4,7 @@
 //#include <string.h>
 #include <libc.h>
 #include "get_next_line.h"
-
-typedef struct			typefic
-{
-	long long			nbrows;
-	long long			nbcolumns;
-	int					**values;
-} tfic;
-
-typedef struct			TElementInt
-{
-	int				value;
-	struct TElementInt	*next;
-} ElemInt;
+#include "readmap.h"
 
 int		**createTable(int nbRow, int nbCol){
 	int **table1 = (int **)malloc(sizeof(int*)*nbRow);
@@ -99,20 +87,3 @@ void		chargeMap(List *myList, tfic *tf, int fd)
 		tf->nbrows++;
 	}
 }
-/*
-int main(int argc, char **argv)
-{
-	int			fd;
-	tfic		tf;
-	List		*myList;
-
-	if ((argc != 2) || (fd = open(argv[1],O_RDONLY)) <= 0)
-		return (-1);
-	myList = initialisation();
-	chargeMap(myList, &tf, fd);
-	createMap(myList, &tf);
-	printMap(myList, &tf);
-	close(fd);
-	return 0;
-}
-*/
