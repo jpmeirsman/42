@@ -93,15 +93,14 @@ int win_start(void)
 	data.put_in_canvas = true;
 
 	data.img[data.back_buffer] = mlx_new_image(data.mlx_ptr, data.canvas_width
-		- 100, data.canvas_height);
+		, data.canvas_height);
 	data.canvas[data.back_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.back_buffer], &data.bpp, &data.sizeline, &data.endian);
 	data.img[data.front_buffer] = mlx_new_image(data.mlx_ptr, data.canvas_width
-		-100, data.canvas_height);
+		, data.canvas_height);
 	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
-	fdf_bline(&data,0,0,100,100,0x00FFFFFF);
 	print_fdf(&data);
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
