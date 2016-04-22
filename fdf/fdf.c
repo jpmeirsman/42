@@ -30,13 +30,19 @@ void		print_menu(data_t *data)
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " x-      : 8");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x0      : 9");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " y+      : 4");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " y-      : 5");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y0      : 6");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " z+      : 1");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " z-      : 2");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z0      : 3");
 	increment++;
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, "Elevation");
@@ -54,30 +60,117 @@ void			print_fdf(data_t *data, tfic *tf)
 	int			j;
 	int			min;
 	int			margin;
-	int			avg;
+	int			marginw;
+	int			marginh;
+	float		avg;
+	float		avg1;
+	float		avg2;
 	int			min2;
 	int			elev;
+	int			elev2;
+	int			oldelevx;
+	int			oldelevy;
+	int			max;
+	int			max2;
+	float		coef;
 
-	min = data->canvas_width < data->canvas_height ? data->canvas_width :
-		data->canvas_height;
-	min2 = tf->nbcolumns < tf->nbrows ? tf->nbcolumns : tf->nbcolumns;
+	if (data->canvas_width < data->canvas_height)
+	{
+		min = data->canvas_width;
+		max = data->canvas_height;
+	}
+	else
+	{
+		min = data->canvas_height;
+		max = data->canvas_width;
+	}
+	if (tf->nbcolumns < tf->nbrows)
+	{
+		min2 = tf->nbcolumns;
+		max2 = tf->nbrows;
+	}
+	else
+	{
+		min2 = tf->nbrows;
+		max2 = tf->nbcolumns;
+	}
 	margin = 10;
+	marginw = margin;
+	marginh = margin;
 	elev = 0;
-	avg = (min - 2 * margin) / min2;
+	oldelevx = 0;
+	oldelevy = 0;
+	coef = 0.5;
+//printf("e:%d ",tf->values[0][0]);
+	avg = (max - 2 * margin) / (max2 - 1);
+	avg1 = (float) (data->canvas_width - 2 * margin) / (tf->nbcolumns - 1);
+	avg2 = (float) (data->canvas_height - 2 * margin) / (tf->nbrows - 1);
+	avg = avg1 < avg2 ? avg1 : avg2;
+	if (avg1 < avg2)
+		marginh = margin + (data->canvas_height - margin * 2 - (tf->nbrows * avg))/2;
+		else
+		marginw = margin + (data->canvas_width - margin * 2 - (tf->nbcolumns * avg))/2;
+printf("min:%d, width:%d, height:%d\n",min, data->canvas_width,data->canvas_height);
+printf("avg:%f, avg1:%f, avg2:%f\n",avg, avg1,avg2);
+//	avg = (data->canvas_width - margin) / 18;
 	data->put_in_canvas = true;
-//	fdf_bline(data,0,0,data->canvas_width - 1,data->canvas_height - 1,0x00FFFFFF);
 	printf("c: %llu, l: %llu\n",tf->nbcolumns,tf->nbrows);
+	for (j = 0; j < tf->nbrows; j++)
+	{
+		oldelevx = 0;
+		for (i = 0; i < tf->nbcolumns; i++)
+		{
+				elev = (int) (tf->values[j][i] * coef);
+/*			if (j < tf->nbrows - 1)
+				fdf_bline(data,
+					marginw + i * avg,
+					marginh + j * avg - elev,
+					marginw + i * avg,
+					marginh + (j + 1) * avg - elev,
+					0x00FFFFFF);
+*/
+			if (i < tf->nbcolumns - 1)
+			{
+				elev2 = (int) (tf->values[j][i + 1] * coef);
+				fdf_bline(data,
+					marginw + i * avg,
+					marginh + j * avg - elev,
+					marginw + (i + 1) * avg,
+					marginh + j * avg - elev2,
+					0x00FFFFFF);
+				oldelevx = elev;
+			}
+		}
+	}
+
 	for (i = 0; i < tf->nbcolumns; i++)
 	{
+		oldelevy = 0;
 		for (j = 0; j < tf->nbrows; j++)
 		{
-//			elev = -tf->values[i][j];
-			elev = -10;
+				elev = (int) (tf->values[j][i] * coef);
 			if (j < tf->nbrows - 1)
-				fdf_bline(data, i * avg, j * avg + elev, i * avg, (j + 1) * avg +elev, 0x00FFFFFF);
-			if (i < tf->nbcolumns - 1)
-				fdf_bline(data, i * avg, j * avg + elev, (i + 1) * avg, j * avg +elev, 0x00FFFFFF);
-			
+			{
+				elev2 = (int) (tf->values[j + 1][i] * coef);
+				fdf_bline(data,
+					marginw + i * avg,
+					marginh + j * avg - elev,
+					marginw + i * avg,
+					marginh + (j + 1) * avg - elev2,
+					0x00FFFFFF);
+				oldelevy = elev;
+			}
+/*			if (i < tf->nbcolumns - 1)
+			{
+				fdf_bline(data,
+					marginw + i * avg,
+					marginh + j * avg - oldelevx,
+					marginw + (i + 1) * avg,
+					marginh + j * avg - elev,
+					0x00FFFFFF);
+				oldelevx = elev;
+			}
+*/
 		}
 	}
 }
@@ -92,8 +185,8 @@ int win_start(tfic *tf)
 		printf("I can't open the display\n");
 		return (EXIT_FAILURE);
 	}
-	data.screen_width = 640;
-	data.screen_height = 480;
+	data.screen_width = 1024;
+	data.screen_height = 768;
 	data.canvas_width = data.screen_width - 100;
 	data.canvas_height = data.screen_height;
 	data.back_buffer = 1;
