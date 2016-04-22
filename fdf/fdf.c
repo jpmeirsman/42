@@ -48,14 +48,41 @@ void		print_menu(data_t *data)
 		pas * increment++, 0X00FFFFFF, " Default : C");
 }
 
-void			print_fdf(data_t *data)
+void			print_fdf(data_t *data, tfic *tf)
 {
+	int			i;
+	int			j;
+	int			min;
+	int			margin;
+	int			avg;
+	int			min2;
+	int			elev;
+
+	min = data->canvas_width < data->canvas_height ? data->canvas_width :
+		data->canvas_height;
+	min2 = tf->nbcolumns < tf->nbrows ? tf->nbcolumns : tf->nbcolumns;
+	margin = 10;
+	elev = 0;
+	avg = (min - 2 * margin) / min2;
 	data->put_in_canvas = true;
-	fdf_bline(data,0,0,data->canvas_width - 1,data->canvas_height - 1,0x00FFFFFF);
-	
+//	fdf_bline(data,0,0,data->canvas_width - 1,data->canvas_height - 1,0x00FFFFFF);
+	printf("c: %llu, l: %llu\n",tf->nbcolumns,tf->nbrows);
+	for (i = 0; i < tf->nbcolumns; i++)
+	{
+		for (j = 0; j < tf->nbrows; j++)
+		{
+//			elev = -tf->values[i][j];
+			elev = -10;
+			if (j < tf->nbrows - 1)
+				fdf_bline(data, i * avg, j * avg + elev, i * avg, (j + 1) * avg +elev, 0x00FFFFFF);
+			if (i < tf->nbcolumns - 1)
+				fdf_bline(data, i * avg, j * avg + elev, (i + 1) * avg, j * avg +elev, 0x00FFFFFF);
+			
+		}
+	}
 }
 
-int win_start(void)
+int win_start(tfic *tf)
 {
 	int retour;
 	data_t data;
@@ -101,7 +128,7 @@ int win_start(void)
 	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
-	print_fdf(&data);
+	print_fdf(&data, tf);
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
 		data.img[data.front_buffer], 0, 0);
@@ -124,7 +151,7 @@ int main(int argc, char **argv)
 	myList = initialisation();
 	chargeMap(myList, &tf, fd);
 	createMap(myList, &tf);
-	win_start();
+	win_start(&tf);
 	close(fd);
 	return 0;
 }

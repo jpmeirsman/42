@@ -31,7 +31,6 @@ void fdf_bline(data_t *data,int xi,int yi,int xf,int yf, int color)
 	sx = (xi < xf) ? 1 : -1;
 	sy = (yi < yf) ? 1 : -1;
 	err = dx - dy;
-printf("??? %d\n",data->put_in_canvas);
 	while (true) {
 		if (data->put_in_canvas)
 			mlx_pixel_put2(data, xi, yi, color);
