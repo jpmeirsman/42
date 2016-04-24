@@ -51,6 +51,5 @@ int			get_next_line(int const fd, char ** line)
 		Curr->FileNbCharRead = 0;
 	}
 	*line = ft_memalloc(BUFF_SIZE + 1);
-	line[0][0] = '\0';
 	return (get_line(fd, line, Curr,0));
 }

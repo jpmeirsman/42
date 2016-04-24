@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "./libft/includes/libft.h"
 
-# define BUFF_SIZE 10000000
+# define BUFF_SIZE 1
 
 typedef struct TElement
 //struct TElement
