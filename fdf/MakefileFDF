@@ -1,11 +1,11 @@
-NAME += moncube
+NAME += fdf
 DIRC += ./
 FLAG += -Wall -Wextra -Werror -O3
 INDS += -I./
 INDS += -I./Libft/
 INDS += -I/usr/X11/include
 SRCA += ./Libft/libft.a
-SRCS += moncube.c
+SRCS += fdf.c
 SRCS += lignes.c
 SRCS += math.c
 SRCS += mlibxtools.c

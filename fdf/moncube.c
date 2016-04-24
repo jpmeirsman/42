@@ -1,5 +1,5 @@
 #include "fdf.h"
-
+#include "gobject.c"
 
 void		print_menu(data_t *data)
 {
@@ -128,7 +128,7 @@ printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
 	}
 }
 
-int win_start(tfic *tf)
+int win_start()
 {
 	int retour;
 	data_t data;
@@ -174,7 +174,7 @@ int win_start(tfic *tf)
 	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
-	print_fdf(&data, tf);
+//	print_fdf(&data, tf);
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
 		data.img[data.front_buffer], 0, 0);
@@ -188,16 +188,18 @@ int win_start(tfic *tf)
 
 int main(int argc, char **argv)
 {
-	int			fd;
-	tfic		tf;
-	List		*myList;
+	tmesh		cube;
+	tcam		camera;
+	tcanvas		*canvas;
 
-	if ((argc != 2) || (fd = open(argv[1],O_RDONLY)) <= 0)
-		return (-1);
-	myList = initialisation();
-	chargeMap(myList, &tf, fd);
-	createMap(myList, &tf);
-	win_start(&tf);
-	close(fd);
+canvaslength = 640;
+canvasheight = 480;
+
+//canvas = newcanvas("frontBuffer");
+camera = setCam(0, 0, 10, 0, 0, 0);
+cube = newcube("MonCube");
+cube.Rotation.x += 0.01;
+cube.Rotation.y += 0.01;
+	win_start();
 	return 0;
 }
