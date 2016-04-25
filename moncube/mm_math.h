@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include "itoa.c"
-#include "ftoa.c"
+//#include "itoa.c"
+//#include "ftoa.c"
 #include "mm_basic.h"
 
 typedef struct		s_vector3

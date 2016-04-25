@@ -1,32 +1,51 @@
-NAME = libft.a
-FLAGS = -Wall -Wextra -Werror
-OBJDIR = ./obj
-SRCDIR = ./
-INCDIR = ./includes/
-FCT = $(shell find $(SRCDIR) | grep "\.c" | cut -d / -f 3-4 | cut -d . -f 1)
-SRC = $(FCT:%=$(SRCDIR)/%.c)
-OBJ = $(FCT:%=$(OBJDIR)/%.o)
-INC = $(INCDIR:%=-I %)
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: adjivas <adjivas@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2014/01/09 22:16:41 by adjivas           #+#    #+#              #
+#    Updated: 2014/02/18 17:26:40 by adjivas          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME += a.out
+DIRC += ./
+FLAG += -Wall -Wextra -Werror -O3
+INDS += -I./
+INDS += -I./Libft/
+SRCA += ./Libft/libft.a
+SRCS += testreadmap.c
+SRCS += get_next_line.c
+LSTC += $(patsubst %,$(DIRC)%,$(SRCS))
+COMP += clang
+OBJO += $(LSTC:.c=.o)
+
+.PHONY: default all clean fclean re
+
+default: all
 
 all: $(NAME)
-	@echo "\0033[1;34m Libft		\0033[1;30m[All OK]\0033[1;37m"
 
-$(OBJ):$(SRC)
-	@mkdir -p $(OBJDIR)
-	@(cd $(OBJDIR) ; mkdir -p $(shell find $(SRCDIR) | grep -v "\.c" | cut -d / -f 3))
-	@gcc -c $(SRCDIR)/$(shell echo $@ | cut -d / -f 2-3 | cut -d . -f 1).c $(FLAGS) $(INC) -o $@
+$(NAME): $(OBJO)
+	@make -C ./Libft/ all
+	@$(COMP) $(FLAG) $^ -o $@ $(SRCA)
 
-$(NAME): $(OBJ)
-	@ar rcus $@ $^
-	@echo "\0033[1;34m %.o 		\0033[0;32m[Create]"
-	@echo "\0033[1;34m Libft.a 	\0033[0;32m[Create]\0033[1;37m"
+%.o: %.c
+	@$(COMP) $(FLAG) -c $< -o $@ $(INDS)
 
 clean:
-	@rm -f $(OBJ)
-	@echo "\0033[1;34m %.o 		\0033[0;31m[Delete]\0033[1;37m"
+	@/bin/rm -rf $(OBJO)
+	@make -C ./Libft/ clean
 
-fclean: clean
-	@rm -f $(NAME)
-	@echo "\0033[1;34m libft.a 	\0033[0;31m[Delete]\0033[1;37m"
+fclean:
+	@/bin/rm -rf $(OBJO)
+	@/bin/rm -rf $(NAME)
+	@make -C ./Libft/ fclean
 
-re: fclean all
+re:
+	@/bin/rm -rf $(OBJO)
+	@/bin/rm -rf $(NAME)
+	@make -C ./Libft/ re
+	@make -C ./ all

@@ -1,14 +1,5 @@
-#ifndef				MM_MATH_H
-#define MM_MATH_H
-
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include "itoa.c"
-#include "math.c"
-#include "ftoa.c"
-
+#include "mm_graph.h"
+/*
 typedef struct		s_vector3
 {
 	double			x;
@@ -80,7 +71,7 @@ typedef struct		s_color4
 	short			b;
 	short			a;
 }					t_color4;
-
+*/
 t_color4			new_color4(short r, short g, short b, short a)
 {
 	t_color4		tc;
@@ -177,11 +168,11 @@ t_vector2			scale_vector2(t_vector2 myvector, double scale)
 	return (temp);
 }
 
-bool				equals_vector2(t_vector2 myvector, t_vector2 other)
+short				equals_vector2(t_vector2 myvector, t_vector2 other)
 {
 	if ((myvector.x == other.x) && (myvector.y == other.y))
 		return (true);
-	return (false);
+	return (0);
 }
 
 double				length_vector2(t_vector2 myvector)
@@ -344,12 +335,12 @@ t_vector3			scale_vector3(t_vector3 myvector, double scale)
 	return (temp);
 }
 
-bool				equals_vector3(t_vector3 myvector, t_vector3 other)
+short				equals_vector3(t_vector3 myvector, t_vector3 other)
 {
 	if ((myvector.x == other.x) && (myvector.y == other.y) &&
 			(myvector.z == other.z))
 		return (true);
-	return (false);
+	return (0);
 }
 
 t_vector3			multiply_vector3(t_vector3 myvector, t_vector3 other)
@@ -557,7 +548,8 @@ t_mesh				*new_mesh(char *name, long long vertCount, long long nbface)
 {
 	t_mesh			*result;
 
-	result->name = (char *) malloc(strlen(name));
+	result = malloc(sizeof(t_mesh));
+	result->name = malloc(strlen(name));
 	strcpy(result->name, name);
 	result->vertices = (t_vector3 *) malloc(sizeof(t_vector3) * vertCount);
 	result->faces = (t_face *) malloc(sizeof(t_face) * nbface);
@@ -671,14 +663,14 @@ void				printcube(t_mesh *my_cube)
 				my_cube->faces[i].b,my_cube->faces[i].c);
 }
 
-bool				matrix_is_identity(t_matrix matrix)
+short				matrix_is_identity(t_matrix matrix)
 {
 	char			index;
 
 	index = true;
 	if ((matrix.m[0] != 1.0) || (matrix.m[5] != 1.0) || (matrix.m[10] != 1.0)
 		|| (matrix.m[15] != 1.0))
-		return (false);
+		return (0);
 	if (matrix.m[1] != 0.0 || matrix.m[2] != 0.0 || matrix.m[3] != 0.0 ||
 		matrix.m[4] != 0.0 || matrix.m[6] != 0.0 || matrix.m[7] != 0.0 ||
 		matrix.m[8] != 0.0 || matrix.m[9] != 0.0 || matrix.m[11] != 0.0 ||
@@ -1104,5 +1096,37 @@ void 			render(t_device device, t_cam camera, t_array_mesh *meshes)
 	}
 }
 
-#endif
+void fdf_bline(data_t *data,int xi,int yi,int xf,int yf, int color)
+{
+	double				dx;
+	double				dy;
+	double				sx;
+	double				sy;
+	double				err;
+	double				e2;
 
+	dx = abs(xf - xi);
+	dy = abs(yf - yi);
+	sx = (xi < xf) ? 1 : -1;
+	sy = (yi < yf) ? 1 : -1;
+	err = dx - dy;			
+	while (true)
+	{
+		if (data->put_in_canvas)
+			mlx_pixel_put2(data, xi, yi, color);
+		else
+			mlx_pixel_put(data->mlx_ptr, data->mlx_win, xi, yi, color);
+		if ((xi == xf) && (yi == yf)) break;
+		e2 = 2 * err;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			xi += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+		yi += sy;
+		}
+	}
+}
