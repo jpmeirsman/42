@@ -9,6 +9,6 @@
 #include "mm_graph.h"
 #include "mm_readmap.h"
 
-void			print_menu(data_t *data);
+void			print_menu(t_data *data);
 
 #endif

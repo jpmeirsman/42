@@ -1,6 +1,6 @@
 #include "mm_libx.h"
 
-void		switch_buffer(data_t *data)
+void		switch_buffer(t_data *data)
 {
 	short		temp;
 	int			result;
@@ -12,7 +12,7 @@ void		switch_buffer(data_t *data)
 		data->img[data->front_buffer], 0, 0);
 }
 
-int my_key_on_release_funct(int keycode, data_t *data)
+int my_key_on_release_funct(int keycode, t_data *data)
 {
 	printf("Key Released: %d\n",keycode);
 //	switch_buffer(data);
@@ -25,66 +25,66 @@ int my_key_on_release_funct(int keycode, data_t *data)
 	return (0);
 }
 
-int my_key_on_maintain_funct(int keycode, data_t *data)
+int my_key_on_maintain_funct(int keycode, t_data *data)
 {
 	printf("Key Maintained: %d\n",keycode);
 	switch_buffer(data);
 	return (0);
 }
 
-int my_key_on_click_funct(int keycode, data_t *data)
+int my_key_on_click_funct(int keycode, t_data *data)
 {
 	printf("Key Clicked: %d\n",keycode);
 	switch_buffer(data);
 	return (0);
 }
 
-int my_expose_funct(data_t *data)
+int my_expose_funct(t_data *data)
 {
 // cette fonction est appelée lorsque l'on replie la fenêtre puis
 // lorsque l'on la réactive et que l'on génère un évènement clavier 
 // ou souris sur mac sinon osx gère corrextement cela pour nous.
-data_t *data2;
+t_data *data2;
 data2 = data;
 printf("*");
 	return (0);
 }
 
-int my_loop_funct(data_t *data)
+int my_loop_funct(t_data *data)
 {
 //	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
 //	printf("*%llu",compteur);
 //	compteur++;
-data_t *data2;
+t_data *data2;
 data2 = data;
 	return (0);
 }
 
-int my_mouse_on_move_funct(int x, int y, data_t *data)
+int my_mouse_on_move_funct(int x, int y, t_data *data)
 {
-data_t *data2;
+t_data *data2;
 data2 = data;
 	printf("x: %d y: %d\n", x ,y);
 	return (0);
 }
 
-int my_mouse_on_click_funct(int button, int x, int y, data_t *data)
+int my_mouse_on_click_funct(int button, int x, int y, t_data *data)
 {
-data_t *data2;
+t_data *data2;
 data2 = data;
 	printf("Clicked Button: %d x: %d y: %d\n",button, x ,y);
 	return (0);
 }
 
-int my_mouse_on_release_funct(int button, int x, int y, data_t *data)
+int my_mouse_on_release_funct(int button, int x, int y, t_data *data)
 {
-data_t *data2;
+t_data *data2;
 data2 = data;
 	printf("Released Button: %d x: %d y: %d\n",button, x ,y);
 	return (0);
 }
 
-int mlx_pixel_put2(data_t *data, int x, int y, int	 color)
+int mlx_pixel_put2(t_data *data, int x, int y, int	 color)
 {
 	if ((x >= 0) && (y >= 0) && (x < data->canvas_width) && (y< data->canvas_height))
 	{

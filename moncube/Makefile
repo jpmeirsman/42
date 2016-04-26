@@ -1,22 +1,16 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: adjivas <adjivas@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2014/01/09 22:16:41 by adjivas           #+#    #+#              #
-#    Updated: 2014/02/18 17:26:40 by adjivas          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME += a.out
+NAME += moncube
 DIRC += ./
 FLAG += -Wall -Wextra -Werror -O3
 INDS += -I./
 INDS += -I./Libft/
+INDS += -I/usr/X11/include
 SRCA += ./Libft/libft.a
-SRCS += testreadmap.c
+SRCS += moncube.c
+SRCS += mm_math.c
+SRCS += mm_graph.c
+SRCS += mm_libx.c
+SRCS += mm_readmap.c
+SRCS += libft2.c
 SRCS += get_next_line.c
 LSTC += $(patsubst %,$(DIRC)%,$(SRCS))
 COMP += clang
@@ -30,7 +24,7 @@ all: $(NAME)
 
 $(NAME): $(OBJO)
 	@make -C ./Libft/ all
-	@$(COMP) $(FLAG) $^ -o $@ $(SRCA)
+	@$(COMP) $(FLAG) $^ -g -L/usr/X11/lib -lX11 -lmlx -lXext -o $@ $(SRCA)
 
 %.o: %.c
 	@$(COMP) $(FLAG) -c $< -o $@ $(INDS)

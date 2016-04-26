@@ -460,10 +460,26 @@ t_mesh				*new_mesh(char *name, long long vertCount, long long nbface)
 	strcpy(result->name, name);
 	result->vertices = (t_vector3 *) malloc(sizeof(t_vector3) * vertCount);
 	result->faces = (t_face *) malloc(sizeof(t_face) * nbface);
-	result->Rotation = zero_vector3();
-	result->Position = zero_vector3();
+	result->rotation = zero_vector3();
+	result->position = zero_vector3();
 	result->length = vertCount;
 	return (result);
+}
+
+t_meshes			*new_meshes(long long len)
+{
+	t_meshes	*result;
+	long long	i;
+
+	result = malloc(sizeof(t_meshes*) * len);
+	result->length = len;
+	i = 0;
+	while (i < len)
+	{
+		result->m = malloc(sizeof(t_mesh*) * len);
+		i++;
+	}
+	return result;
 }
 
 short				matrix_is_identity(t_matrix matrix)

@@ -5,8 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-//#include "itoa.c"
-//#include "ftoa.c"
+#include "libft2.h"
 #include "mm_basic.h"
 
 typedef struct		s_vector3
@@ -39,16 +38,16 @@ typedef struct		s_mesh
 	char			*name;
 	t_vector3		*vertices;
 	t_face			*faces;
-	t_vector3		Rotation;
-	t_vector3		Position;
+	t_vector3		rotation;
+	t_vector3		position;
 	long long		length;
 }					t_mesh;
 
-typedef struct		s_array_mesh
+typedef struct		s_meshes
 {
 	long long		length;
-	t_mesh			*m;
-}					t_array_mesh;
+	t_mesh			**m;
+}					t_meshes;
 
 typedef struct		s_color4
 {
@@ -103,6 +102,7 @@ double				dist_squared_vector3(t_vector3 value1, t_vector3 value2);
 double				dist_vector3(t_vector3 value1, t_vector3 value2);
 void				put_face(t_face *face, double a, double b, double c);
 t_mesh				*new_mesh(char *name, long long vertCount, long long nbface);
+t_meshes			*new_meshes(long long len);
 short				matrix_is_identity(t_matrix matrix);
 double				determinant_matrix(t_matrix matrix);
 t_matrix			to_array_matrix(t_matrix matrix);

@@ -1,6 +1,6 @@
 #include "moncube.h"
 
-void		print_menu(data_t *data)
+void		print_menu(t_data *data)
 {
 	int			increment;
 	int			pas;
@@ -53,7 +53,7 @@ void		print_menu(data_t *data)
 		pas * increment++, 0X00FFFFFF, " Default : C");
 }
 
-void			print_fdf(data_t *data, tfic *tf)
+void			print_fdf(t_data *data, tfic *tf)
 {
 	int			i;
 	int			j;
@@ -127,12 +127,38 @@ printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
 	}
 }
 
+void		drawing_loop(t_data *data, t_meshes *arr_mesh)
+{
+//	device.clear; //mise à zero
+	arr_mesh->m[0]->rotation.x += 0.01;
+	arr_mesh->m[0]->rotation.y += 0.01;
+	render(data, arr_mesh);
+//	device.present(); // affichage du buffer
+}
+
+void		print_my_cube(t_data *data)
+{
+	float			center_x;
+	float			center_y;
+	t_meshes		*my_meshes;
+
+	center_x = (float) data->canvas_width / 2;
+	center_y = (float) data->canvas_height / 2;
+//	my_meshes = malloc(sizeof(t_meshes));
+	my_meshes = new_meshes(1);
+	my_meshes->m[0] = new_cube("Mon Cube");
+	data->cam = set_cam(zero_vector3(), zero_vector3());
+	data->cam->position = set_vector3(0, 0 ,10);
+	data->cam->target = set_vector3(0, 0 ,10);
+	drawing_loop(data, my_meshes);
+}
+
 int main(void)
 //int main(int argc, char **argv)
 //int win_start()
 {
 	int retour;
-	data_t data;
+	t_data data;
 
 	if ((data.mlx_ptr = mlx_init()) == NULL)
 	{
@@ -176,6 +202,8 @@ int main(void)
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
 //	print_fdf(&data, tf);
+	print_my_cube(&data);
+
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
 		data.img[data.front_buffer], 0, 0);

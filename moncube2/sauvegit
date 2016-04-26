@@ -1,7 +1,0 @@
-#git add *
-git config --global push.default simple
-git add --all
-git commit -m "version 0.0"
-git push origin master
-git push
-

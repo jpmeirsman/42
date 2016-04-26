@@ -22,12 +22,13 @@
 
 typedef struct			s_cam
 {
-	t_vector3			Position;
-	t_vector3			Target;
+	t_vector3			position;
+	t_vector3			target;
 }						t_cam;
 
+/*
 typedef struct			s_canvas
-{
+{====
 	long				width;
 	long				height;
 	char				*context;
@@ -43,8 +44,9 @@ typedef struct			s_device
 	char				*workingContext;
 }						t_device;
 
+*/
 
-typedef struct			data_s
+typedef struct			s_data
 {
 	void				*mlx_ptr;
 	void				*mlx_win;
@@ -62,21 +64,21 @@ typedef struct			data_s
 	int					canvas_width;
 	int					canvas_height;
 	short				put_in_canvas;
-	t_cam				cam;
+	t_cam				*cam;
 	//t_canvascanvas2;
 	////t_devicedevice;
 	//
-}						data_t;
+}						t_data;
 
-void		switch_buffer(data_t *data);
-int 		my_key_on_release_funct(int keycode, data_t *data);
-int 		my_key_on_maintain_funct(int keycode, data_t *data);
-int 		my_key_on_click_funct(int keycode, data_t *data);
-int 		my_expose_funct(data_t *data);
-int 		my_loop_funct(data_t *data);
-int 		my_mouse_on_move_funct(int x, int y, data_t *data);
-int 		my_mouse_on_click_funct(int button, int x, int y, data_t *data);
-int 		my_mouse_on_release_funct(int button, int x, int y, data_t *data);
-int 		mlx_pixel_put2(data_t *data, int x, int y, int	 color);
+void		switch_buffer(t_data *data);
+int 		my_key_on_release_funct(int keycode, t_data *data);
+int 		my_key_on_maintain_funct(int keycode, t_data *data);
+int 		my_key_on_click_funct(int keycode, t_data *data);
+int 		my_expose_funct(t_data *data);
+int 		my_loop_funct(t_data *data);
+int 		my_mouse_on_move_funct(int x, int y, t_data *data);
+int 		my_mouse_on_click_funct(int button, int x, int y, t_data *data);
+int 		my_mouse_on_release_funct(int button, int x, int y, t_data *data);
+int 		mlx_pixel_put2(t_data *data, int x, int y, int	 color);
 
 #endif
