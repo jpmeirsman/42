@@ -66,20 +66,18 @@ t_mesh				*new_cube(char *name)
 	my_cube->vertices[6] = set_vector3( 1, -1, -1);
 	my_cube->vertices[7] = set_vector3(-1, -1, -1);
 	my_cube->length = 8;
-/*
-	put_face(&my_cube.faces[0],  0, 1, 2);
-	put_face(&my_cube.faces[1],  1, 2, 3);
-	put_face(&my_cube.faces[2],  1, 3, 6);
-	put_face(&my_cube.faces[3],  1, 5, 6);
-	put_face(&my_cube.faces[4],  0, 1, 4);
-	put_face(&my_cube.faces[5],  1, 4, 5);
-	put_face(&my_cube.faces[6],  2, 3, 7);
-	put_face(&my_cube.faces[7],  3, 6, 7);
-	put_face(&my_cube.faces[8],  0, 2, 7);
-	put_face(&my_cube.faces[9],  0, 4, 7);
-	put_face(&my_cube.faces[10], 4, 5, 6);
-	put_face(&my_cube.faces[11], 4, 6, 7);
-*/
+	put_face(&my_cube->faces[0],  0, 1, 2);
+	put_face(&my_cube->faces[1],  1, 2, 3);
+	put_face(&my_cube->faces[2],  1, 3, 6);
+	put_face(&my_cube->faces[3],  1, 5, 6);
+	put_face(&my_cube->faces[4],  0, 1, 4);
+	put_face(&my_cube->faces[5],  1, 4, 5);
+	put_face(&my_cube->faces[6],  2, 3, 7);
+	put_face(&my_cube->faces[7],  3, 6, 7);
+	put_face(&my_cube->faces[8],  0, 2, 7);
+	put_face(&my_cube->faces[9],  0, 4, 7);
+	put_face(&my_cube->faces[10], 4, 5, 6);
+	put_face(&my_cube->faces[11], 4, 6, 7);
 	return my_cube;
 }
 
@@ -104,43 +102,42 @@ void 			render(t_data *data, t_meshes *meshes)
 	long long	indexvertices;
 	t_mesh		*cMesh;
 	t_vector2	projectedPoint;
-
-//printf("%s %llu\n",meshes->m[0]->name,meshes->m[0]->length);
-//printcube(meshes->m[0]);
-
-
-
-
-
-/*
-print_vector3(data->cam->position);
-print_vector3(data->cam->target);
-print_vector3(up_vector3());
-*/
+	t_vector2	tv[12];
 
 	viewMatrix = look_at_lh_matrix(data->cam->position, data->cam->target, 
 		up_vector3());
-//print_matrix(viewMatrix);
 	projectionMatrix = perspective_fov_lh_matrix(0.78, 
 		data->canvas_width / data->canvas_height, 0.01, 1);
 	for (index = 0; index < meshes->length; index++)
 	{
 		cMesh = meshes->m[index];
-//	printf("***%llu***%llu***\n",cMesh->length,index);
 		worldMatrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
 			cMesh->rotation.y, cMesh->rotation.x, cMesh->rotation.z),
 			translation_matrix(cMesh->position.x, cMesh->position.y, 
 			cMesh->position.z));
 			transformMatrix = multiply_matrix(worldMatrix,multiply_matrix(
 				viewMatrix,projectionMatrix));
-//printcube(meshes->m[0]);
 		for (indexvertices = 0; indexvertices < cMesh->length; indexvertices++)
 		{
 			projectedPoint = project_device(data, 
 				cMesh->vertices[indexvertices], transformMatrix);
-			draw_point_device (data, projectedPoint);
-//			printf("x:%lf ,y:%lf====\n",projectedPoint.x,projectedPoint.y);
+//			draw_point_device (data, projectedPoint);
+			tv[indexvertices] = projectedPoint;
 		}
+/*
+		fdf_bline(data, tv[0].x, tv[0]. y,tv[1].x, tv[1].y, 0x00FFFFFF);
+		fdf_bline(data, tv[1].x, tv[1]. y,tv[3].x, tv[3].y, 0x00FFFFFF);
+		fdf_bline(data, tv[3].x, tv[3]. y,tv[2].x, tv[2].y, 0x00FFFFFF);
+		fdf_bline(data, tv[2].x, tv[2]. y,tv[0].x, tv[0].y, 0x00FFFFFF);
+		fdf_bline(data, tv[4].x, tv[4]. y,tv[5].x, tv[5].y, 0x00FFFFFF);
+		fdf_bline(data, tv[5].x, tv[5]. y,tv[6].x, tv[6].y, 0x00FFFFFF);
+		fdf_bline(data, tv[6].x, tv[6]. y,tv[7].x, tv[7].y, 0x00FFFFFF);
+		fdf_bline(data, tv[7].x, tv[7]. y,tv[4].x, tv[4].y, 0x00FFFFFF);
+		fdf_bline(data, tv[0].x, tv[0]. y,tv[4].x, tv[4].y, 0x00FFFFFF);
+		fdf_bline(data, tv[1].x, tv[1]. y,tv[5].x, tv[5].y, 0x00FFFFFF);
+		fdf_bline(data, tv[2].x, tv[2]. y,tv[7].x, tv[7].y, 0x00FFFFFF);
+		fdf_bline(data, tv[3].x, tv[3]. y,tv[6].x, tv[6].y, 0x00FFFFFF);
+*/
 	}
 }
 
