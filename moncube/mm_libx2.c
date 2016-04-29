@@ -1,10 +1,32 @@
-#include "mm_libx.h"
-/*
+#include "mm_libx2.h"
+#include "mm_graph.h"
+
+void		clear_canvas(t_data *data)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < data->canvas_height)
+	{
+		j = 0;
+		while (j < data->canvas_width)
+		{
+			mlx_pixel_put2(data, j, i, 0x00000000);
+			j++;
+		}
+		i++;
+	}
+}
+
 void		drawing_loop(t_data *data, t_meshes *arr_mesh)
 {
+arr_mesh->m[0]->rotation.x += 0.01;
+arr_mesh->m[0]->rotation.y += 0.01;
+printf("===%le\n",arr_mesh->m[0]->rotation.y);
 render(data, arr_mesh);
 }
-*/
+/*
 void		switch_buffer(t_data *data)
 {
 	short		temp;
@@ -54,18 +76,20 @@ data2 = data;
 printf("*");
 	return (0);
 }
-/*
+*/
 int my_loop_funct(t_data *data)
 {
 //	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
 //	printf("*%llu",compteur);
 //	compteur++;
-t_data *data2;
-data2 = data;
-printf("*\n");
+clear_canvas(data);
+data->my_meshes->m[0]->rotation.x += 0.01;
+data->my_meshes->m[0]->rotation.y += 0.01;
+render(data, data->my_meshes);
+switch_buffer(data);
 	return (0);
 }
-*/
+/*
 int my_mouse_on_move_funct(int x, int y, t_data *data)
 {
 t_data *data2;
@@ -101,3 +125,4 @@ int mlx_pixel_put2(t_data *data, int x, int y, int	 color)
 	}
 	return (0);
 }
+*/

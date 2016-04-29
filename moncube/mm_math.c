@@ -901,7 +901,28 @@ int				matrix_mult(int n, int m, int p, void *m1, void *m2, void *m3)
 	for (i = 0; i < n; i++)
 		for ( j = 0; j < p; j++)
 			for (k = 0; k < m; k++)
-				matres[0][i][j] = mat1[0][i][k] * mat2[0][k][j] + matres[0][i][j];
+				matres[0][i][j] = mat1[0][i][k] * mat2[0][k][j] + 
+					matres[0][i][j];
 	return (0);
 }
+
+void			print_matrix(t_matrix m)
+{
+	short		i;
+
+	i = 0;
+	while (i < 16)
+	{
+		printf("m[%d] = %le\t", i, m.m[i]);
+		if (i % 4 == 3)
+			printf("\n");
+		i++;
+	}
+}
+
+void			print_vector3(t_vector3 tv)
+{
+	printf("x: %le, y:%le, z:%le\n", tv.x, tv.y, tv.z);
+}
+
 

@@ -10,6 +10,7 @@ SRCS += mm_math.c
 SRCS += mm_graph.c
 SRCS += mm_libx.c
 SRCS += mm_readmap.c
+SRCS += mm_libx2.c
 SRCS += libft2.c
 SRCS += get_next_line.c
 LSTC += $(patsubst %,$(DIRC)%,$(SRCS))

@@ -1,4 +1,5 @@
 #include "moncube.h"
+#include "mm_libx2.h"
 
 void		print_menu(t_data *data)
 {
@@ -126,16 +127,16 @@ printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
 		}
 	}
 }
-
+/*
 void		drawing_loop(t_data *data, t_meshes *arr_mesh)
 {
 //	device.clear; //mise à zero
-	arr_mesh->m[0]->rotation.x += 0.01;
-	arr_mesh->m[0]->rotation.y += 0.01;
+//	arr_mesh->m[0]->rotation.x += 0.01;
+//	arr_mesh->m[0]->rotation.y += 0.01;
 	render(data, arr_mesh);
 //	device.present(); // affichage du buffer
 }
-
+*/
 void		print_my_cube(t_data *data)
 {
 	float			center_x;
@@ -146,11 +147,16 @@ void		print_my_cube(t_data *data)
 	center_y = (float) data->canvas_height / 2;
 //	my_meshes = malloc(sizeof(t_meshes));
 	my_meshes = new_meshes(1);
+	data->my_meshes = my_meshes;
 	my_meshes->m[0] = new_cube("Mon Cube");
 	data->cam = set_cam(zero_vector3(), zero_vector3());
 	data->cam->position = set_vector3(0, 0 ,10);
-	data->cam->target = set_vector3(0, 0 ,10);
-	drawing_loop(data, my_meshes);
+	data->cam->target = set_vector3(0, 0 ,0);
+	my_meshes->m[0]->rotation.x += 0.01;
+	my_meshes->m[0]->rotation.y += 0.01;
+
+//	render(data, arr_mesh);
+//	drawing_loop(data, my_meshes);
 }
 
 int main(void)

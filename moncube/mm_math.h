@@ -131,6 +131,8 @@ t_matrix		perspective_fov_lh_matrix(double fov, double aspect, double znear, dou
 t_matrix		transpose_matrix(t_matrix matrix);
 int				MatrixMult(int N, int M, int P, void *m1, void *m2, void		 *m3);
 int				matrix_mult(int n, int m, int p, void *m1, void *m2, void *m3);
+void			print_matrix(t_matrix m);
+void			print_vector3(t_vector3 tv);
 
 #endif
 

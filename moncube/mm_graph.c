@@ -22,46 +22,6 @@ t_cam				*set_cam(t_vector3 pos, t_vector3 target)
 	camera->target.z = target.z;
 	return (camera);
 }
-/*
-t_device			set_device(t_canvas canvas)
-{
-	t_device		result;
-
-	result.workingCanvas = canvas;
-	result.workingWidth = canvas.width;
-	result.workingHeight = canvas.height;
-	//A implémenter si besoin
-	//	result.workingContext = getContextCanvas(result.workingContext"2d");
-	return (result);
-}
-
-void				clear_device(t_device *device)
-{
-
-	   device
-	   this.workingContext.clearRect(0, 0, this.workingWidth, this.workingHeight);
-	   this.backbuffer = this.workingContext.getImageData(0, 0, this.workingWidth, this.workingHeight);
-
-}
-
-void				present_device(t_device *device)
-{
-device->workingWidth = 0;
-	//	device.workingContext.putImageData(this.backbuffer, 0, 0);
-}
-
-void				put_pixel(t_device *device, long x, long y, t_color4 color)
-{
-
-	   this.backbufferdata = this.backbuffer.data;
-	   var index = ((x >> 0) + (y >> 0) * this.workingWidth) * 4;
-	   this.backbufferdata[index] = color.r * 255;
-	   this.backbufferdata[index + 1] = color.g * 255;
-	   this.backbufferdata[index + 2] = color.b * 255;
-	   this.backbufferdata[index + 3] = color.a * 255;
-
-}
-*/
 
 //t_vector2			project_device(t_device dev, t_vector3 coord, t_matrix tMat)
 t_vector2			project_device(t_data *data, t_vector3 coord, t_matrix tMat)
@@ -74,6 +34,7 @@ t_vector2			project_device(t_data *data, t_vector3 coord, t_matrix tMat)
 	//	x = round((point.x * device.workingWidth) + (device.workingWidth / 2.0)) >> 0;
 	x = round((point.x * data->canvas_width) + (data->canvas_width / 2.0));
 	y = round((point.y * data->canvas_height) + (data->canvas_height / 2.0));
+//printf("x: %lf, y: %lf///\n",x,y);
 	return (new_vector2(x, y));
 }
 
@@ -82,7 +43,7 @@ void				draw_point_device(t_data *data, t_vector2 point)
 	int			color;
 	t_color4	color4;
 
-	color4 = new_color4(1, 1, 0, 1);
+	color4 = new_color4(0, 0xFF,0xFF, 0xFF);
 	color = (((color4.a * 0xFF + color4.r) * 0xFF + color4.g) * 0xFF) 
 		+ color4.b;
 	if(point.x >= 0 && point.y >= 0 && point.x < data->canvas_width && point.y 
@@ -104,6 +65,7 @@ t_mesh				*new_cube(char *name)
 	my_cube->vertices[5] = set_vector3( 1,  1, -1);
 	my_cube->vertices[6] = set_vector3( 1, -1, -1);
 	my_cube->vertices[7] = set_vector3(-1, -1, -1);
+	my_cube->length = 8;
 /*
 	put_face(&my_cube.faces[0],  0, 1, 2);
 	put_face(&my_cube.faces[1],  1, 2, 3);
@@ -143,23 +105,41 @@ void 			render(t_data *data, t_meshes *meshes)
 	t_mesh		*cMesh;
 	t_vector2	projectedPoint;
 
+//printf("%s %llu\n",meshes->m[0]->name,meshes->m[0]->length);
+//printcube(meshes->m[0]);
+
+
+
+
+
+/*
+print_vector3(data->cam->position);
+print_vector3(data->cam->target);
+print_vector3(up_vector3());
+*/
+
 	viewMatrix = look_at_lh_matrix(data->cam->position, data->cam->target, 
 		up_vector3());
+//print_matrix(viewMatrix);
 	projectionMatrix = perspective_fov_lh_matrix(0.78, 
 		data->canvas_width / data->canvas_height, 0.01, 1);
 	for (index = 0; index < meshes->length; index++)
 	{
 		cMesh = meshes->m[index];
+//	printf("***%llu***%llu***\n",cMesh->length,index);
 		worldMatrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
 			cMesh->rotation.y, cMesh->rotation.x, cMesh->rotation.z),
 			translation_matrix(cMesh->position.x, cMesh->position.y, 
 			cMesh->position.z));
 			transformMatrix = multiply_matrix(worldMatrix,multiply_matrix(
 				viewMatrix,projectionMatrix));
+//printcube(meshes->m[0]);
 		for (indexvertices = 0; indexvertices < cMesh->length; indexvertices++)
 		{
-			projectedPoint = project_device(data, cMesh->vertices[indexvertices], transformMatrix);
+			projectedPoint = project_device(data, 
+				cMesh->vertices[indexvertices], transformMatrix);
 			draw_point_device (data, projectedPoint);
+//			printf("x:%lf ,y:%lf====\n",projectedPoint.x,projectedPoint.y);
 		}
 	}
 }

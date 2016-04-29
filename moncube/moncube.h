@@ -8,6 +8,8 @@
 #include "mlx.h"
 #include "mm_graph.h"
 #include "mm_readmap.h"
+#include "mm_libx2.h"
+#include "mm_libx.h"
 
 void			print_menu(t_data *data);
 

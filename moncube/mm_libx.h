@@ -3,6 +3,7 @@
 				
 #include "mlx.h"
 #include "mm_math.h"
+//#include "mm_graph.h"
 
 #define KeyPressMask			(1L<<0)
 #define KeyPress				2
@@ -65,17 +66,19 @@ typedef struct			s_data
 	int					canvas_height;
 	short				put_in_canvas;
 	t_cam				*cam;
-	//t_canvascanvas2;
+	t_meshes			*my_meshes;
+//t_canvascanvas2;
 	////t_devicedevice;
 	//
 }						t_data;
 
+//void		drawing_loop(t_data *data, t_meshes *arr_mesh);
 void		switch_buffer(t_data *data);
 int 		my_key_on_release_funct(int keycode, t_data *data);
 int 		my_key_on_maintain_funct(int keycode, t_data *data);
 int 		my_key_on_click_funct(int keycode, t_data *data);
 int 		my_expose_funct(t_data *data);
-int 		my_loop_funct(t_data *data);
+//int 		my_loop_funct(t_data *data);
 int 		my_mouse_on_move_funct(int x, int y, t_data *data);
 int 		my_mouse_on_click_funct(int button, int x, int y, t_data *data);
 int 		my_mouse_on_release_funct(int button, int x, int y, t_data *data);
