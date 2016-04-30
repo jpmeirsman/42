@@ -6,33 +6,38 @@
 #include "get_next_line.h"
 #include "mm_readmap.h"
 
-int		**createTable(int nbRow, int nbCol){
-	int **table1 = (int **)malloc(sizeof(int*)*nbRow);
-	int *table2 = (int *)malloc(sizeof(int)*nbCol*nbRow);
-	for(int i = 0 ; i < nbRow ; i++){
-		table1[i] = &table2[i*nbCol];
+int			**create_table(int nb_row, int nb_col){
+	int		**table1;
+	int		*table2;
+
+	table1 = (int **) malloc(sizeof(int*) * nb_row);
+	table2 = (int *) malloc(sizeof(int) * nb_col*nb_row);
+	for(int i = 0 ; i < nb_row ; i++){
+		table1[i] = &table2[i*nb_col];
 	}
 	return table1;
 }
 
-void freeTable(int **table1){
+void		free_table(int **table1)
+{
 	free(table1[0]);
 	free(table1);
 }
-void		printMap(List *myList, tfic *tf)
-{
-	ElemInt		*Curr;
-	long long	i;
-	long long	j;
 
-	Curr = myList->first;
+void		print_map(t_list2 *myList, t_fic *tf)
+{
+	t_elem_int		*curr;
+	long long		i;
+	long long		j;
+
+	curr = myList->first;
 	i = 0;
-	while (i < tf->nbrows)
+	while (i < tf->nb_rows)
 	{
 		j = 0;
-		while (j < tf->nbcolumns)
+		while (j < tf->nb_columns)
 		{
-			printf("%d ",tf->values[i][j]);
+			printf("%d ", tf->values[i][j]);
 			j++;
 		}
 		printf("\n");
@@ -41,49 +46,49 @@ void		printMap(List *myList, tfic *tf)
 
 }
 
-void		createMap(List *myList, tfic *tf)
+void		create_map(t_list2 *myList, t_fic *tf)
 {
-	ElemInt		*Curr;
-	long long	i;
-	long long	j;
+	t_elem_int		*curr;
+	long long		i;
+	long long		j;
 
-	Curr = myList->first;
-	tf->values = createTable(tf->nbrows,tf->nbcolumns);
-	i = tf->nbrows - 1;
+	curr = myList->first;
+	tf->values = create_table(tf->nb_rows,tf->nb_columns);
+	i = tf->nb_rows - 1;
 	while (i >= 0)
 	{
-		j = tf->nbcolumns - 1;
+		j = tf->nb_columns - 1;
 		while (j >= 0)
 		{
-			tf->values[i][j] = Curr->value;
-			Curr = Curr->next;
+			tf->values[i][j] = curr->value;
+			curr = curr->next;
 			j--;
 		}
 		i--;
 	}
 }
 
-void		chargeMap(List *myList, tfic *tf, int fd)
+void		charge_map(t_list2 *myList, t_fic *tf, int fd)
 {
-	ElemInt		*Curr;
-	char		*BUFF;
-	char		**StrBuf;
+	t_elem_int		*curr;
+	char		*buff;
+	char		**str_buf;
 
-	Curr = NULL;
-	myList->first = Curr;
-	tf->nbrows = 0;
-	while ((get_next_line(fd, &BUFF) > 0))
+	curr = NULL;
+	myList->first = curr;
+	tf->nb_rows = 0;
+	while ((get_next_line(fd, &buff) > 0))
 	{
-		StrBuf = ft_strsplit(BUFF, ' ');
-		tf->nbcolumns = 0;
-		while (StrBuf[tf->nbcolumns] != 0)
+		str_buf = ft_strsplit(buff, ' ');
+		tf->nb_columns = 0;
+		while (str_buf[tf->nb_columns] != 0)
 		{
-			Curr = malloc(sizeof(ElemInt));
-			Curr->value = ft_atoi(StrBuf[tf->nbcolumns]);
-			Curr->next = myList->first;
-			myList->first = Curr;
-			tf->nbcolumns++;
+			curr = malloc(sizeof(t_elem_int));
+			curr->value = ft_atoi(str_buf[tf->nb_columns]);
+			curr->next = myList->first;
+			myList->first = curr;
+			tf->nb_columns++;
 		}
-		tf->nbrows++;
+		tf->nb_rows++;
 	}
 }

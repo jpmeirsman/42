@@ -6,17 +6,17 @@
 #include <libc.h>
 #include "get_next_line.h"
 
-typedef struct			typefic
+typedef struct			s_fic
 {
-	long long			nbrows;
-	long long			nbcolumns;
+	long long			nb_rows;
+	long long			nb_columns;
 	int					**values;
-} tfic;
+} t_fic;
 
-typedef struct			TElementInt
+typedef struct			s_elem_int
 {
 	int				value;
-	struct TElementInt	*next;
-} ElemInt;
+	struct s_elem_int	*next;
+} t_elem_int;
 
 #endif

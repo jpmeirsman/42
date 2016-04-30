@@ -32,7 +32,7 @@ int			get_line(int const fd, char ** line, Elem * Curr, int nbCharLine)
 int			get_next_line(int const fd, char ** line)
 {
 			Elem			*Curr;
-			static List		*myList = NULL;
+			static t_list2		*myList = NULL;
 			char			c[1];
 
 	myList = myList ? myList : initialisation();

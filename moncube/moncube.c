@@ -54,7 +54,7 @@ void		print_menu(t_data *data)
 		pas * increment++, 0X00FFFFFF, " Default : C");
 }
 
-void			print_fdf(t_data *data, tfic *tf)
+void			print_fdf(t_data *data, t_fic *tf)
 {
 	int			i;
 	int			j;
@@ -76,10 +76,10 @@ void			print_fdf(t_data *data, tfic *tf)
 		max = data->canvas_height;
 	else
 		max = data->canvas_width;
-	if (tf->nbcolumns < tf->nbrows)
-		max2 = tf->nbrows;
+	if (tf->nb_columns < tf->nb_rows)
+		max2 = tf->nb_rows;
 	else
-		max2 = tf->nbcolumns;
+		max2 = tf->nb_columns;
 	margin = 10;
 	marginw = margin;
 	marginh = margin;
@@ -88,22 +88,22 @@ void			print_fdf(t_data *data, tfic *tf)
 	pi = 3.14159265359;
 	anglez = (0/180) * pi;
 	avg = (max - 2 * margin) / (max2 - 1);
-	avg1 = (float) (data->canvas_width - 2 * margin) / (tf->nbcolumns - 1);
-	avg2 = (float) (data->canvas_height - 2 * margin) / (tf->nbrows - 1);
+	avg1 = (float) (data->canvas_width - 2 * margin) / (tf->nb_columns - 1);
+	avg2 = (float) (data->canvas_height - 2 * margin) / (tf->nb_rows - 1);
 	avg = avg1 < avg2 ? avg1 : avg2;
 	if (avg1 < avg2)
-		marginh = margin + (data->canvas_height - margin * 2 - (tf->nbrows * avg))/2;
+		marginh = margin + (data->canvas_height - margin * 2 - (tf->nb_rows * avg))/2;
 		else
-		marginw = margin + (data->canvas_width - margin * 2 - (tf->nbcolumns * avg))/2;
+		marginw = margin + (data->canvas_width - margin * 2 - (tf->nb_columns * avg))/2;
 	data->put_in_canvas = true;
-	printf("c: %llu, l: %llu\n",tf->nbcolumns,tf->nbrows);
+	printf("c: %llu, l: %llu\n",tf->nb_columns,tf->nb_rows);
 printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
-	for (j = 0; j < tf->nbrows; j++)
+	for (j = 0; j < tf->nb_rows; j++)
 	{
-		for (i = 0; i < tf->nbcolumns; i++)
+		for (i = 0; i < tf->nb_columns; i++)
 		{
 //			elev = (int) (tf->values[j][i] * coef);
-			if (j < tf->nbrows - 1)
+			if (j < tf->nb_rows - 1)
 			{
 				elev2 = (int) (tf->values[j + 1][i] * coef);
 				fdf_bline(data,
@@ -114,7 +114,7 @@ printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
 					0x00FFFFFF);
 			}
 			elev = (int) (tf->values[j][i] * coef);
-			if (i < tf->nbcolumns - 1)
+			if (i < tf->nb_columns - 1)
 			{
 				elev2 = (int) (tf->values[j][i + 1] * coef);
 				fdf_bline(data,
