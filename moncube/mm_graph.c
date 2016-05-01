@@ -215,11 +215,11 @@ void			print_fdf(t_data *data)
 
 void			render_fdf(t_data *data)
 {
-	t_mesh		*mesh;
+//	t_mesh		*mesh;
 
-	mesh = malloc(sizeof(t_mesh));
-	mesh->position = set_vector3(0, 0, 0);
-	mesh->rotation = set_vector3(0, 0, 0);
+//	mesh = malloc(sizeof(t_mesh));
+//	mesh->position = set_vector3(0, 0, 0);
+//	mesh->rotation = set_vector3(0, 0, 0);
 //	data->view_matrix = malloc(sizeof(t_matrix));
 	*data->view_matrix = look_at_lh_matrix(data->cam->position,
 		data->cam->target, up_vector3());
@@ -228,9 +228,9 @@ void			render_fdf(t_data *data)
 		data->canvas_width / data->canvas_height, 0.01, 1);
 //	data->world_matrix = malloc(sizeof(t_matrix));
 	*data->world_matrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
-		mesh->rotation.y, mesh->rotation.x, mesh->rotation.z),
-	translation_matrix(mesh->position.x, mesh->position.y, 
-		mesh->position.z));
+		data->scene_rot.y, data->scene_rot.x, data->scene_rot.z),
+	translation_matrix(data->scene_pos.x, data->scene_pos.y, 
+		data->scene_pos.z));
 //	data->transform_matrix = malloc(sizeof(t_matrix));
 	*data->transform_matrix = multiply_matrix(*data->world_matrix,
 		multiply_matrix(*data->view_matrix, *data->projection_matrix));

@@ -85,6 +85,8 @@ typedef struct			s_data
 	t_matrix			*world_matrix;
 	t_matrix			*transform_matrix;
 	t_fic				*tf;
+	t_vector3			scene_pos;
+	t_vector3			scene_rot;
 //t_canvascanvas2;
 	////t_devicedevice;
 	//

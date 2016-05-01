@@ -55,7 +55,7 @@ int my_key_on_release_funct(int keycode, t_data *data)
 
 int my_key_on_maintain_funct(int keycode, t_data *data)
 {
-	if (keycode == 113)
+	if (keycode == 115)
 	{
 		clear_canvas(data);
 		data->ratio_cam += data->step_cam;
@@ -63,7 +63,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 	}
-	if (keycode == 115)
+	if (keycode == 113)
 	{
 		clear_canvas(data);
 		data->ratio_cam -= data->step_cam;
@@ -76,6 +76,90 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		clear_canvas(data);
 		data->ratio_cam = data->ratio_init_cam;
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 232)
+	{
+		clear_canvas(data);
+		data->scene_rot.x += 0.01 ;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 95)
+	{
+		clear_canvas(data);
+		data->scene_rot.x -= 0.01 ;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 231)
+	{
+		clear_canvas(data);
+		data->scene_rot.x = 0;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 39)
+	{
+		clear_canvas(data);
+		data->scene_rot.y += 0.01;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 40)
+	{
+		clear_canvas(data);
+		data->scene_rot.y -= 0.01;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 45)
+	{
+		clear_canvas(data);
+		data->scene_rot.y = 0;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 38)
+	{
+		clear_canvas(data);
+		data->scene_rot.z += 0.01;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 233)
+	{
+		clear_canvas(data);
+		data->scene_rot.z -= 0.01;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 34)
+	{
+		clear_canvas(data);
+		data->scene_rot.z = 0;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 119)
+	{
+		clear_canvas(data);
+		data->coef_elev += data->step_elev;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 120)
+	{
+		clear_canvas(data);
+		data->coef_elev -= data->step_elev;
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 99)
+	{
+		clear_canvas(data);
+		data->coef_elev = data->coef_init_elev;
 		render_fdf(data);
 		print_fdf(data);
 	}

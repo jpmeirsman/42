@@ -77,9 +77,10 @@ void			start_fdf(t_data *data, t_fic *tf)
 	data->cam->position = set_vector3(0, 0 , data->ratio_cam);
 	data->cam->target = set_vector3(0, 0 , 0);
 	mesh = malloc(sizeof(t_mesh));
-	mesh->position = set_vector3(0, 0, 0);
-	mesh->rotation = set_vector3(-60 / 180 * pi, 0, 0);
-
+//	mesh->position = set_vector3(0, 0, 0);
+//	mesh->rotation = set_vector3(-60 / 180 * pi, 0, 0);
+	data->scene_pos = set_vector3(0, 0, 0);
+	data->scene_rot = set_vector3(0, 0, 0);
 	data->view_matrix = malloc(sizeof(t_matrix));
 //	*data->view_matrix = look_at_lh_matrix(data->cam->position,
 //		data->cam->target, up_vector3());
