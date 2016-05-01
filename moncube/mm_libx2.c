@@ -62,6 +62,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 113)
 	{
@@ -70,6 +71,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 100)
 	{
@@ -78,6 +80,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 232)
 	{
@@ -85,6 +88,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.x += 0.01 ;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 95)
 	{
@@ -92,6 +96,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.x -= 0.01 ;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 231)
 	{
@@ -99,6 +104,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.x = 0;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 39)
 	{
@@ -106,6 +112,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.y += 0.01;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 40)
 	{
@@ -113,6 +120,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.y -= 0.01;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 45)
 	{
@@ -120,6 +128,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.y = 0;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 38)
 	{
@@ -127,6 +136,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.z += 0.01;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 233)
 	{
@@ -134,6 +144,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.z -= 0.01;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 34)
 	{
@@ -141,6 +152,79 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->scene_rot.z = 0;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 114)
+	{
+		clear_canvas(data);
+		data->scene_pos.x += 0.1 ;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 116)
+	{
+		clear_canvas(data);
+		data->scene_pos.x -= 0.1 ;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 121)
+	{
+		clear_canvas(data);
+		data->scene_pos.x = 0;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 102)
+	{
+		clear_canvas(data);
+		data->scene_pos.y += 0.1;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 103)
+	{
+		clear_canvas(data);
+		data->scene_pos.y -= 0.1;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 104)
+	{
+		clear_canvas(data);
+		data->scene_pos.y = 0;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 118)
+	{
+		clear_canvas(data);
+		data->scene_pos.z += 0.1;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 98)
+	{
+		clear_canvas(data);
+		data->scene_pos.z -= 0.1;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
+	}
+	if (keycode == 110)
+	{
+		clear_canvas(data);
+		data->scene_pos.z = 0;
+		render_fdf(data);
+		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 119)
 	{
@@ -148,6 +232,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->coef_elev += data->step_elev;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 120)
 	{
@@ -155,6 +240,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->coef_elev -= data->step_elev;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
 	if (keycode == 99)
 	{
@@ -162,15 +248,16 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->coef_elev = data->coef_init_elev;
 		render_fdf(data);
 		print_fdf(data);
+		switch_buffer(data);
 	}
-	switch_buffer(data);
 	return (0);
 }
 
 int my_key_on_click_funct(int keycode, t_data *data)
 {
-	printf("Key Clicked: %d\n",keycode);
-	switch_buffer(data);
+//	printf("Key Clicked: %d\n",keycode);
+keycode = data->coef_elev;
+//	switch_buffer(data);
 	return (0);
 }
 /*

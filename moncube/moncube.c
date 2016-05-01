@@ -24,7 +24,7 @@ void		print_menu(t_data *data)
 		pas * increment++, 0X00FFFFFF, " Default : D");
 	increment++;
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Scene");
+		pas * increment++, 0X00FFFFFF, "Scene rotation");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " x+      : 7");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
@@ -43,6 +43,27 @@ void		print_menu(t_data *data)
 		pas * increment++, 0X00FFFFFF, " z-      : 2");
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, " z0      : 3");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Scene position");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x+      : R");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x-      : T");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x0      : Y");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y+      : F");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y-      : G");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y0      : H");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z+      : V");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z-      : B");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z0      : N");
 	increment++;
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
 		pas * increment++, 0X00FFFFFF, "Elevation");
@@ -98,8 +119,8 @@ void			start_fdf(t_data *data, t_fic *tf)
 	render_fdf(data);
 	data->put_in_canvas = true;
 
-	printf("c: %llu, l: %llu\n",tf->nb_columns,tf->nb_rows);
-printf("nbrow : %llu, nbcol : %llu\n",tf->nb_rows, tf->nb_columns);
+//	printf("c: %llu, l: %llu\n",tf->nb_columns,tf->nb_rows);
+//printf("nbrow : %llu, nbcol : %llu\n",tf->nb_rows, tf->nb_columns);
 	min_z = 0;
 	max_z = 0;
 	for (i = 0; i < tf->nb_rows; i++)
@@ -113,10 +134,10 @@ printf("nbrow : %llu, nbcol : %llu\n",tf->nb_rows, tf->nb_columns);
 				max_z = z;
 		}
 	}
-printf("Z : min = %le, max = %le\n",min_z,max_z);
-	data->coef_elev = 10 / (max_z - min_z);
+//printf("Z : min = %le, max = %le\n",min_z,max_z);
+	data->coef_elev = 2 / (max_z - min_z);
 	data->coef_init_elev = data->coef_elev;
-	data->step_elev = data->coef_elev / 20;
+	data->step_elev = data->coef_elev / 10;
 	print_fdf(data);
 /*
 	for (i = 0; i < tf->nb_rows; i++)
