@@ -46,6 +46,13 @@ typedef struct			s_device
 }						t_device;
 
 */
+typedef struct			s_fic
+{
+	long long			nb_rows;
+	long long			nb_columns;
+	int					**values;
+	t_vector3			**tvect;
+} t_fic;
 
 typedef struct			s_data
 {
@@ -66,7 +73,18 @@ typedef struct			s_data
 	int					canvas_height;
 	short				put_in_canvas;
 	t_cam				*cam;
+	double				ratio_init_cam;
+	double				ratio_cam;
+	double				step_cam;
+	double				coef_elev;
+	double				coef_init_elev;
+	double				step_elev;
 	t_meshes			*my_meshes;
+	t_matrix			*view_matrix;
+	t_matrix			*projection_matrix;
+	t_matrix			*world_matrix;
+	t_matrix			*transform_matrix;
+	t_fic				*tf;
 //t_canvascanvas2;
 	////t_devicedevice;
 	//
@@ -74,9 +92,12 @@ typedef struct			s_data
 
 //void		drawing_loop(t_data *data, t_meshes *arr_mesh);
 void		switch_buffer(t_data *data);
+/*
 int 		my_key_on_release_funct(int keycode, t_data *data);
 int 		my_key_on_maintain_funct(int keycode, t_data *data);
 int 		my_key_on_click_funct(int keycode, t_data *data);
+
+*/
 int 		my_expose_funct(t_data *data);
 //int 		my_loop_funct(t_data *data);
 int 		my_mouse_on_move_funct(int x, int y, t_data *data);

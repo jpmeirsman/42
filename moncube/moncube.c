@@ -54,78 +54,98 @@ void		print_menu(t_data *data)
 		pas * increment++, 0X00FFFFFF, " Default : C");
 }
 
-void			print_fdf(t_data *data, t_fic *tf)
+void			start_fdf(t_data *data, t_fic *tf)
 {
 	int			i;
 	int			j;
-	int			margin;
-	int			marginw;
-	int			marginh;
-	float		avg;
-	float		avg1;
-	float		avg2;
-	int			elev;
-	int			elev2;
-	int			max;
-	int			max2;
-	float		coef;
-	float		anglez;
-	float		pi;
+	t_mesh		*mesh;
+	double		min_z;
+	double		max_z;
+//	double		coef_elev;
+	double		z;
+	double		pi;
 
-	if (data->canvas_width < data->canvas_height)
-		max = data->canvas_height;
-	else
-		max = data->canvas_width;
-	if (tf->nb_columns < tf->nb_rows)
-		max2 = tf->nb_rows;
-	else
-		max2 = tf->nb_columns;
-	margin = 10;
-	marginw = margin;
-	marginh = margin;
-	elev = 0;
-	coef = 0.5;
+	data->tf = tf;
 	pi = 3.14159265359;
-	anglez = (0/180) * pi;
-	avg = (max - 2 * margin) / (max2 - 1);
-	avg1 = (float) (data->canvas_width - 2 * margin) / (tf->nb_columns - 1);
-	avg2 = (float) (data->canvas_height - 2 * margin) / (tf->nb_rows - 1);
-	avg = avg1 < avg2 ? avg1 : avg2;
-	if (avg1 < avg2)
-		marginh = margin + (data->canvas_height - margin * 2 - (tf->nb_rows * avg))/2;
+	if (tf->nb_columns < tf->nb_rows)
+		data->ratio_init_cam = tf->nb_rows * -3;
 		else
-		marginw = margin + (data->canvas_width - margin * 2 - (tf->nb_columns * avg))/2;
+		data->ratio_init_cam = tf->nb_columns * -3;
+	data->ratio_cam = data->ratio_init_cam;
+	data->step_cam = data->ratio_init_cam / 20;
+	data->cam = set_cam(zero_vector3(), zero_vector3());
+	data->cam->position = set_vector3(0, 0 , data->ratio_cam);
+	data->cam->target = set_vector3(0, 0 , 0);
+	mesh = malloc(sizeof(t_mesh));
+	mesh->position = set_vector3(0, 0, 0);
+	mesh->rotation = set_vector3(-60 / 180 * pi, 0, 0);
+
+	data->view_matrix = malloc(sizeof(t_matrix));
+//	*data->view_matrix = look_at_lh_matrix(data->cam->position,
+//		data->cam->target, up_vector3());
+	data->projection_matrix= malloc(sizeof(t_matrix));
+//	*data->projection_matrix = perspective_fov_lh_matrix(0.78,
+//		data->canvas_width / data->canvas_height, 0.01, 1);
+	data->world_matrix = malloc(sizeof(t_matrix));
+//	*data->world_matrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
+//		mesh->rotation.y, mesh->rotation.x, mesh->rotation.z),
+//		translation_matrix(mesh->position.x, mesh->position.y, 
+//		mesh->position.z));
+	data->transform_matrix = malloc(sizeof(t_matrix));
+//	*data->transform_matrix = multiply_matrix(*data->world_matrix,
+//		multiply_matrix(*data->view_matrix, *data->projection_matrix));
+	render_fdf(data);
 	data->put_in_canvas = true;
+
 	printf("c: %llu, l: %llu\n",tf->nb_columns,tf->nb_rows);
-printf("angle:%f cos:%f sin:%f\n",anglez, cos(anglez), sin(anglez));
-	for (j = 0; j < tf->nb_rows; j++)
+printf("nbrow : %llu, nbcol : %llu\n",tf->nb_rows, tf->nb_columns);
+	min_z = 0;
+	max_z = 0;
+	for (i = 0; i < tf->nb_rows; i++)
 	{
-		for (i = 0; i < tf->nb_columns; i++)
+		for (j = 0; j < tf->nb_columns; j++)
 		{
-//			elev = (int) (tf->values[j][i] * coef);
-			if (j < tf->nb_rows - 1)
+			z = tf->tvect[i][j].z;
+			if (min_z > z)
+				min_z = z;
+			if (max_z < z)
+				max_z = z;
+		}
+	}
+printf("Z : min = %le, max = %le\n",min_z,max_z);
+	data->coef_elev = 10 / (max_z - min_z);
+	data->coef_init_elev = data->coef_elev;
+	data->step_elev = data->coef_elev / 20;
+	print_fdf(data);
+/*
+	for (i = 0; i < tf->nb_rows; i++)
+	{
+		for (j = 0; j < tf->nb_columns; j++)
+		{
+			if (j < tf->nb_columns - 1)
 			{
-				elev2 = (int) (tf->values[j + 1][i] * coef);
-				fdf_bline(data,
-					(marginw + i * avg),
-					(marginh + j * avg - elev),
-					(marginw + i * avg),
-					(marginh + (j + 1) * avg - elev2),
-					0x00FFFFFF);
+				tv1 = tf->tvect[i][j];
+				tv2 = tf->tvect[i][j+1];
+				tv1.z *= data->coef_elev;
+				tv2.z *= data->coef_elev;
+				pj1 = project_device(data, tv1, *data->transform_matrix);
+				pj2 = project_device(data, tv2, *data->transform_matrix);
+				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
 			}
-			elev = (int) (tf->values[j][i] * coef);
-			if (i < tf->nb_columns - 1)
+			if (i < tf->nb_rows - 1)
 			{
-				elev2 = (int) (tf->values[j][i + 1] * coef);
-				fdf_bline(data,
-					(marginw + i * avg),
-					(marginh + j * avg - elev),
-					(marginw + (i + 1) * avg),
-					(marginh + j * avg - elev2),
-					0x00FFFFFF);
+				tv1 = tf->tvect[i][j];
+				tv2 = tf->tvect[i+1][j];
+				tv1.z *= data->coef_elev;
+				tv2.z *= data->coef_elev;
+				pj1 = project_device(data, tv1, *data->transform_matrix);
+				pj2 = project_device(data, tv2, *data->transform_matrix);
+				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
 			}
 		}
 	}
+*/
+//printf("tv1.x : %le, tv1.y : %le, tv2.x : %le, tv2.y : %le\n",tv1.x,tv1.y,tv2.x,tv2.y);
 }
 /*
 void		drawing_loop(t_data *data, t_meshes *arr_mesh)
@@ -159,13 +179,15 @@ void		print_my_cube(t_data *data)
 //	drawing_loop(data, my_meshes);
 }
 
-int main(void)
-//int main(int argc, char **argv)
+//int main(void)
+int main(int argc, char **argv)
 //int win_start()
 {
 	int retour;
 	t_data data;
 
+	if (argc != 2)
+		return (-1);
 	if ((data.mlx_ptr = mlx_init()) == NULL)
 	{
 		printf("I can't open the display\n");
@@ -207,8 +229,8 @@ int main(void)
 	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
-//	print_fdf(&data, tf);
-	print_my_cube(&data);
+	start_fdf(&data, read_file(argv[1]));
+//	print_my_cube(&data);
 
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,

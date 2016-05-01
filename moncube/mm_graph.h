@@ -17,6 +17,8 @@ t_mesh				*new_cube(char *name);
 void				printcube(t_mesh *my_cube);
 //void 			render(t_device device, t_cam camera, t_meshes *meshes);
 void 			render(t_data *data, t_meshes *meshes);
-void fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color);
+void			fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color);
+void			print_fdf(t_data *data);
+
 #endif
 

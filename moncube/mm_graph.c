@@ -175,3 +175,63 @@ void fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color)
 		}
 	}
 }
+
+void			print_fdf(t_data *data)
+{
+	int			i;
+	int			j;
+	t_vector3	tv1;
+	t_vector3	tv2;
+	t_vector2	pj1;
+	t_vector2	pj2;
+
+	for (i = 0; i < data->tf->nb_rows; i++)
+	{
+		for (j = 0; j < data->tf->nb_columns; j++)
+		{
+			if (j < data->tf->nb_columns - 1)
+			{
+				tv1 = data->tf->tvect[i][j];
+				tv2 = data->tf->tvect[i][j+1];
+				tv1.z *= data->coef_elev;
+				tv2.z *= data->coef_elev;
+				pj1 = project_device(data, tv1, *data->transform_matrix);
+				pj2 = project_device(data, tv2, *data->transform_matrix);
+				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+			}
+			if (i < data->tf->nb_rows - 1)
+			{
+				tv1 = data->tf->tvect[i][j];
+				tv2 = data->tf->tvect[i+1][j];
+				tv1.z *= data->coef_elev;
+				tv2.z *= data->coef_elev;
+				pj1 = project_device(data, tv1, *data->transform_matrix);
+				pj2 = project_device(data, tv2, *data->transform_matrix);
+				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+			}
+		}
+	}
+}
+
+void			render_fdf(t_data *data)
+{
+	t_mesh		*mesh;
+
+	mesh = malloc(sizeof(t_mesh));
+	mesh->position = set_vector3(0, 0, 0);
+	mesh->rotation = set_vector3(0, 0, 0);
+//	data->view_matrix = malloc(sizeof(t_matrix));
+	*data->view_matrix = look_at_lh_matrix(data->cam->position,
+		data->cam->target, up_vector3());
+//	data->projection_matrix= malloc(sizeof(t_matrix));
+	*data->projection_matrix = perspective_fov_lh_matrix(0.78,
+		data->canvas_width / data->canvas_height, 0.01, 1);
+//	data->world_matrix = malloc(sizeof(t_matrix));
+	*data->world_matrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
+		mesh->rotation.y, mesh->rotation.x, mesh->rotation.z),
+	translation_matrix(mesh->position.x, mesh->position.y, 
+		mesh->position.z));
+//	data->transform_matrix = malloc(sizeof(t_matrix));
+	*data->transform_matrix = multiply_matrix(*data->world_matrix,
+		multiply_matrix(*data->view_matrix, *data->projection_matrix));
+}

@@ -21,6 +21,7 @@ void		clear_canvas(t_data *data)
 
 void		drawing_loop(t_data *data, t_meshes *arr_mesh)
 {
+return ;
 arr_mesh->m[0]->rotation.x += 0.01;
 arr_mesh->m[0]->rotation.y += 0.01;
 printf("===%le\n",arr_mesh->m[0]->rotation.y);
@@ -38,7 +39,7 @@ void		switch_buffer(t_data *data)
 	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win,
 		data->img[data->front_buffer], 0, 0);
 }
-
+*/
 int my_key_on_release_funct(int keycode, t_data *data)
 {
 	printf("Key Released: %d\n",keycode);
@@ -54,7 +55,30 @@ int my_key_on_release_funct(int keycode, t_data *data)
 
 int my_key_on_maintain_funct(int keycode, t_data *data)
 {
-	printf("Key Maintained: %d\n",keycode);
+	if (keycode == 113)
+	{
+		clear_canvas(data);
+		data->ratio_cam += data->step_cam;
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 115)
+	{
+		clear_canvas(data);
+		data->ratio_cam -= data->step_cam;
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		render_fdf(data);
+		print_fdf(data);
+	}
+	if (keycode == 100)
+	{
+		clear_canvas(data);
+		data->ratio_cam = data->ratio_init_cam;
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		render_fdf(data);
+		print_fdf(data);
+	}
 	switch_buffer(data);
 	return (0);
 }
@@ -65,7 +89,7 @@ int my_key_on_click_funct(int keycode, t_data *data)
 	switch_buffer(data);
 	return (0);
 }
-
+/*
 int my_expose_funct(t_data *data)
 {
 // cette fonction est appelée lorsque l'on replie la fenêtre puis
@@ -82,6 +106,7 @@ int my_loop_funct(t_data *data)
 //	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
 //	printf("*%llu",compteur);
 //	compteur++;
+return (0);
 clear_canvas(data);
 data->my_meshes->m[0]->rotation.x += 0.01;
 data->my_meshes->m[0]->rotation.y += 0.01;

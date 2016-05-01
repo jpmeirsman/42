@@ -16,7 +16,7 @@ void		switch_buffer(t_data *data)
 	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win,
 		data->img[data->front_buffer], 0, 0);
 }
-
+/*
 int my_key_on_release_funct(int keycode, t_data *data)
 {
 	printf("Key Released: %d\n",keycode);
@@ -43,7 +43,7 @@ int my_key_on_click_funct(int keycode, t_data *data)
 	switch_buffer(data);
 	return (0);
 }
-
+*/
 int my_expose_funct(t_data *data)
 {
 // cette fonction est appelée lorsque l'on replie la fenêtre puis
