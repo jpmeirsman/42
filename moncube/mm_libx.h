@@ -100,7 +100,7 @@ int 		my_key_on_maintain_funct(int keycode, t_data *data);
 int 		my_key_on_click_funct(int keycode, t_data *data);
 
 */
-int 		my_expose_funct(t_data *data);
+//int 		my_expose_funct(t_data *data);
 //int 		my_loop_funct(t_data *data);
 int 		my_mouse_on_move_funct(int x, int y, t_data *data);
 int 		my_mouse_on_click_funct(int button, int x, int y, t_data *data);

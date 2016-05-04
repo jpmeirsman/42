@@ -4,6 +4,7 @@
 #include <math.h>
 #include "mm_math.h"
 #include "mm_libx.h"
+#include "mm_intersects.h"
 
 t_cam				new_cam();
 t_cam				*set_cam(t_vector3 pos, t_vector3 target);
@@ -16,6 +17,7 @@ void				draw_point_device(t_data *data, t_vector2 point);
 t_mesh				*new_cube(char *name);
 void				printcube(t_mesh *my_cube);
 //void 			render(t_device device, t_cam camera, t_meshes *meshes);
+void			print_buffer(t_data *data);
 void 			render(t_data *data, t_meshes *meshes);
 void			fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color);
 void			print_fdf(t_data *data);

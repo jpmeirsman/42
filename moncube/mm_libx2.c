@@ -1,6 +1,86 @@
 #include "mm_libx2.h"
 #include "mm_graph.h"
 
+void			print_menu(t_data *data)
+{
+	int			increment;
+	int			pas;
+
+
+	increment = 1;
+	pas = 12;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	pas * increment++, 0X00FFFFFF, "   M E N U    ");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Quitter  : Esc");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Camera");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Zoom+   : Q");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Zoom-   : S");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Default : D");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Scene rotation");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x+      : 7");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x-      : 8");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x0      : 9");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y+      : 4");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y-      : 5");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y0      : 6");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z+      : 1");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z-      : 2");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z0      : 3");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Scene position");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x+      : R");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x-      : T");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " x0      : Y");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y+      : F");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y-      : G");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " y0      : H");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z+      : V");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z-      : B");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " z0      : N");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, "Elevation");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " +       : W");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " -       : X");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		pas * increment++, 0X00FFFFFF, " Default : C");
+}
+
+
+
+
+
+
 void		clear_canvas(t_data *data)
 {
 	int		i;
@@ -59,6 +139,9 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 	{
 		clear_canvas(data);
 		data->ratio_cam += data->step_cam;
+		if (data->ratio_cam >0)
+			data->ratio_cam = 0;
+//printf("%le=115=\n", data->ratio_cam);
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
@@ -68,6 +151,9 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 	{
 		clear_canvas(data);
 		data->ratio_cam -= data->step_cam;
+		if (data->ratio_cam >0)
+			data->ratio_cam = 0;
+//printf("%le=113=\n", data->ratio_cam);
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
@@ -260,18 +346,17 @@ keycode = data->coef_elev;
 //	switch_buffer(data);
 	return (0);
 }
-/*
+
 int my_expose_funct(t_data *data)
 {
 // cette fonction est appelée lorsque l'on replie la fenêtre puis
 // lorsque l'on la réactive et que l'on génère un évènement clavier 
 // ou souris sur mac sinon osx gère corrextement cela pour nous.
-t_data *data2;
-data2 = data;
-printf("*");
+	print_menu(data);
+	print_buffer(data);
 	return (0);
 }
-*/
+
 int my_loop_funct(t_data *data)
 {
 //	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);

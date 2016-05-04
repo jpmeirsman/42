@@ -176,6 +176,84 @@ void fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color)
 	}
 }
 
+void			print_buffer(t_data *data)
+{
+	int			result;
+
+	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win,
+		data->img[data->front_buffer], 0, 0);
+}
+
+int			clip_v2(t_data *data, t_vector2 *pj1, t_vector2 *pj2)
+{
+	short		pj1_in_canvas;
+	short		pj2_in_canvas;
+	int			result[4];
+	t_vector2	intersect1;
+	t_vector2	intersect2;
+	short		nb_intersect;
+	t_vector2	array_inters[8];
+	int			i;
+
+	if (((pj1->x >= 0) && (pj1->x <= data->canvas_width)) &&
+	   ((pj1->y >= 0) && (pj1->y <= data->canvas_height)))
+		pj1_in_canvas = 1;
+		else
+		pj1_in_canvas = 0;
+	if (((pj2->x >= 0) && (pj2->x <= data->canvas_width)) &&
+	   ((pj2->y >= 0) && (pj2->y <= data->canvas_height)))
+		pj2_in_canvas = 1;
+		else
+		pj2_in_canvas = 0;
+	if (pj1_in_canvas && pj2_in_canvas)
+		return (1);
+
+	result[0] = lines_intersect(pj1->x, pj1->y, pj2->x, pj2->y, 0, 0,
+		data->canvas_width, 0,  &array_inters[0].x, &array_inters[0].y);
+	result[1] = lines_intersect(pj1->x, pj1->y, pj2->x, pj2->y,
+		data->canvas_width, 0, data->canvas_width, data->canvas_height,
+		&array_inters[1].x, &array_inters[1].y);
+	result[2] = lines_intersect(pj1->x, pj1->y, pj2->x, pj2->y,
+		data->canvas_width, data->canvas_height, 0, data->canvas_height,
+		&array_inters[2].x, &array_inters[2].y);
+	result[3] = lines_intersect(pj1->x, pj1->y, pj2->x, pj2->y,
+		0, data->canvas_height, 0, 0, &array_inters[3].x, &array_inters[3].y);
+	nb_intersect = 0;
+	i = 0;
+	while (i <= 3)
+	{
+		if (result[i] == do_intersect)
+		{
+			if (nb_intersect == 0)
+				intersect1 = array_inters[i];
+				else
+				intersect2 = array_inters[i];
+			nb_intersect++;
+		}
+		i++;
+	}
+	if (nb_intersect == 2)
+	{
+		*pj1 = intersect1;
+		*pj2 = intersect2;
+		return (1);
+	}
+	else
+	if (nb_intersect == 1)
+	{
+		if (pj1_in_canvas)
+		{
+			*pj2 = intersect1;
+		}
+		else
+		{
+			*pj1 = intersect1;
+		}
+		return (1);
+	}
+	return (0);
+}
+
 void			print_fdf(t_data *data)
 {
 	int			i;
@@ -197,7 +275,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
-				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+				if (clip_v2(data, &pj1, &pj2))
+					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
 			}
 			if (i < data->tf->nb_rows - 1)
 			{
@@ -207,7 +286,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
-				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+				if (clip_v2(data, &pj1, &pj2))
+					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
 			}
 		}
 	}

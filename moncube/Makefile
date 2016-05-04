@@ -7,6 +7,7 @@ INDS += -I/usr/X11/include
 SRCA += ./Libft/libft.a
 SRCS += moncube.c
 SRCS += mm_math.c
+SRCS += mm_intersects.c
 SRCS += mm_graph.c
 SRCS += mm_libx.c
 SRCS += mm_readmap.c

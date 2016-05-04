@@ -1,16 +1,5 @@
+#include "mm_intersects.h"
 #include <stdio.h>
-#define	dont_intersect    0
-#define	do_intersect      1
-#define collinear         2
-
-/**************************************************************
- *                                                            *
- *    NOTE:  The following macro to determine if two numbers  *
- *    have the same sign, is for 2's complement number        *
- *    representation.  It will need to be modified for other  *
- *    number systems.                                         *
- *                                                            *
- **************************************************************/
 
 int same_signs(double a, double b)
 {
@@ -64,6 +53,8 @@ int			lines_intersect(double x1, double y1, double x2, double y2,
 	return (do_intersect);
 }
 
+/*
+
 Si les 2 points sont dans le canvas
 	on utilise la procédure standard
 	sinon 
@@ -73,37 +64,28 @@ Si les 2 points sont dans le canvas
 		on ne dessine pas
 		sinon
 		si les deux points son collinéaires
-			on limite les valeurs de x et y à celles min et max du canvas et on dessine
+			on limite les valeurs de x et y à celles min et max du canvas et on dessine ; l'astuce est que le calcul se fait sur est un pixel plus grand et large que le vrai canvas donc on n'a pas besoin de dessiner
 			sinon
 			un des point se trouve dans le canvas et l'autre point intersecte
 			on trace un trait entre celui dans le canvas et celui qui intersecte
 
-
+*/
+/*
 int		main(void)
 {
 	double x1, x2, x3, x4, y1, y2, y3, y4;
 	double  x, y;
 
-		x1 = -1;
-		y1 = 3;
-		x2 = 6;
-		y2 = 7;
-/*
-		x1 = 1;
-		y1 = 1;
+		x1 = 2;
+		y1 = 5;
 		x2 = 5;
-		y2 = 5;
-*/
-		x3 = 2;
-		y3 = 9;
-		x4 = 4;
+		y2 = 4;
+
+		x3 = 3;
+		y3 = 6;
+		x4 = 3;
 		y4 = 2;
-/*
-		x3 = 5;
-		y3 = 5;
-		x4 = 8;
-		y4 = 8;
-*/
+
 		switch ( lines_intersect( x1, y1, x2, y2, x3, y3, x4, y4, &x, &y )) {
 			case dont_intersect:
 				printf( "Lines don't intersect\n" );
@@ -117,4 +99,5 @@ int		main(void)
 		}
 	return (0);
 }
+*/
 

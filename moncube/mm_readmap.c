@@ -65,14 +65,14 @@ void		create_map(t_list2 *my_list, t_fic *tf)
 	t_elem_int		*curr;
 	long long		i;
 	long long		j;
-	long long		center_x;
-	long long		center_y;
+	double			center_x;
+	double			center_y;
 
 	curr = my_list->first;
 	tf->values = create_table(tf->nb_rows,tf->nb_columns);
 	tf->tvect = create_table_v3(tf->nb_rows,tf->nb_columns);
-	center_x = tf->nb_columns / 2;
-	center_y = tf->nb_rows / 2;
+	center_x = (float) (tf->nb_columns - 1) / 2;
+	center_y = (float) (tf->nb_rows - 1) / 2;
 
 	i = tf->nb_rows - 1;
 	while (i >= 0)

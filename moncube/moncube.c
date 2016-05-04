@@ -1,79 +1,5 @@
 #include "moncube.h"
-#include "mm_libx2.h"
-
-void		print_menu(t_data *data)
-{
-	int			increment;
-	int			pas;
-
-	increment = 1;
-	pas = 12;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "   M E N U    ");
-	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Quitter  : Esc");
-	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Camera");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " Zoom+   : Q");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " Zoom-   : S");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " Default : D");
-	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Scene rotation");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x+      : 7");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x-      : 8");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x0      : 9");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y+      : 4");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y-      : 5");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y0      : 6");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z+      : 1");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z-      : 2");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z0      : 3");
-	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Scene position");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x+      : R");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x-      : T");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " x0      : Y");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y+      : F");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y-      : G");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " y0      : H");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z+      : V");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z-      : B");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " z0      : N");
-	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Elevation");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " +       : W");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " -       : X");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, " Default : C");
-}
+//#include "mm_libx2.h"
 
 void			start_fdf(t_data *data, t_fic *tf)
 {
@@ -82,7 +8,6 @@ void			start_fdf(t_data *data, t_fic *tf)
 	t_mesh		*mesh;
 	double		min_z;
 	double		max_z;
-//	double		coef_elev;
 	double		z;
 	double		pi;
 
@@ -93,33 +18,20 @@ void			start_fdf(t_data *data, t_fic *tf)
 		else
 		data->ratio_init_cam = tf->nb_columns * -3;
 	data->ratio_cam = data->ratio_init_cam;
-	data->step_cam = data->ratio_init_cam / 20;
+	data->step_cam = data->ratio_init_cam / 5;
 	data->cam = set_cam(zero_vector3(), zero_vector3());
 	data->cam->position = set_vector3(0, 0 , data->ratio_cam);
-	data->cam->target = set_vector3(0, 0 , 0);
+//	data->cam->position = set_vector3(0, 0, 0);
+	data->cam->target = set_vector3(0, 0, 0);
 	mesh = malloc(sizeof(t_mesh));
-//	mesh->position = set_vector3(0, 0, 0);
-//	mesh->rotation = set_vector3(-60 / 180 * pi, 0, 0);
 	data->scene_pos = set_vector3(0, 0, 0);
 	data->scene_rot = set_vector3(0, 0, 0);
 	data->view_matrix = malloc(sizeof(t_matrix));
-//	*data->view_matrix = look_at_lh_matrix(data->cam->position,
-//		data->cam->target, up_vector3());
 	data->projection_matrix= malloc(sizeof(t_matrix));
-//	*data->projection_matrix = perspective_fov_lh_matrix(0.78,
-//		data->canvas_width / data->canvas_height, 0.01, 1);
 	data->world_matrix = malloc(sizeof(t_matrix));
-//	*data->world_matrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
-//		mesh->rotation.y, mesh->rotation.x, mesh->rotation.z),
-//		translation_matrix(mesh->position.x, mesh->position.y, 
-//		mesh->position.z));
 	data->transform_matrix = malloc(sizeof(t_matrix));
-//	*data->transform_matrix = multiply_matrix(*data->world_matrix,
-//		multiply_matrix(*data->view_matrix, *data->projection_matrix));
-	render_fdf(data);
 	data->put_in_canvas = true;
 
-//	printf("c: %llu, l: %llu\n",tf->nb_columns,tf->nb_rows);
 //printf("nbrow : %llu, nbcol : %llu\n",tf->nb_rows, tf->nb_columns);
 	min_z = 0;
 	max_z = 0;
@@ -135,50 +47,13 @@ void			start_fdf(t_data *data, t_fic *tf)
 		}
 	}
 //printf("Z : min = %le, max = %le\n",min_z,max_z);
-	data->coef_elev = 2 / (max_z - min_z);
+	data->coef_elev = -2 / (max_z - min_z);
 	data->coef_init_elev = data->coef_elev;
 	data->step_elev = data->coef_elev / 10;
+	render_fdf(data);
 	print_fdf(data);
-/*
-	for (i = 0; i < tf->nb_rows; i++)
-	{
-		for (j = 0; j < tf->nb_columns; j++)
-		{
-			if (j < tf->nb_columns - 1)
-			{
-				tv1 = tf->tvect[i][j];
-				tv2 = tf->tvect[i][j+1];
-				tv1.z *= data->coef_elev;
-				tv2.z *= data->coef_elev;
-				pj1 = project_device(data, tv1, *data->transform_matrix);
-				pj2 = project_device(data, tv2, *data->transform_matrix);
-				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
-			}
-			if (i < tf->nb_rows - 1)
-			{
-				tv1 = tf->tvect[i][j];
-				tv2 = tf->tvect[i+1][j];
-				tv1.z *= data->coef_elev;
-				tv2.z *= data->coef_elev;
-				pj1 = project_device(data, tv1, *data->transform_matrix);
-				pj2 = project_device(data, tv2, *data->transform_matrix);
-				fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
-			}
-		}
-	}
-*/
-//printf("tv1.x : %le, tv1.y : %le, tv2.x : %le, tv2.y : %le\n",tv1.x,tv1.y,tv2.x,tv2.y);
 }
-/*
-void		drawing_loop(t_data *data, t_meshes *arr_mesh)
-{
-//	device.clear; //mise à zero
-//	arr_mesh->m[0]->rotation.x += 0.01;
-//	arr_mesh->m[0]->rotation.y += 0.01;
-	render(data, arr_mesh);
-//	device.present(); // affichage du buffer
-}
-*/
+
 void		print_my_cube(t_data *data)
 {
 	float			center_x;
@@ -201,9 +76,7 @@ void		print_my_cube(t_data *data)
 //	drawing_loop(data, my_meshes);
 }
 
-//int main(void)
 int main(int argc, char **argv)
-//int win_start()
 {
 	int retour;
 	t_data data;

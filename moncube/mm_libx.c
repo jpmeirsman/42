@@ -44,6 +44,7 @@ int my_key_on_click_funct(int keycode, t_data *data)
 	return (0);
 }
 */
+/*
 int my_expose_funct(t_data *data)
 {
 // cette fonction est appelée lorsque l'on replie la fenêtre puis
@@ -54,6 +55,7 @@ data2 = data;
 printf("*");
 	return (0);
 }
+*/
 /*
 int my_loop_funct(t_data *data)
 {
