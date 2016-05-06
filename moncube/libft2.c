@@ -52,19 +52,61 @@ void reverse2(char s[])
 	}
 }
 
-void itoa(int n, char s[])
+void				itoa(int n, char s[])
 {
-	int i, sign;
+	int				i;
+	int				sign;
 
-	if ((sign = n) < 0)  /* record sign */
-		n = -n;          /* make n positive */
+	if ((sign = n) < 0)
+		n = -n;
 	i = 0;
-	do {       /* generate digits in reverse order */
-		s[i++] = n % 10 + '0';   /* get next digit */
-	} while ((n /= 10) > 0);     /* delete it */
+	do {
+		s[i++] = n % 10 + '0';
+	} while ((n /= 10) > 0);
 	if (sign < 0)
 		s[i++] = '-';
 	s[i] = '\0';
 	reverse2(s);
+}
+
+char				*dtoa(double f, short precision)
+{
+	char			*s;
+	char			*s2;
+	double			f3;
+	double			f2;
+	long long		z;
+	int				i;
+
+	s = ft_memalloc(sizeof(char) *30);
+
+//	return (s);
+
+	s = memset(s, '\0', 30);
+	s2 = ft_memalloc(sizeof(char) *30);
+	s2 = memset(s2, '\0', 30);
+	if (f < 0)
+	{
+		s=strcat(s,"-");
+		f = -f;
+	}
+	f2 = modf(f, &f3);
+	z = (int) f3;
+	itoa(z, s2);
+	s = strcat(s, s2);
+	s = strcat(s, ".");
+	z = (int) nearbyint(f2 * pow(10, precision));
+	i = (int) ceil(log10(f2*pow(10, precision)));
+	if (z == 0)
+		i = 0;
+	s2 = memset(s2, '0', precision - i);
+	s2[precision - i] = '\0';
+	s = strcat(s, s2);
+	if (z != 0)
+	{
+		itoa(z, s2);
+		s = strcat(s, s2);
+	}
+	return (s);
 }
 

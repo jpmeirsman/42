@@ -73,7 +73,7 @@ void		print_my_cube(t_data *data)
 	my_meshes->m[0]->rotation.y += 0.01;
 
 //	render(data, arr_mesh);
-//	drawing_loop(data, my_meshes);
+	drawing_loop(data, my_meshes);
 }
 
 int main(int argc, char **argv)
@@ -90,8 +90,8 @@ int main(int argc, char **argv)
 	}
 	data.screen_width = 1024;
 	data.screen_height = 768;
-	data.canvas_width = data.screen_width - 100;
-	data.canvas_height = data.screen_height;
+	data.canvas_width = data.screen_width - 100 - 1;
+	data.canvas_height = data.screen_height - 2;
 	data.back_buffer = 1;
 	data.front_buffer = 0;
 	data.anime = 1;
@@ -111,8 +111,15 @@ int main(int argc, char **argv)
 
 	print_menu(&data);
 	data.put_in_canvas = false;
-	fdf_bline(&data,data.canvas_width,0,data.canvas_width,data.screen_height
-		- 1,0x00FFFFFF);
+	fdf_bline(&data, data.canvas_width + 1, 0, data.canvas_width + 1, data.screen_height
+		- 1, 0x00CFCFCF);
+	fdf_bline(&data,data.screen_width - 1, 0, data.screen_width - 1,
+		data.screen_height - 1, 0x00CFCFCF);
+	fdf_bline(&data, 0, 0, 0, data.screen_height - 1, 0x00CFCFCF);
+	fdf_bline(&data, 0, data.screen_height - 1, data.screen_width - 1,
+		data.screen_height - 1, 0x00CFCFCF);
+//	draw_square(&data, data.canvas_width + 2, 0, data.screen_width - 2, 
+//		data.screen_height - 2, 0x00CFCFCF);
 	data.put_in_canvas = true;
 
 	data.img[data.back_buffer] = mlx_new_image(data.mlx_ptr, data.canvas_width
@@ -129,7 +136,7 @@ int main(int argc, char **argv)
 
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
-		data.img[data.front_buffer], 0, 0);
+		data.img[data.front_buffer], 1, 1);
 
 	if (retour == 1)
 		return 0;

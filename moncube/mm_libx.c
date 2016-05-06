@@ -14,7 +14,7 @@ void		switch_buffer(t_data *data)
 	data->front_buffer = data->back_buffer;
 	data->back_buffer = temp;
 	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win,
-		data->img[data->front_buffer], 0, 0);
+		data->img[data->front_buffer], 1, 0);
 }
 /*
 int my_key_on_release_funct(int keycode, t_data *data)
@@ -67,7 +67,7 @@ data2 = data;
 printf("*\n");
 	return (0);
 }
-*/
+
 int my_mouse_on_move_funct(int x, int y, t_data *data)
 {
 t_data *data2;
@@ -91,7 +91,7 @@ data2 = data;
 	printf("Released Button: %d x: %d y: %d\n",button, x ,y);
 	return (0);
 }
-
+*/
 int mlx_pixel_put2(t_data *data, int x, int y, int	 color)
 {
 	if ((x >= 0) && (y >= 0) && (x < data->canvas_width) && (y< data->canvas_height))

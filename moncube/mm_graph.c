@@ -176,12 +176,33 @@ void fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color)
 	}
 }
 
+void draw_square(t_data *data,int xi,int yi,int xf,int yf, int color)
+{
+	int			i;
+	int			j;
+
+	i = xi;
+	while (i <= xf)
+	{
+		j = yi;
+		while (j <= yf)
+		{
+			if (data->put_in_canvas)
+				mlx_pixel_put2(data, i, j, color);
+			else
+				mlx_pixel_put(data->mlx_ptr, data->mlx_win, i, j, color);
+			j++;
+		}
+		i++;
+	}
+}
+
 void			print_buffer(t_data *data)
 {
 	int			result;
 
 	result = mlx_put_image_to_window (data->mlx_ptr, data->mlx_win,
-		data->img[data->front_buffer], 0, 0);
+		data->img[data->front_buffer], 1, 0);
 }
 
 int			clip_v2(t_data *data, t_vector2 *pj1, t_vector2 *pj2)

@@ -5,75 +5,102 @@ void			print_menu(t_data *data)
 {
 	int			increment;
 	int			pas;
-
+//	char		s[20];
 
 	increment = 1;
 	pas = 12;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 	pas * increment++, 0X00FFFFFF, "   M E N U    ");
 	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
-		pas * increment++, 0X00FFFFFF, "Quitter  : Esc");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Quit    : Esc");
 	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, "Camera");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " Zoom+   : Q");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " Zoom-   : S");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " Default : D");
 	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, "Scene rotation");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x+      : 7");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x-      : 8");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x0      : 9");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y+      : 4");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y-      : 5");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y0      : 6");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z+      : 1");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z-      : 2");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z0      : 3");
 	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, "Scene position");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x+      : R");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x-      : T");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " x0      : Y");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y+      : F");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y-      : G");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " y0      : H");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z+      : V");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z-      : B");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " z0      : N");
 	increment++;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, "Elevation");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " +       : W");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " -       : X");
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 90,
+		
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, " Default : C");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Mouse");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "X:    0 Y:    0");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Camera");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Elev:    0");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Scene");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "RotX:    0");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "RotY:    0");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "RotZ:    0");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "PosX:    0");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "PosY:    0");
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "PosZ:    0");
+//	print_info(data);
 }
 
 
@@ -133,6 +160,38 @@ int my_key_on_release_funct(int keycode, t_data *data)
 	return (0);
 }
 
+void			print_sub_info(t_data *data, int increment, char *s1, 
+					double value)
+{
+	int			pas;
+	char		*s;
+	char		*s2;
+
+	s2 = malloc(20);
+	pas = 12;
+	s = s1;
+	s2 = ft_strcat(s2, s);
+	s = dtoa(value, 3);
+	s2 = ft_strcat(s2, s);
+	data->put_in_canvas = false;
+	draw_square(data, data->screen_width - 95, pas * (increment - 1),
+		data->screen_width - 2, pas * (increment - 1) + 12, 0x00000000);
+	data->put_in_canvas = true;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment, 0X00FFFFFF, s2);
+}
+
+void			print_info(t_data *data)
+{
+	print_sub_info(data, 41, "Elev: ", data->ratio_cam);
+	print_sub_info(data, 43, "RotX: ", data->scene_rot.x);
+	print_sub_info(data, 44, "RotY: ", data->scene_rot.y);
+	print_sub_info(data, 45, "RotZ: ", data->scene_rot.z);
+	print_sub_info(data, 46, "PosX: ", data->scene_pos.x);
+	print_sub_info(data, 47, "PosY: ", data->scene_pos.y);
+	print_sub_info(data, 48, "PosZ: ", data->scene_pos.z);
+}
+
 int my_key_on_maintain_funct(int keycode, t_data *data)
 {
 	if (keycode == 115)
@@ -141,11 +200,11 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->ratio_cam += data->step_cam;
 		if (data->ratio_cam >0)
 			data->ratio_cam = 0;
-//printf("%le=115=\n", data->ratio_cam);
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 113)
 	{
@@ -153,11 +212,11 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		data->ratio_cam -= data->step_cam;
 		if (data->ratio_cam >0)
 			data->ratio_cam = 0;
-//printf("%le=113=\n", data->ratio_cam);
 		data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 100)
 	{
@@ -167,6 +226,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 232)
 	{
@@ -175,6 +235,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 95)
 	{
@@ -183,6 +244,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 231)
 	{
@@ -191,6 +253,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 39)
 	{
@@ -199,6 +262,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 40)
 	{
@@ -207,6 +271,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 45)
 	{
@@ -215,6 +280,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 38)
 	{
@@ -223,6 +289,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 233)
 	{
@@ -231,6 +298,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 34)
 	{
@@ -239,6 +307,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 114)
 	{
@@ -247,6 +316,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 116)
 	{
@@ -255,6 +325,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 121)
 	{
@@ -263,6 +334,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 102)
 	{
@@ -271,6 +343,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 103)
 	{
@@ -279,6 +352,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 104)
 	{
@@ -287,6 +361,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 118)
 	{
@@ -295,6 +370,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 98)
 	{
@@ -303,14 +379,17 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 110)
+		print_info(data);
 	{
 		clear_canvas(data);
 		data->scene_pos.z = 0;
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 119)
 	{
@@ -319,6 +398,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 120)
 	{
@@ -327,6 +407,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	if (keycode == 99)
 	{
@@ -335,6 +416,7 @@ int my_key_on_maintain_funct(int keycode, t_data *data)
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
+		print_info(data);
 	}
 	return (0);
 }
@@ -370,12 +452,46 @@ render(data, data->my_meshes);
 switch_buffer(data);
 	return (0);
 }
-/*
+
 int my_mouse_on_move_funct(int x, int y, t_data *data)
 {
-t_data *data2;
-data2 = data;
-	printf("x: %d y: %d\n", x ,y);
+	int			increment;
+	int			pas;
+	char		s[20];
+	char		*s2;
+	int			i;
+	int			len;
+
+	s2 = malloc(20);
+	increment = 38;
+	pas = 12;
+	s2 = ft_strcat(s2, "X:");
+	itoa(x, s);
+	len = 4 - ft_strlen(s);
+	i = 0;
+	while (i <= len)
+	{
+		s2 = ft_strcat(s2, " ");
+		i++;
+	}
+	s2 = ft_strcat(s2, s);
+	s2 = ft_strcat(s2, " Y:");
+	itoa(y, s);
+	len = 4 - ft_strlen(s);
+	i = 0;
+	while (i <= len)
+	{
+		s2 = ft_strcat(s2, " ");
+		i++;
+	}
+	s2 = ft_strcat(s2, s);
+	data->put_in_canvas = false;
+	draw_square(data, data->screen_width - 91, pas * (increment - 1),
+		data->screen_width - 2, pas * (increment - 1) + 12, 0x00000000);
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, s2);
+	data->put_in_canvas = true;
+
 	return (0);
 }
 
@@ -394,7 +510,7 @@ data2 = data;
 	printf("Released Button: %d x: %d y: %d\n",button, x ,y);
 	return (0);
 }
-
+/*
 int mlx_pixel_put2(t_data *data, int x, int y, int	 color)
 {
 	if ((x >= 0) && (y >= 0) && (x < data->canvas_width) && (y< data->canvas_height))
