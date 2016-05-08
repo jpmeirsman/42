@@ -275,6 +275,33 @@ int			clip_v2(t_data *data, t_vector2 *pj1, t_vector2 *pj2)
 	return (0);
 }
 
+void			print_fdf2(t_data *data)
+{
+	int			i;
+	int			j;
+	t_vector3	tv1;
+//	t_vector2	pj1;
+	char		*s;
+
+	printf("Table des vecteurs\n");
+	for (i = 0; i < data->tf->nb_rows; i++)
+	{
+		for (j = 0; j < data->tf->nb_columns; j++)
+		{
+			tv1 = data->tf->tvect[i][j];
+			s = dtoa(tv1.x, 2);
+			printf("(%s ", s);
+			s = dtoa(tv1.y, 2);
+			printf("%s ", s);
+			s = dtoa(tv1.z * data->coef_elev, 2);
+			printf("%s)\t", s);
+//			pj1 = project_device(data, tv1, *data->transform_matrix);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
+
 void			print_fdf(t_data *data)
 {
 	int			i;
@@ -284,6 +311,7 @@ void			print_fdf(t_data *data)
 	t_vector2	pj1;
 	t_vector2	pj2;
 
+print_fdf2(data);
 	for (i = 0; i < data->tf->nb_rows; i++)
 	{
 		for (j = 0; j < data->tf->nb_columns; j++)
@@ -296,8 +324,14 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
-				if (clip_v2(data, &pj1, &pj2))
+				if ((clip_v2(data, &pj1, &pj2))
+					&& ((data->cam->position.z < data->scene_pos.z + tv1.z
+					&& (data->cam->position.z < data->scene_pos.z + tv2.z))))
+				{
+					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
+					printf("coef elev %le %le \n", tv1.z, tv2.z);
 					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+				}
 			}
 			if (i < data->tf->nb_rows - 1)
 			{
@@ -307,8 +341,14 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
-				if (clip_v2(data, &pj1, &pj2))
+				if ((clip_v2(data, &pj1, &pj2))
+					&& ((data->cam->position.z < data->scene_pos.z + tv1.z
+					&& (data->cam->position.z < data->scene_pos.z + tv2.z))))
+				{
+					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
+					printf("coef elev %le %le \n", tv1.z, tv2.z);
 					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+				}
 			}
 		}
 	}

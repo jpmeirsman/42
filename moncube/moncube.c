@@ -9,10 +9,8 @@ void			start_fdf(t_data *data, t_fic *tf)
 	double		min_z;
 	double		max_z;
 	double		z;
-	double		pi;
 
 	data->tf = tf;
-	pi = 3.14159265359;
 	if (tf->nb_columns < tf->nb_rows)
 		data->ratio_init_cam = tf->nb_rows * -3;
 		else

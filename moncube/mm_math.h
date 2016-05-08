@@ -8,6 +8,8 @@
 #include "libft2.h"
 #include "mm_basic.h"
 
+#define pi			3.14159265359
+
 typedef struct		s_vector3
 {
 	double			x;
