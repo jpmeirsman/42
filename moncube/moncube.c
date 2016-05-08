@@ -12,9 +12,9 @@ void			start_fdf(t_data *data, t_fic *tf)
 
 	data->tf = tf;
 	if (tf->nb_columns < tf->nb_rows)
-		data->ratio_init_cam = tf->nb_rows * -3;
+		data->ratio_init_cam = tf->nb_rows * 3;
 		else
-		data->ratio_init_cam = tf->nb_columns * -3;
+		data->ratio_init_cam = tf->nb_columns * 3;
 	data->ratio_cam = data->ratio_init_cam;
 	data->step_cam = data->ratio_init_cam / 5;
 	data->cam = set_cam(zero_vector3(), zero_vector3());
@@ -45,7 +45,7 @@ void			start_fdf(t_data *data, t_fic *tf)
 		}
 	}
 //printf("Z : min = %le, max = %le\n",min_z,max_z);
-	data->coef_elev = -2 / (max_z - min_z);
+	data->coef_elev = 2 / (max_z - min_z);
 	data->coef_init_elev = data->coef_elev;
 	data->step_elev = data->coef_elev / 10;
 	render_fdf(data);

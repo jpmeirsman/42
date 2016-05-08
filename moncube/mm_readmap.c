@@ -68,6 +68,8 @@ void		create_map(t_list2 *my_list, t_fic *tf)
 	double			center_x;
 	double			center_y;
 
+	tf->min_elev = 1e70;
+	tf->max_elev = -1e70;
 	curr = my_list->first;
 	tf->values = create_table(tf->nb_rows,tf->nb_columns);
 	tf->tvect = create_table_v3(tf->nb_rows,tf->nb_columns);
@@ -80,6 +82,10 @@ void		create_map(t_list2 *my_list, t_fic *tf)
 		j = tf->nb_columns - 1;
 		while (j >= 0)
 		{
+			if (tf->min_elev > curr->value)
+				tf->min_elev = curr->value;
+			if (tf->max_elev < curr->value)
+				tf->max_elev = curr->value;
 			tf->values[i][j] = curr->value;
 			tf->tvect[i][j] = set_vector3( j - center_x, i - center_y, 
 				curr->value);

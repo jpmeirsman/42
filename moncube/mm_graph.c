@@ -176,6 +176,113 @@ void fdf_bline(t_data *data,int xi,int yi,int xf,int yf, int color)
 	}
 }
 
+int				compute_color(t_data *data, double altitude)
+{
+	t_color4	start_color;
+	t_color4	end_color;
+	t_color4	final_color;
+	int			color;
+	double		proportion;
+
+	int			i;
+//	t_palette	*pal;
+
+	data->nb_palette = 2;
+	data->palette = malloc(sizeof(t_palette) * data->nb_palette);
+	data->palette[0].start_color = new_color4(151, 10, 0, 0);
+	data->palette[0].end_color = new_color4(141, 211, 0, 0);
+	data->palette[0].start_range = 0;
+	data->palette[0].end_range = 0.333;
+	data->palette[1].start_color = new_color4(141, 211, 0, 0);
+	data->palette[1].end_color = new_color4(99, 59, 0xFF, 0);
+	data->palette[1].start_range = 0.333;
+	data->palette[1].end_range = 1;
+
+	color = data->endian;
+	proportion = (altitude - data->tf->min_elev) / (data->tf->max_elev - 
+		data->tf->min_elev);
+
+//printf("p:%le %le-",proportion,data->palette[1].start_range);
+	i = 0;
+	while (i < data->nb_palette)
+	{
+		if ((proportion >= data->palette[i].start_range) && (proportion <= 
+			data->palette[i].end_range))
+			break;
+		i++;
+	}
+	if (i == data->nb_palette)
+		i = 0;
+
+//	start_color = new_color4(0x40,0x40, 0x40, 0x00);
+//	end_color = new_color4(0xFF, 0xFF, 0xFF, 0x00);
+	start_color = data->palette[i].start_color;
+	end_color = data->palette[i].end_color;;
+
+
+	final_color.r = start_color.r + (proportion * (end_color.r - start_color.r));
+	final_color.g = start_color.g + (proportion * (end_color.g - start_color.g));
+	final_color.b = start_color.b + (proportion * (end_color.b - start_color.b));
+	final_color.a = 0x00;//start_color.a + (proportion * end_color.a);
+	color = (((((final_color.a * 256) + final_color.r) * 256) + 
+		final_color.g) * 256) + final_color.b;
+	return (color);
+}
+
+void fdf_bline_color(t_data *data,int xi,int yi,int xf,int yf,
+	double altitude1, double altitude2)
+{
+	double				dx;
+	double				dy;
+	double				sx;
+	double				sy;
+	double				err;
+	double				e2;
+	double				altitude;
+//	double				diff_alt;
+	double				len_segment;
+	double				len_progress;
+	int					save_xi;
+	int					save_yi;
+	double				proportion;
+
+//printf("DEBUT\n");
+	save_xi = xi;
+	save_yi = yi;
+	dx = abs(xf - xi);
+	dy = abs(yf - yi);
+	sx = (xi < xf) ? 1 : -1;
+	sy = (yi < yf) ? 1 : -1;
+	err = dx - dy;
+	len_segment = sqrt(pow((xf - xi),2) + pow((yf - yi),2));
+	while (true)
+	{
+		len_progress = sqrt(pow((save_xi - xi),2) + pow((save_yi - yi),2));
+		proportion = len_progress / len_segment;
+		altitude = altitude1 + (altitude2 - altitude1) * proportion;
+
+//printf("ALT : %le %le %le %le\n",altitude, proportion, altitude1, altitude2);
+
+		if (data->put_in_canvas)
+			mlx_pixel_put2(data, xi, yi, compute_color(data, altitude));
+		else
+			mlx_pixel_put(data->mlx_ptr, data->mlx_win, xi, yi,
+				compute_color(data, altitude));
+		if ((xi == xf) && (yi == yf)) break;
+		e2 = 2 * err;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			xi += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+		yi += sy;
+		}
+	}
+}
+
 void draw_square(t_data *data,int xi,int yi,int xf,int yf, int color)
 {
 	int			i;
@@ -311,7 +418,7 @@ void			print_fdf(t_data *data)
 	t_vector2	pj1;
 	t_vector2	pj2;
 
-print_fdf2(data);
+//print_fdf2(data);
 	for (i = 0; i < data->tf->nb_rows; i++)
 	{
 		for (j = 0; j < data->tf->nb_columns; j++)
@@ -325,12 +432,14 @@ print_fdf2(data);
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
 				if ((clip_v2(data, &pj1, &pj2))
-					&& ((data->cam->position.z < data->scene_pos.z + tv1.z
-					&& (data->cam->position.z < data->scene_pos.z + tv2.z))))
+					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
+					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))
 				{
-					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
-					printf("coef elev %le %le \n", tv1.z, tv2.z);
-					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+//					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
+//					printf("coef elev %le %le \n", tv1.z, tv2.z);
+//					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+					fdf_bline_color(data, pj1.x, pj1.y, pj2.x, pj2.y,
+						data->tf->tvect[i][j].z, data->tf->tvect[i][j+1].z);
 				}
 			}
 			if (i < data->tf->nb_rows - 1)
@@ -342,12 +451,14 @@ print_fdf2(data);
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
 				if ((clip_v2(data, &pj1, &pj2))
-					&& ((data->cam->position.z < data->scene_pos.z + tv1.z
-					&& (data->cam->position.z < data->scene_pos.z + tv2.z))))
+					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
+					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))
 				{
-					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
-					printf("coef elev %le %le \n", tv1.z, tv2.z);
-					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+//					printf("i:%d j:%d %le %le %le %le\n", i, j, pj1.x, pj1.y, pj2.x, pj2.y);
+//					printf("coef elev %le %le \n", tv1.z, tv2.z);
+//					fdf_bline(data, pj1.x, pj1.y, pj2.x, pj2.y,0x00FFFFFF);
+					fdf_bline_color(data, pj1.x, pj1.y, pj2.x, pj2.y,
+						data->tf->tvect[i][j].z, data->tf->tvect[i+1][j].z);
 				}
 			}
 		}

@@ -53,10 +53,10 @@ typedef struct		s_meshes
 
 typedef struct		s_color4
 {
-	short			r;
-	short			g;
-	short			b;
-	short			a;
+	unsigned short	r;
+	unsigned short	g;
+	unsigned short	b;
+	unsigned short	a;
 }					t_color4;
 
 t_color4			new_color4(short r, short g, short b, short a);

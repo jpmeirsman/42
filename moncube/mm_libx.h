@@ -51,8 +51,18 @@ typedef struct			s_fic
 	long long			nb_rows;
 	long long			nb_columns;
 	int					**values;
+	double				min_elev;
+	double				max_elev;
 	t_vector3			**tvect;
 } t_fic;
+
+typedef struct			s_palette
+{
+	t_color4			start_color;
+	t_color4			end_color;
+	double				start_range;
+	double				end_range;
+} t_palette;
 
 typedef struct			s_data
 {
@@ -87,6 +97,8 @@ typedef struct			s_data
 	t_fic				*tf;
 	t_vector3			scene_pos;
 	t_vector3			scene_rot;
+	t_palette			*palette;
+	int					nb_palette;
 //t_canvascanvas2;
 	////t_devicedevice;
 	//
