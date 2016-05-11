@@ -23,7 +23,7 @@ void			start_fdf(t_data *data, t_fic *tf)
 	data->cam->target = set_vector3(0, 0, 0);
 	mesh = malloc(sizeof(t_mesh));
 	data->scene_pos = set_vector3(0, 0, 0);
-	data->scene_rot = set_vector3(0, 0, 0);
+	data->scene_rot = set_vector3(0, pi, 0);
 	data->view_matrix = malloc(sizeof(t_matrix));
 	data->projection_matrix= malloc(sizeof(t_matrix));
 	data->world_matrix = malloc(sizeof(t_matrix));
@@ -45,9 +45,18 @@ void			start_fdf(t_data *data, t_fic *tf)
 		}
 	}
 //printf("Z : min = %le, max = %le\n",min_z,max_z);
-	data->coef_elev = 2 / (max_z - min_z);
+	data->coef_elev = -2 / (max_z - min_z);
 	data->coef_init_elev = data->coef_elev;
 	data->step_elev = data->coef_elev / 10;
+
+//data->tf->min_elev = 0;
+//data->tf->max_elev = 10;
+//fdf_bline_color(data, 0, 0,700, 700, 0, 10);
+//return;
+
+
+
+
 	render_fdf(data);
 	print_fdf(data);
 }

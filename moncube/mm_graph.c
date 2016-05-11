@@ -183,42 +183,57 @@ int				compute_color(t_data *data, double altitude)
 	t_color4	final_color;
 	int			color;
 	double		proportion;
+	double		diff_range;
+	double		max_diff_range;
 
 	int			i;
 //	t_palette	*pal;
 
 	data->nb_palette = 2;
 	data->palette = malloc(sizeof(t_palette) * data->nb_palette);
-	data->palette[0].start_color = new_color4(151, 10, 0, 0);
-	data->palette[0].end_color = new_color4(141, 211, 0, 0);
+	data->palette[0].start_color = new_color4(0, 0x40, 0, 0);
+	data->palette[0].end_color = new_color4(0, 0x8F, 0, 0);
 	data->palette[0].start_range = 0;
 	data->palette[0].end_range = 0.333;
-	data->palette[1].start_color = new_color4(141, 211, 0, 0);
-	data->palette[1].end_color = new_color4(99, 59, 0xFF, 0);
+	data->palette[1].start_color = new_color4(0, 0x8F, 0, 0);
+	data->palette[1].end_color = new_color4(0, 0x00, 0xFF, 0);
 	data->palette[1].start_range = 0.333;
-	data->palette[1].end_range = 1;
+	data->palette[1].end_range = 2;
+//	data->palette[2].start_color = new_color4(99, 59, 0xFF, 0);
+//	data->palette[2].end_color = new_color4(0xFF, 0xFF, 0xFF, 0);
+//	data->palette[2].start_range = 0.666;
+//	data->palette[2].end_range = 1;
 
+	max_diff_range = data->palette[data->nb_palette - 1].end_range - 
+		data->palette[0].start_range;
+	i = 0;
+	while (i < data->nb_palette)
+	{
+		data->palette[i].start_range /= max_diff_range;
+		data->palette[i].end_range /= max_diff_range;
+		i++;
+	}
 	color = data->endian;
 	proportion = (altitude - data->tf->min_elev) / (data->tf->max_elev - 
 		data->tf->min_elev);
 
-//printf("p:%le %le-",proportion,data->palette[1].start_range);
 	i = 0;
 	while (i < data->nb_palette)
 	{
-		if ((proportion >= data->palette[i].start_range) && (proportion <= 
-			data->palette[i].end_range))
+		if ((proportion >= data->palette[i].start_range) && 
+			(proportion <= data->palette[i].end_range))
 			break;
 		i++;
 	}
-	if (i == data->nb_palette)
-		i = 0;
+//	if (i == data->nb_palette) 
+//		i = 0;
 
 //	start_color = new_color4(0x40,0x40, 0x40, 0x00);
 //	end_color = new_color4(0xFF, 0xFF, 0xFF, 0x00);
 	start_color = data->palette[i].start_color;
 	end_color = data->palette[i].end_color;;
-
+	diff_range = data->palette[i].end_range - data->palette[i].start_range;
+	proportion = (proportion - data->palette[i].start_range) / diff_range;
 
 	final_color.r = start_color.r + (proportion * (end_color.r - start_color.r));
 	final_color.g = start_color.g + (proportion * (end_color.g - start_color.g));
@@ -226,6 +241,7 @@ int				compute_color(t_data *data, double altitude)
 	final_color.a = 0x00;//start_color.a + (proportion * end_color.a);
 	color = (((((final_color.a * 256) + final_color.r) * 256) + 
 		final_color.g) * 256) + final_color.b;
+//printf("p:%le %d == %x %x %x %x\n",proportion, i, final_color.r, final_color.g, final_color.b,final_color.a);
 	return (color);
 }
 
@@ -467,23 +483,14 @@ void			print_fdf(t_data *data)
 
 void			render_fdf(t_data *data)
 {
-//	t_mesh		*mesh;
-
-//	mesh = malloc(sizeof(t_mesh));
-//	mesh->position = set_vector3(0, 0, 0);
-//	mesh->rotation = set_vector3(0, 0, 0);
-//	data->view_matrix = malloc(sizeof(t_matrix));
 	*data->view_matrix = look_at_lh_matrix(data->cam->position,
 		data->cam->target, up_vector3());
-//	data->projection_matrix= malloc(sizeof(t_matrix));
 	*data->projection_matrix = perspective_fov_lh_matrix(0.78,
 		data->canvas_width / data->canvas_height, 0.01, 1);
-//	data->world_matrix = malloc(sizeof(t_matrix));
 	*data->world_matrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
 		data->scene_rot.y, data->scene_rot.x, data->scene_rot.z),
 	translation_matrix(data->scene_pos.x, data->scene_pos.y, 
 		data->scene_pos.z));
-//	data->transform_matrix = malloc(sizeof(t_matrix));
 	*data->transform_matrix = multiply_matrix(*data->world_matrix,
 		multiply_matrix(*data->view_matrix, *data->projection_matrix));
 }
