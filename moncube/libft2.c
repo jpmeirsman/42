@@ -94,7 +94,8 @@ char				*dtoa(double f, short precision)
 	z = (int) f3;
 	itoa(z, s2);
 	s = strcat(s, s2);
-	s = strcat(s, ".");
+	if (precision > 0)
+		s = strcat(s, ".");
 	z = (int) nearbyint(f2 * pow(10, precision));
 	i = (int) ceil(log10(f2*pow(10, precision)));
 	if (z == 0)

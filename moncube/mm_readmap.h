@@ -8,21 +8,18 @@
 #include "mm_math.h"
 #include "mm_libx.h"
 
-/*
-typedef struct			s_fic
-{
-	long long			nb_rows;
-	long long			nb_columns;
-	int					**values;
-	t_vector3			**tvect;
-} t_fic;
-*/
 typedef struct			s_elem_int
 {
 	int				value;
 	struct s_elem_int	*next;
 } t_elem_int;
 
-t_fic*read_file(char *file_name);
+typedef struct			s_elem_pal
+{
+	t_palette			value;
+	struct s_elem_pal	*next;
+} t_elem_pal;
+
+t_fic		*read_file(char *file_name);
 
 #endif

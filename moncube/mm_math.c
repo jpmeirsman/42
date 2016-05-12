@@ -35,6 +35,26 @@ char				*color4_to_string(t_color4 tc)
 	return (s);
 }
 
+int				color4_to_int(t_color4 tc)
+{
+	return ((((tc.a * 256) + tc.r) * 256 + tc.g) * 256 + tc.b);
+}
+
+t_color4		int_to_color4(int color)
+{
+	t_color4	tc;
+	int			temp;
+
+	tc.b = color % 256;
+	color /= 256;
+	tc.g = color % 256;
+	color /= 256;
+	tc.r = color % 256;
+	tc.a = color / 256;
+
+	return (tc);
+}
+
 t_vector2			new_vector2(double x, double y)
 {
 	t_vector2		vector2;

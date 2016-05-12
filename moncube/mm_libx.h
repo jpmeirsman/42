@@ -62,6 +62,7 @@ typedef struct			s_palette
 	t_color4			end_color;
 	double				start_range;
 	double				end_range;
+	int					nb_rows;
 } t_palette;
 
 typedef struct			s_data

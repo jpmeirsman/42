@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <libc.h>
-//#include "get_next_line.h"
 #include "mm_readmap.h"
-//#include "mm_math.h"
-//#include "mm_libx.h"
 
 int			**create_table(int nb_row, int nb_col){
 	int		**table1;
@@ -96,7 +88,7 @@ void		create_map(t_list2 *my_list, t_fic *tf)
 	}
 }
 
-void		charge_map(t_list2 *my_list, t_fic *tf, int fd)
+void		load_map(t_list2 *my_list, t_fic *tf, int fd)
 {
 	t_elem_int		*curr;
 	char		*buff;
@@ -131,8 +123,51 @@ t_fic		*read_file(char *file_name)
 		return (NULL);
 	my_list = initialisation();
 	tf = malloc(sizeof(t_fic));
-	charge_map(my_list, tf, fd);
+	load_map(my_list, tf, fd);
 	create_map(my_list, tf);
 	return (tf);
 }
 
+void				load_pal(t_list2 *my_list, t_palette *tp, int fd)
+{
+	t_elem_pal		*curr;
+	char			*buff;
+	char			**str_buf;
+	int				prev_range;
+	int				range;
+
+	curr = NULL;
+	my_list->first = curr;
+	tp->nb_rows = 0;
+	prev_range = 0;
+	while ((get_next_line(fd, &buff) > 0))
+	{
+		str_buf = ft_strsplit(buff, ' ');
+		curr = malloc(sizeof(t_elem_pal));
+		curr->value.start_color = int_to_color4(ft_atoi(str_buf[0]));
+		curr->value.end_color = int_to_color4(ft_atoi(str_buf[2]));
+		curr->value.start_range = prev_range;
+		range = ft_atoi(str_buf[1]);
+		prev_range += range;
+		curr->value.end_range = prev_range;
+
+		curr->next = my_list->first;
+		my_list->first = curr;
+		tp->nb_rows++;
+	}
+}
+
+t_palette	*read_pal(char *file_name)
+{
+	int			fd;
+	t_palette	*tp;
+	t_list2		*my_list;
+
+	if ((fd = open(file_name, O_RDONLY)) <= 0)
+		return (NULL);
+	my_list = initialisation();
+	tp = malloc(sizeof(t_palette));
+	load_pal(my_list, tp, fd);
+	create_pal(my_list, tp);
+	return (tp);
+}

@@ -1,6 +1,28 @@
 #include "mm_libx2.h"
 #include "mm_graph.h"
 
+void			print_sub_info(t_data *data, int increment, char *s1, 
+					char *unit, double value, short precision)
+{
+	int			pas;
+	char		*s;
+	char		*s2;
+
+	s2 = ft_memalloc(20);
+	pas = 12;
+	s = s1;
+	s2 = ft_strcat(s2, s);
+	s = dtoa(value, precision);
+	s2 = ft_strcat(s2, s);
+	s2 = ft_strcat(s2, unit);
+	data->put_in_canvas = false;
+	draw_square(data, data->screen_width - 95, pas * (increment - 1),
+		data->screen_width - 2, pas * (increment - 1) + 12, 0x00000000);
+	data->put_in_canvas = true;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment, 0X00FFFFFF, s2);
+}
+
 void			print_menu(t_data *data)
 {
 	int			increment;
@@ -120,6 +142,12 @@ void			print_menu(t_data *data)
 	increment++;
 	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
 		pas * increment++, 0X00FFFFFF, "Elev:    0");
+	increment++;
+	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
+		pas * increment++, 0X00FFFFFF, "Image size");
+	print_sub_info(data, 54, "Width  : ", "", data->tf->nb_columns, 0);
+	print_sub_info(data, 55, "Height : ", "", data->tf->nb_rows, 0);
+	print_sub_info(data, 56, "MaxElev: ", "", data->tf->max_elev, 0);
 //	print_info(data);
 }
 
@@ -163,27 +191,6 @@ int				my_key_on_release_funct(int keycode, t_data *data)
 	return (0);
 }
 
-void			print_sub_info(t_data *data, int increment, char *s1, 
-					char *unit, double value, short precision)
-{
-	int			pas;
-	char		*s;
-	char		*s2;
-
-	s2 = malloc(20);
-	pas = 12;
-	s = s1;
-	s2 = ft_strcat(s2, s);
-	s = dtoa(value, precision);
-	s2 = ft_strcat(s2, s);
-	s2 = ft_strcat(s2, unit);
-	data->put_in_canvas = false;
-	draw_square(data, data->screen_width - 95, pas * (increment - 1),
-		data->screen_width - 2, pas * (increment - 1) + 12, 0x00000000);
-	data->put_in_canvas = true;
-	mlx_string_put(data->mlx_ptr, data->mlx_win, data->screen_width - 95,
-		pas * increment, 0X00FFFFFF, s2);
-}
 double			rad_to_deg(double value)
 {
 	double		temp;
@@ -304,7 +311,7 @@ int				my_key_on_maintain_funct(int keycode, t_data *data)
 	else if (keycode == 45)
 	{
 		clear_canvas(data);
-		data->scene_rot.y = 0;
+		data->scene_rot.y = pi;
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);
