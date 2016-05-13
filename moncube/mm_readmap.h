@@ -21,5 +21,5 @@ typedef struct			s_elem_pal
 } t_elem_pal;
 
 t_fic		*read_file(char *file_name);
-
+int			read_pal(t_data *data, char *file_name);
 #endif

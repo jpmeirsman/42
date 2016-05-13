@@ -189,16 +189,16 @@ int				compute_color(t_data *data, double altitude)
 	int			i;
 //	t_palette	*pal;
 
-	data->nb_palette = 2;
-	data->palette = malloc(sizeof(t_palette) * data->nb_palette);
-	data->palette[0].start_color = new_color4(0, 0x40, 0, 0);
-	data->palette[0].end_color = new_color4(0, 0x8F, 0, 0);
-	data->palette[0].start_range = 0;
-	data->palette[0].end_range = 0.333;
-	data->palette[1].start_color = new_color4(0, 0x8F, 0, 0);
-	data->palette[1].end_color = new_color4(0, 0x00, 0xFF, 0);
-	data->palette[1].start_range = 0.333;
-	data->palette[1].end_range = 2;
+//	data->nb_palette = 2;
+//	data->palette = malloc(sizeof(t_palette) * data->nb_palette);
+//	data->palette[0].start_color = new_color4(0, 0x40, 0, 0);
+//	data->palette[0].end_color = new_color4(0, 0x8F, 0, 0);
+//	data->palette[0].start_range = 0;
+//	data->palette[0].end_range = 0.333;
+//	data->palette[1].start_color = new_color4(0, 0x8F, 0, 0);
+//	data->palette[1].end_color = new_color4(0, 0x00, 0xFF, 0);
+//	data->palette[1].start_range = 0.333;
+//	data->palette[1].end_range = 2;
 //	data->palette[2].start_color = new_color4(99, 59, 0xFF, 0);
 //	data->palette[2].end_color = new_color4(0xFF, 0xFF, 0xFF, 0);
 //	data->palette[2].start_range = 0.666;

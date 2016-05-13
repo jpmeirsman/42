@@ -43,7 +43,6 @@ int				color4_to_int(t_color4 tc)
 t_color4		int_to_color4(int color)
 {
 	t_color4	tc;
-	int			temp;
 
 	tc.b = color % 256;
 	color /= 256;

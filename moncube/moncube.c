@@ -88,8 +88,21 @@ int main(int argc, char **argv)
 	int retour;
 	t_data data;
 
-	if (argc != 2)
+	if ( !(argc == 2 || argc == 3))
 		return (-1);
+	
+	if (argc == 3)
+	{
+		retour = read_pal(&data, argv[2]);
+	}
+	else
+	{
+	data.palette = (t_palette *) malloc(sizeof(t_palette));
+	data.palette[0].start_color = int_to_color4(0x00FFFFFF);
+	data.palette[0].end_color = int_to_color4(0x00FFFFFF);
+	data.palette[0].start_range = 0;
+	data.palette[0].end_range = 1;
+	}
 	if ((data.mlx_ptr = mlx_init()) == NULL)
 	{
 		printf("I can't open the display\n");

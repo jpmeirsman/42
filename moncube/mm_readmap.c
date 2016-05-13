@@ -128,46 +128,110 @@ t_fic		*read_file(char *file_name)
 	return (tf);
 }
 
-void				load_pal(t_list2 *my_list, t_palette *tp, int fd)
+unsigned short				ahtos(char *s)
+{
+	int		a;
+	int		b;
+
+	if (s[0] >= 'A')
+		a = s[0] - 55;
+		else
+		a = s[0] - 48;
+	if (s[1] >= 'A')
+		b = s[1] - 55;
+		else
+		b = s[1] - 48;
+	return (a * 16 + b);
+}
+
+unsigned int					ahtoi(char *s)
+{
+	int				a;
+	int				b;
+	int				c;
+	int				d;
+	unsigned int	result;
+
+	a = ahtos(&s[2]);
+	b = ahtos(&s[4]);
+	c = ahtos(&s[6]);
+	d = ahtos(&s[8]);
+//	result = (((a * 256 ) + b * 256) + c * 256) + d;
+	result = (unsigned int) (((((a * 256) + b) * 256) + c) * 256) + d;
+	return (result);
+
+}
+
+void				load_pal(t_list2 *my_list, t_data *data, int fd)
 {
 	t_elem_pal		*curr;
 	char			*buff;
 	char			**str_buf;
-	int				prev_range;
-	int				range;
+	double			prev_range;
+	double			range;
+	int				i;
 
 	curr = NULL;
 	my_list->first = curr;
-	tp->nb_rows = 0;
+	data->nb_palette = 0;
 	prev_range = 0;
 	while ((get_next_line(fd, &buff) > 0))
 	{
 		str_buf = ft_strsplit(buff, ' ');
 		curr = malloc(sizeof(t_elem_pal));
-		curr->value.start_color = int_to_color4(ft_atoi(str_buf[0]));
-		curr->value.end_color = int_to_color4(ft_atoi(str_buf[2]));
+		curr->value.start_color = int_to_color4(ahtoi(str_buf[0]));
+		curr->value.end_color = int_to_color4(ahtoi(str_buf[2]));
 		curr->value.start_range = prev_range;
-		range = ft_atoi(str_buf[1]);
+		range = (double) ft_atoi(str_buf[1]);
 		prev_range += range;
 		curr->value.end_range = prev_range;
-
 		curr->next = my_list->first;
 		my_list->first = curr;
-		tp->nb_rows++;
+		data->nb_palette++;
+	}
+	data->palette = (t_palette *) malloc(sizeof(t_palette) * data->nb_palette);
+	curr = my_list->first;
+	i = data->nb_palette - 1;
+	while (i >= 0)
+	{
+		data->palette[i] = curr->value;
+//		printf("--Start range:%le\n", curr->value.start_range);
+//		printf("--Start range:%le\n", data->palette[i].start_range);
+		curr = curr->next;
+		i--;
 	}
 }
 
-t_palette	*read_pal(char *file_name)
+void		print_pal(t_data *data)
+{
+	int		i;
+//	int		color;
+
+	printf("Il y a %d palette(s)\n ", data->nb_palette);
+	i = 0;
+	while (i < data->nb_palette)
+	{
+		printf("Palette n°%d\n", i);
+		printf("Start color:%s\n",color4_to_string(data->palette[i].start_color));
+		printf("End color:%s\n",color4_to_string(data->palette[i].end_color));
+		printf("Start range:%le\n", data->palette[i].start_range);
+		printf("End range:%le\n", data->palette[i].end_range);
+		i++;
+	}
+
+}
+
+int	read_pal(t_data *data, char *file_name)
 {
 	int			fd;
-	t_palette	*tp;
 	t_list2		*my_list;
 
 	if ((fd = open(file_name, O_RDONLY)) <= 0)
-		return (NULL);
+		return (-1);
 	my_list = initialisation();
-	tp = malloc(sizeof(t_palette));
-	load_pal(my_list, tp, fd);
-	create_pal(my_list, tp);
-	return (tp);
+	data->palette = malloc(sizeof(t_palette));
+	load_pal(my_list, data, fd);
+//	print_pal(data);
+//	create_pal(my_list, tp);
+	return (0);
 }
