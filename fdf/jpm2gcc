@@ -1,1 +1,0 @@
-gcc -I /usr/X11/include -g -L/usr/X11/lib -lX11 -lmlx -lXext -o fdf2 fdf2.c lignes.c math.c

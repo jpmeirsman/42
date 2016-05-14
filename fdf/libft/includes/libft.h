@@ -84,10 +84,10 @@ void				ft_strtoupper(char *str);
 t_list				*ft_lstnew(void const *content, size_t content_size);
 void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstadd(t_list **alst, t_list *new);
+void				ft_lstadd(t_list **alst, t_list *new_list);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-void				ft_lstend(t_list **lst, t_list *new);
+void				ft_lstend(t_list **lst, t_list *new_list);
 size_t				ft_lstinser(t_list **lst, t_list *src, size_t n);
 size_t				ft_lstlen(t_list *lst);
 t_list				*ft_lstshift(t_list **lst);
@@ -139,13 +139,12 @@ int					pf_solve_flags(char **src, int *width, int *precision, va_list *ap);
 char				*pf_apply_flags(char **str, void *ptr, va_list *ap);
 char				*pf_itoa(void *ptr, char output, int flags);
 
-typedef 			struct TList List;
-struct 				TList
+typedef struct		s_list2
 {
 	void			*first;
-};
+}					t_list2;;
 
-List				*initialisation();
+t_list2				*initialisation();
 void				realloc_str(char ** Source, long long len, long long lenmore);
 
 #endif

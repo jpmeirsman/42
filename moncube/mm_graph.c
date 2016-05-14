@@ -124,7 +124,7 @@ void 			render(t_data *data, t_meshes *meshes)
 //			draw_point_device (data, projectedPoint);
 			tv[indexvertices] = projectedPoint;
 		}
-/*
+
 		fdf_bline(data, tv[0].x, tv[0]. y,tv[1].x, tv[1].y, 0x00FFFFFF);
 		fdf_bline(data, tv[1].x, tv[1]. y,tv[3].x, tv[3].y, 0x00FFFFFF);
 		fdf_bline(data, tv[3].x, tv[3]. y,tv[2].x, tv[2].y, 0x00FFFFFF);
@@ -137,7 +137,7 @@ void 			render(t_data *data, t_meshes *meshes)
 		fdf_bline(data, tv[1].x, tv[1]. y,tv[5].x, tv[5].y, 0x00FFFFFF);
 		fdf_bline(data, tv[2].x, tv[2]. y,tv[7].x, tv[7].y, 0x00FFFFFF);
 		fdf_bline(data, tv[3].x, tv[3]. y,tv[6].x, tv[6].y, 0x00FFFFFF);
-*/
+
 	}
 }
 
@@ -479,6 +479,7 @@ void			print_fdf(t_data *data)
 			}
 		}
 	}
+	printf("toto\n");
 }
 
 void			render_fdf(t_data *data)

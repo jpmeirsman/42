@@ -1,20 +1,20 @@
 #include <stdlib.h>
 #include "libft.h"
 
-List	*initialisation()
+t_list2		*initialisation()
 {
-	List *List = malloc(sizeof(List));
-	if (List == NULL/* | element == NULL*/)
+	t_list2 *my_list = malloc(sizeof(my_list));
+	if (my_list == NULL/* | element == NULL*/)
 	{
 		return(NULL);
 	}
-	List->first = NULL;
-	return List;
+	my_list->first = NULL;
+	return my_list;
 }
 
-void	realloc_str(char ** Source, long long len, long long lenmore)
+void		realloc_str(char ** Source, long long len, long long lenmore)
 {
-void	*temp;
+void		*temp;
 
 	temp = *Source;
 	*Source = malloc(len + lenmore + 1);

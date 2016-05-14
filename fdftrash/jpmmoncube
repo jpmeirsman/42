@@ -1,1 +1,0 @@
-gcc -I /usr/X11/include -I ./Libft/ -g -L/usr/X11/lib -lX11 -lmlx -lXext -o fdf moncube.c lignes.c math.c mlibxtools.c readmap.c itoa.c get_next_line.c

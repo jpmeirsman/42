@@ -171,7 +171,9 @@ void		clear_canvas(t_data *data)
 
 void			drawing_loop(t_data *data, t_meshes *arr_mesh)
 {
-return ;
+	if (data->anime == 0)
+		return ;
+return;
 arr_mesh->m[0]->rotation.x += 0.01;
 arr_mesh->m[0]->rotation.y += 0.01;
 printf("===%le\n",arr_mesh->m[0]->rotation.y);
@@ -478,7 +480,7 @@ int				my_loop_funct(t_data *data)
 //	mlx_pixel_put(data->mlx_ptr ,data->mlx_win, 300, 300, 0x00FF00FF);
 //	printf("*%llu",compteur);
 //	compteur++;
-return (0);
+//return (0);
 clear_canvas(data);
 data->my_meshes->m[0]->rotation.x += 0.01;
 data->my_meshes->m[0]->rotation.y += 0.01;

@@ -1,0 +1,11 @@
+	viewMatrix = look_at_lh_matrix(data->cam->position, data->cam->target, 
+	*data->view_matrix = look_at_lh_matrix(data->cam->position,
+		data->cam->target, up_vector3());
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+		data->cam->position = set_vector3(0, 0, data->ratio_cam);
+	data->cam->position = set_vector3(0, 0 , data->ratio_cam);
+//	data->cam->position = set_vector3(0, 0, 0);
+	data->cam->target = set_vector3(0, 0, 0);
+	data->cam->position = set_vector3(0, 0 ,10);
+	data->cam->target = set_vector3(0, 0 ,0);

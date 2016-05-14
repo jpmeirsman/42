@@ -56,7 +56,7 @@ void			start_fdf(t_data *data, t_fic *tf)
 
 
 
-
+//	data->anime = 0;
 	render_fdf(data);
 	print_fdf(data);
 }
@@ -67,6 +67,7 @@ void		print_my_cube(t_data *data)
 	float			center_y;
 	t_meshes		*my_meshes;
 
+//printf("zzz\n");
 	center_x = (float) data->canvas_width / 2;
 	center_y = (float) data->canvas_height / 2;
 //	my_meshes = malloc(sizeof(t_meshes));
@@ -79,15 +80,23 @@ void		print_my_cube(t_data *data)
 	my_meshes->m[0]->rotation.x += 0.01;
 	my_meshes->m[0]->rotation.y += 0.01;
 
+	data->anime = 1;
+printf("\n");
 //	render(data, arr_mesh);
 	drawing_loop(data, my_meshes);
 }
 
-int main(int argc, char **argv)
+//int main(int argc, char **argv)
+int main()
 {
-	int retour;
-	t_data data;
+	int			retour;
+	t_data		data;
+	t_json		js;
 
+	js.a= 0;
+	json_print(&js,"monkey.babylon");
+	return (0);
+/*
 	if ( !(argc == 2 || argc == 3))
 		return (-1);
 	
@@ -103,6 +112,7 @@ int main(int argc, char **argv)
 	data.palette[0].start_range = 0;
 	data.palette[0].end_range = 1;
 	}
+*/
 	if ((data.mlx_ptr = mlx_init()) == NULL)
 	{
 		printf("I can't open the display\n");
@@ -151,8 +161,8 @@ int main(int argc, char **argv)
 	data.canvas[data.front_buffer] = (int *) mlx_get_data_addr(
 		data.img[data.front_buffer], &data.bpp, &data.sizeline, &data.endian);
 
-	start_fdf(&data, read_file(argv[1]));
-//	print_my_cube(&data);
+//	start_fdf(&data, read_file(argv[1]));
+	print_my_cube(&data);
 
 	switch_buffer(&data);
 	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win,
