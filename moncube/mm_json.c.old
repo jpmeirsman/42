@@ -19,12 +19,12 @@ typedef struct					s_json_value
 
 typedef struct					s_json_string
 {
-	char						*s;;
+	char						*s;
 }								t_json_string;
 
 typedef struct					s_json_number
 {
-	double						nb;;
+	double						nb;
 }								t_json_number;
 
 typedef struct					s_json_boolean
@@ -82,7 +82,6 @@ typedef struct					s_json_pushpop
 	long			file_pos;
 	char			*buffer;
 	short			print_bool;
-	short			print_bool2;
 	t_json_list		*my_list;
 	t_json_pushpop	*pp;
 	t_json_tree		*curr_tree;
@@ -103,12 +102,11 @@ t_json_tree			*json_new_tree()
 	return (curr);
 }
 
-void				json_tree_add_child(short type_value)
+void				json_tree_add_child()
 {
 	t_json_tree		*curr;
 
 	curr = json_new_tree();
-	curr->type_value = type_value;
 	if (curr_tree->last == NULL)
 		curr->parent = curr_tree;
 	else
@@ -124,15 +122,12 @@ printf("Ajout de Curr: %p en tant qu'enfant de curr_tree:%p\n",curr, curr_tree->
 
 }
 
-void				json_tree_add_next(short type_value)
+void				json_tree_add_next()
 {
 	t_json_tree		*curr;
 
-//printf("DEB - Curr:%p Parent:%p Child:%p Next:%p\n",curr_tree, curr_tree->parent,
-//	curr_tree->child, curr_tree->next);
 	curr_tree = curr_tree->child;
 	curr = json_new_tree();
-	curr->type_value = type_value;
 	if (curr_tree->next == NULL)
 		curr_tree->next = curr;
 	if (curr_tree->last == NULL)
@@ -150,31 +145,6 @@ void				json_tree_add_next(short type_value)
 
 printf("Ajout de Curr: %p en tant que dernier de curr_tree:%p\n",curr, curr_tree);
 
-}
-
-t_json_tree			*json_tree_add_next_leaf(short type_value)
-{
-	t_json_tree		*curr;
-
-//printf("DEB - Curr:%p Parent:%p Child:%p Next:%p\n",curr_tree, curr_tree->parent,
-//	curr_tree->child, curr_tree->next);
-//	curr_tree = curr_tree->child;
-	curr = json_new_tree();
-	curr->type_value = type_value;
-	if (curr_tree->next == NULL)
-		curr_tree->next = curr;
-	if (curr_tree->last == NULL)
-		curr->previous = curr_tree;
-	else
-	{
-		curr->previous = curr_tree->last;
-		curr_tree->last->next = curr;
-	}
-	curr_tree->last = curr;
-	curr->parent = curr_tree->parent;
-	return (curr);
-//	curr_tree->last->next = curr;
-//	curr_tree->last->last = curr;
 }
 
 void				json_tree_return_to_parent()
@@ -237,13 +207,13 @@ void				json_choose_rule(/*t_json *js,*/ char c)
 			if (curr_tree->child == NULL)
 			{
 //	printf("add child\n");
-				json_tree_add_child(1);
+				json_tree_add_child();
 			}
 			else
 			{
 //	printf("add next\n");
 	//			curr_tree = curr_tree->child;
-				json_tree_add_next(1);
+				json_tree_add_next();
 			}
 			json_get_object();
 			json_tree_return_to_parent();
@@ -352,7 +322,6 @@ void				json_indent()
 	while (i < indent)
 	{
 		if (print_bool) printf(" ");
-		if (print_bool2) printf(" ");
 		i++;
 	}
 }
@@ -381,20 +350,24 @@ void				json_get_number(char first_digit)
 	if (print_bool) printf("%le\n",number);
 }
 
-void				json_get_string()
+char				*json_get_string()
 {
 	char				*s;
 	int					len;
 	int					result;
 	char				c;
-	t_json_string		*curr;
-	t_json_tree			*temp;
+/*	t_json_string		*curr;
 
+printf("aaa\n");
 	curr = malloc(sizeof(t_json_string));
-	temp = json_tree_add_next_leaf(3);
-	temp->value = curr;
-//	curr_tree->type_value = 3;
-	s = ft_memalloc(100);
+printf("aaa\n");
+	json_tree_add_next();
+printf("aaa\n");
+	curr_tree->value = curr;
+printf("aaa\n");
+	curr_tree->type_value = 3;
+printf("aaa\n");
+*/	s = ft_memalloc(100);
 	len = 0;
 //	result = json_get_char(fd, &s[0]);
 	while (((result = json_get_char(&c)) != 0) && (c != '"'))
@@ -404,9 +377,10 @@ void				json_get_string()
 	}
 	json_indent();
 	if (print_bool) printf("%s",s);
-//	printf("%s\n",s);
-	curr->s = ft_memalloc(ft_strlen(s));
-	strcpy(curr->s, s);;
+/*printf("aaa\n");
+	ft_strcpy(curr->s, s);
+printf("aaa\n");
+*/	return (s);
 }
 /*
 void		json_read_value(int fd)
@@ -449,7 +423,7 @@ void				json_get_object()
 	result = json_get_char(&c);
 	while (result  && (c != '}'))
 	{
-		json_get_string();
+//		curr->s = json_get_string();
 		result = json_get_char(&c);
 		result = json_get_char(&c);
 		json_choose_rule(c);
@@ -463,41 +437,16 @@ void				json_get_object()
 void				json_print_curr_info()
 {
 	t_json_object	*my_object;
-	t_json_string	*my_string;
 
-//printf("%d\n",curr_tree->type_value);
 	switch (curr_tree->type_value)
 	{
 		case 1:
 			my_object = (t_json_object *) curr_tree->value;
-			json_indent();
-			printf("Object: ");
-//			printf("%p ", curr_tree->next);
-//			printf("%p ", curr_tree->next->value);
-			if (curr_tree->next->type_value == 3)
-			{
-				my_string = (t_json_string *) curr_tree->next->value;
-//				printf("%p %p ", my_string, my_string->s);
-				printf("%s ", my_string->s);
-				if (curr_tree->next->next->type_value == 3)
-				{
-					my_string = (t_json_string *) curr_tree->next->next->value;
-					printf("%s ", my_string->s);
-				}
-			}
-			else
-				printf("n'est pas une string");
-			printf("\n");
-			break;
-		case 3:
-			json_indent();
-			my_string = NULL;
-			my_string = (t_json_string *) curr_tree->value;
-//			printf("%p %p ", my_string, my_string->s);
-			printf("%s\n", my_string->s);
+//			printf("Object: %s\n", my_object->s);
+			printf("Object: \n");
 			break;
 		default:
-			printf("Type_value :%d\n",curr_tree->type_value);
+			printf("Qui a chié dans le potage ?\n");
 			break;
 	}
 }
@@ -512,7 +461,6 @@ void				json_print_tree()
 	{
 		if ((search_child_at_first == 1) && (curr_tree->child != NULL))
 		{
-			indent += 2;
 //			printf("%p",curr_tree);
 			curr_tree = curr_tree->child;
 //			printf(" -> %p - ",curr_tree);
@@ -526,12 +474,10 @@ void				json_print_tree()
 			curr_tree = curr_tree->next;
 //			printf(" -> %p - ",curr_tree);
 //			printf("next\n");
-			json_print_curr_info();
 			search_child_at_first = 1;
 		}
 		else
 		{
-			indent -= 2;
 			search_child_at_first = 0;
 //			printf("%p",curr_tree);
 			curr_tree = curr_tree->parent;
@@ -559,7 +505,6 @@ int					json_print(t_json *js, char * file_name)
 	lseek (fd, 0, 0);
 	buffer = malloc(file_size);
 	file_pos = 0;
-	print_bool2 = 0;
 	result = read(fd, buffer, file_size);
 	print_bool = 0;
 	my_list = malloc(sizeof(t_json_list));
@@ -572,14 +517,41 @@ int					json_print(t_json *js, char * file_name)
 
 	curr_tree = json_new_tree();
 	root_tree = curr_tree;
+/*
+ptr = malloc(sizeof(t_json_list));
+json_push(ptr, 0);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+ptr = malloc(sizeof(t_json_object));
+json_push(ptr, 1);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+
+ptr = malloc(sizeof(t_json_array));
+json_push(ptr, 2);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+*/
 
 	while ((result = json_get_char(&c)) )
 	{
+//		curr = malloc(sizeof(t_json_object));
 		json_choose_rule(c);
+//		curr->next = my_list->first;
+//		my_list->first = curr;
 	}
+//	js = (t_json *) my_list;
 	js = NULL;
 
-	print_bool2 = 1;
 	curr_tree = root_tree;
 	json_print_tree();
 	return (0);
