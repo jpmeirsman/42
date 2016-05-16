@@ -409,6 +409,7 @@ void			print_fdf2(t_data *data)
 	printf("Table des vecteurs\n");
 	for (i = 0; i < data->tf->nb_rows; i++)
 	{
+		printf("Ligne n° %d\n",i);
 		for (j = 0; j < data->tf->nb_columns; j++)
 		{
 			tv1 = data->tf->tvect[i][j];
@@ -434,7 +435,7 @@ void			print_fdf(t_data *data)
 	t_vector2	pj1;
 	t_vector2	pj2;
 
-//print_fdf2(data);
+print_fdf2(data);
 	for (i = 0; i < data->tf->nb_rows; i++)
 	{
 		for (j = 0; j < data->tf->nb_columns; j++)
@@ -447,6 +448,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
+				tv1.z /= data->coef_elev;
+				tv2.z /= data->coef_elev;
 				if ((clip_v2(data, &pj1, &pj2))
 					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
 					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))
@@ -466,6 +469,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
+				tv1.z /= data->coef_elev;
+				tv2.z /= data->coef_elev;
 				if ((clip_v2(data, &pj1, &pj2))
 					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
 					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))

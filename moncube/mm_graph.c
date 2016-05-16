@@ -447,6 +447,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
+				tv1.z /= data->coef_elev;
+				tv2.z /= data->coef_elev;
 				if ((clip_v2(data, &pj1, &pj2))
 					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
 					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))
@@ -466,6 +468,8 @@ void			print_fdf(t_data *data)
 				tv2.z *= data->coef_elev;
 				pj1 = project_device(data, tv1, *data->transform_matrix);
 				pj2 = project_device(data, tv2, *data->transform_matrix);
+				tv1.z /= data->coef_elev;
+				tv2.z /= data->coef_elev;
 				if ((clip_v2(data, &pj1, &pj2))
 					&& ((data->cam->position.z >= data->scene_pos.z + tv1.z
 					&& (data->cam->position.z >= data->scene_pos.z + tv2.z))))

@@ -1,239 +1,14 @@
 #include "mm_json.h"
+
 /*
-int			**create_table(int nb_row, int nb_col){
-	int		**table1;
-	int		*table2;
-
-	table1 = (int **) malloc(sizeof(int*) * nb_row);
-	table2 = (int *) malloc(sizeof(int) * nb_col*nb_row);
-	for(int i = 0 ; i < nb_row ; i++){
-		table1[i] = &table2[i*nb_col];
-	}
-	return table1;
-}
-
-t_vector3				**create_table_v3(int nb_row, int nb_col){
-	t_vector3			**table1;
-	t_vector3		*table2;
-
-	table1 = (t_vector3 **) malloc(sizeof(void *) * nb_row);
-	table2 = (t_vector3 *) malloc(sizeof(t_vector3) * nb_col*nb_row);
-	for(int i = 0 ; i < nb_row ; i++){
-		table1[i] = &table2[i*nb_col];
-	}
-	return table1;
-}
-
-void		free_table(int **table1)
-{
-	free(table1[0]);
-	free(table1);
-}
-
-void		print_map(t_list2 *my_list, t_fic *tf)
-{
-	t_elem_int		*curr;
-	long long		i;
-	long long		j;
-
-	curr = my_list->first;
-	i = 0;
-	while (i < tf->nb_rows)
-	{
-		j = 0;
-		while (j < tf->nb_columns)
-		{
-			printf("%d ", tf->values[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-
-}
-
-void		create_map(t_list2 *my_list, t_fic *tf)
-{
-	t_elem_int		*curr;
-	long long		i;
-	long long		j;
-	double			center_x;
-	double			center_y;
-
-	tf->min_elev = 1e70;
-	tf->max_elev = -1e70;
-	curr = my_list->first;
-	tf->values = create_table(tf->nb_rows,tf->nb_columns);
-	tf->tvect = create_table_v3(tf->nb_rows,tf->nb_columns);
-	center_x = (float) (tf->nb_columns - 1) / 2;
-	center_y = (float) (tf->nb_rows - 1) / 2;
-
-	i = tf->nb_rows - 1;
-	while (i >= 0)
-	{
-		j = tf->nb_columns - 1;
-		while (j >= 0)
-		{
-			if (tf->min_elev > curr->value)
-				tf->min_elev = curr->value;
-			if (tf->max_elev < curr->value)
-				tf->max_elev = curr->value;
-			tf->values[i][j] = curr->value;
-			tf->tvect[i][j] = set_vector3( j - center_x, i - center_y, 
-				curr->value);
-			curr = curr->next;
-			j--;
-		}
-		i--;
-	}
-}
-
-void		load_map(t_list2 *my_list, t_fic *tf, int fd)
-{
-	t_elem_int		*curr;
-	char		*buff;
-	char		**str_buf;
-
-	curr = NULL;
-	my_list->first = curr;
-	tf->nb_rows = 0;
-	while ((get_next_line(fd, &buff) > 0))
-	{
-		str_buf = ft_strsplit(buff, ' ');
-		tf->nb_columns = 0;
-		while (str_buf[tf->nb_columns] != 0)
-		{
-			curr = malloc(sizeof(t_elem_int));
-			curr->value = ft_atoi(str_buf[tf->nb_columns]);
-			curr->next = my_list->first;
-			my_list->first = curr;
-			tf->nb_columns++;
-		}
-		tf->nb_rows++;
-	}
-}
-
-t_fic		*read_file(char *file_name)
-{
-	int			fd;
-	t_fic		*tf;
-	t_list2		*my_list;
-
-	if ((fd = open(file_name, O_RDONLY)) <= 0)
-		return (NULL);
-	my_list = initialisation();
-	tf = malloc(sizeof(t_fic));
-	load_map(my_list, tf, fd);
-	create_map(my_list, tf);
-	return (tf);
-}
-
-unsigned short				ahtos(char *s)
-{
-	int		a;
-	int		b;
-
-	if (s[0] >= 'A')
-		a = s[0] - 55;
-		else
-		a = s[0] - 48;
-	if (s[1] >= 'A')
-		b = s[1] - 55;
-		else
-		b = s[1] - 48;
-	return (a * 16 + b);
-}
-
-unsigned int					ahtoi(char *s)
-{
-	int				a;
-	int				b;
-	int				c;
-	int				d;
-	unsigned int	result;
-
-	a = ahtos(&s[2]);
-	b = ahtos(&s[4]);
-	c = ahtos(&s[6]);
-	d = ahtos(&s[8]);
-//	result = (((a * 256 ) + b * 256) + c * 256) + d;
-	result = (unsigned int) (((((a * 256) + b) * 256) + c) * 256) + d;
-	return (result);
-
-}
-
-void				load_pal(t_list2 *my_list, t_data *data, int fd)
-{
-	t_elem_pal		*curr;
-	char			*buff;
-	char			**str_buf;
-	double			prev_range;
-	double			range;
-	int				i;
-
-	curr = NULL;
-	my_list->first = curr;
-	data->nb_palette = 0;
-	prev_range = 0;
-	while ((get_next_line(fd, &buff) > 0))
-	{
-		str_buf = ft_strsplit(buff, ' ');
-		curr = malloc(sizeof(t_elem_pal));
-		curr->value.start_color = int_to_color4(ahtoi(str_buf[0]));
-		curr->value.end_color = int_to_color4(ahtoi(str_buf[2]));
-		curr->value.start_range = prev_range;
-		range = (double) ft_atoi(str_buf[1]);
-		prev_range += range;
-		curr->value.end_range = prev_range;
-		curr->next = my_list->first;
-		my_list->first = curr;
-		data->nb_palette++;
-	}
-	data->palette = (t_palette *) malloc(sizeof(t_palette) * data->nb_palette);
-	curr = my_list->first;
-	i = data->nb_palette - 1;
-	while (i >= 0)
-	{
-		data->palette[i] = curr->value;
-//		printf("--Start range:%le\n", curr->value.start_range);
-//		printf("--Start range:%le\n", data->palette[i].start_range);
-		curr = curr->next;
-		i--;
-	}
-}
-
-void		print_pal(t_data *data)
-{
-	int		i;
-//	int		color;
-
-	printf("Il y a %d palette(s)\n ", data->nb_palette);
-	i = 0;
-	while (i < data->nb_palette)
-	{
-		printf("Palette n°%d\n", i);
-		printf("Start color:%s\n",color4_to_string(data->palette[i].start_color));
-		printf("End color:%s\n",color4_to_string(data->palette[i].end_color));
-		printf("Start range:%le\n", data->palette[i].start_range);
-		printf("End range:%le\n", data->palette[i].end_range);
-		i++;
-	}
-
-}
-
-int	read_pal(t_data *data, char *file_name)
-{
-	int			fd;
-	t_list2		*my_list;
-
-	if ((fd = open(file_name, O_RDONLY)) <= 0)
-		return (-1);
-	my_list = initialisation();
-	data->palette = malloc(sizeof(t_palette));
-	load_pal(my_list, data, fd);
-//	print_pal(data);
-//	create_pal(my_list, tp);
-	return (0);
+ * Les types des objets sont :
+ * 0 : mylist;
+ * 1 : Object
+ * 2 : Array
+ * 3 : String
+ * 4 : Number
+ * 5 : Boolean
+ * 6 : null
 */
 
 typedef struct					s_json_value
@@ -277,13 +52,137 @@ typedef struct					s_json_object
 	struct s_json_object		*last;
 }								t_json_object;
 
-	int			indent;
-	long		file_size;
-	long		file_pos;
-	char		*buffer;
+typedef struct					s_json_list
+{
+	short						type_value;
+	struct s_json_list			*first;
+}								t_json_list;
+
+typedef struct					s_json_tree
+{
+	short						type_value;
+	void						*value;
+	struct s_json_tree			*first;
+	struct s_json_tree			*last;
+	struct s_json_tree			*next;
+	struct s_json_tree			*previous;
+	struct s_json_tree			*parent;
+	struct s_json_tree			*child;
+}								t_json_tree;
+
+typedef struct					s_json_pushpop
+{
+	short						type_value;
+	void						*value;
+	struct s_json_pushpop		*first;
+}								t_json_pushpop;
+
+	int				indent;
+	long			file_size;
+	long			file_pos;
+	char			*buffer;
+	short			print_bool;
+	t_json_list		*my_list;
+	t_json_pushpop	*pp;
+	t_json_tree		*curr_tree;
+	t_json_tree		*root_tree;
+
+t_json_tree			*json_new_tree()
+{
+	t_json_tree		*curr;
+
+	curr = malloc(sizeof(t_json_tree));
+	curr->value = NULL;
+	curr->first = NULL;
+	curr->last = NULL;
+	curr->next = NULL;
+	curr->previous = NULL;
+	curr->parent = NULL;
+	curr->child = NULL;
+	return (curr);
+}
+
+void				json_tree_add_child()
+{
+	t_json_tree		*curr;
+
+	curr = json_new_tree();
+	if (curr_tree->last == NULL)
+		curr->parent = curr_tree;
+	else
+		curr->parent = curr_tree->last;
+	if (curr_tree->last == NULL)
+		curr_tree->child = curr;
+	else
+		curr_tree->last->child = curr;
+	curr_tree = curr;
+printf("Ajout de Curr: %p en tant qu'enfant de curr_tree:%p\n",curr, curr_tree->parent);
+
+//	curr_tree->parent->child = curr;
+
+}
+
+void				json_tree_add_next()
+{
+	t_json_tree		*curr;
+
+	curr_tree = curr_tree->child;
+	curr = json_new_tree();
+	if (curr_tree->next == NULL)
+		curr_tree->next = curr;
+	if (curr_tree->last == NULL)
+		curr->previous = curr_tree;
+	else
+	{
+		curr->previous = curr_tree->last;
+		curr_tree->last->next = curr;
+	}
+	curr_tree->last = curr;
+	curr->parent = curr_tree->parent;
+//	curr_tree->last->next = curr;
+//	curr_tree->last->last = curr;
 
 
-int			json_get_char(char *c)
+printf("Ajout de Curr: %p en tant que dernier de curr_tree:%p\n",curr, curr_tree);
+
+}
+
+void				json_tree_return_to_parent()
+{
+	curr_tree = curr_tree->parent;
+}
+
+void				json_push_pp(void *ptr, short type_value)
+{
+	t_json_pushpop	*curr;
+
+	curr = malloc(sizeof(t_json_pushpop));
+	curr->type_value = type_value;
+	curr->value = ptr;
+	curr->first = pp;
+	pp = curr;
+}
+
+void				*json_get_pp_value()
+{
+	return (pp->value);
+}
+
+void				*json_get_pp()
+{
+	return (pp);
+}
+
+void				json_pop_pp()
+{
+	void			*curr;
+
+	curr = pp;
+	pp = pp->first;
+	free(curr);
+}
+
+int					json_get_char(char *c)
 {
 	if (file_pos < file_size)
 	{
@@ -293,29 +192,46 @@ int			json_get_char(char *c)
 	return (0);
 }
 
-void		json_choose_rule(/*t_json *js,*/ char c)
+void				json_choose_rule(/*t_json *js,*/ char c)
 {
 	int			result;
 
 	switch (c)
 	{
 		case '{':
+//printf("DEB - Curr:%p Parent:%p Child:%p Next:%p\n",curr_tree, curr_tree->parent,
+//	curr_tree->child, curr_tree->next);
 			json_indent();
-			printf("Object:\n");
+			if (print_bool) printf("Object:\n");
 			indent += 2;
+			if (curr_tree->child == NULL)
+			{
+//	printf("add child\n");
+				json_tree_add_child();
+			}
+			else
+			{
+//	printf("add next\n");
+	//			curr_tree = curr_tree->child;
+				json_tree_add_next();
+			}
 			json_get_object();
+			json_tree_return_to_parent();
 			indent -= 2;
 			json_indent();
-			printf("End Object:\n");
+//printf("FIN - Curr:%p Parent:%p Child:%p Next:%p\n",curr_tree, curr_tree->parent,
+//	curr_tree->child, curr_tree->next);
+//	printf("add return\n");
+			if (print_bool) printf("End Object:\n");
 			break;
 		case '[':
 			indent += 2;
-			printf("\n");
+			if (print_bool) printf("\n");
 			json_indent();
-			printf("Array:\n");
+			if (print_bool) printf("Array:\n");
 			json_get_array();
 			json_indent();
-			printf("End Array:\n");
+			if (print_bool) printf("End Array:\n");
 			indent -= 2;
 			break;
 		case 't':
@@ -326,11 +242,10 @@ void		json_choose_rule(/*t_json *js,*/ char c)
 			break;
 		case '"':
 			json_get_string();
-			printf("\n");
+			if (print_bool) printf("\n");
 			break;
 		case ',':
 			result = json_get_char(&c);
-			printf("\nEnd ,:\n");
 			break;
 		case '-':
 		case '0':
@@ -346,14 +261,14 @@ void		json_choose_rule(/*t_json *js,*/ char c)
 			json_get_number(c);
 			break;
 		default:
-			printf("%c", c);
-			printf("\nEnd default:\n");
+			if (print_bool) printf("%c", c);
+			if (print_bool) printf("\nEnd default:\n");
 			break;
 	
 	}
 }
 
-void			json_get_false()
+void				json_get_false()
 {
 	int			i;
 	int			result;
@@ -363,13 +278,13 @@ void			json_get_false()
 	while (i < 4)
 	{
 		result = json_get_char(&c);
-		printf("%c",c);
+		if (print_bool) printf("%c",c);
 		i++;
 	}
-	printf(" = false\n");
+	if (print_bool)printf(" = false\n");
 }
 
-void			json_get_null()
+void				json_get_null()
 {
 	int			i;
 	int			result;
@@ -381,10 +296,10 @@ void			json_get_null()
 		result = json_get_char(&c);
 		i++;
 	}
-	printf(" = null\n");
+	if (print_bool)printf(" = null\n");
 }
 
-void			json_get_true()
+void				json_get_true()
 {
 	int			i;
 	int			result;
@@ -396,22 +311,22 @@ void			json_get_true()
 		result = json_get_char(&c);
 		i++;
 	}
-	printf(" = true\n");
+	if (print_bool) printf(" = true\n");
 }
 
-void			json_indent()
+void				json_indent()
 {
 	int			i;
 
 	i = 0;
 	while (i < indent)
 	{
-		printf(" ");
+		if (print_bool) printf(" ");
 		i++;
 	}
 }
 
-void			json_get_number(char first_digit)
+void				json_get_number(char first_digit)
 {
 	char		*s;
 	int			len;
@@ -432,10 +347,10 @@ void			json_get_number(char first_digit)
 	file_pos--;
 	json_indent();
 	number = atof(s);
-	printf("%le\n",number);
+	if (print_bool) printf("%le\n",number);
 }
 
-void			json_get_string()
+void				json_get_string()
 {
 	char		*s;
 	int			len;
@@ -451,7 +366,7 @@ void			json_get_string()
 		len++;
 	}
 	json_indent();
-	printf("%s",s);
+	if (print_bool) printf("%s",s);
 }
 /*
 void		json_read_value(int fd)
@@ -464,7 +379,7 @@ void		json_read_value(int fd)
 	exit(0);
 }
 */
-void		json_get_array()
+void				json_get_array()
 {
 	char		c;
 	int			result;
@@ -482,12 +397,17 @@ void		json_get_array()
 
 }
 
-void		json_get_object()
+void				json_get_object()
 {
-	char		c;
-	int			result;
+	char				c;
+	int					result;
+//	t_json_object		*curr;
 
+//	curr = malloc(sizeof(t_json_object));
+//	curr_tree->value = curr;
+//	curr_tree->type_value = 1;
 	result = json_get_char(&c);
+//	printf("add parent\n");
 	while (result  && (c != '}'))
 	{
 		json_get_string();
@@ -501,7 +421,42 @@ void		json_get_object()
 
 }
 
-int			json_print(t_json *js, char * file_name)
+void				json_print_tree()
+{
+//	short			find_next_parent;
+	short			search_child_at_first;
+
+	search_child_at_first = 1;
+	while (curr_tree != NULL)
+	{
+		if ((search_child_at_first == 1) && (curr_tree->child != NULL))
+		{
+			printf("%p",curr_tree);
+			curr_tree = curr_tree->child;
+			printf(" -> %p - ",curr_tree);
+			printf("child\n");
+		}
+		else
+		if (curr_tree->next != NULL)
+		{
+			printf("%p",curr_tree);
+			curr_tree = curr_tree->next;
+			printf(" -> %p - ",curr_tree);
+			printf("next\n");
+			search_child_at_first = 1;
+		}
+		else
+		{
+			search_child_at_first = 0;
+			printf("%p",curr_tree);
+			curr_tree = curr_tree->parent;
+			printf(" -> %p - ",curr_tree);
+			printf("parent\n");
+		}
+	}
+}
+
+int					json_print(t_json *js, char * file_name)
 {
 	int					fd;
 //	t_list2				*my_list;
@@ -509,6 +464,8 @@ int			json_print(t_json *js, char * file_name)
 	char				c;
 //	char				**str_buf;
 	int					result;
+//	t_json_pushpop		*curr;
+//	void				*ptr;
 
 	indent = 0;
 	if ((fd = open(file_name, O_RDONLY)) <= 0)
@@ -518,7 +475,42 @@ int			json_print(t_json *js, char * file_name)
 	buffer = malloc(file_size);
 	file_pos = 0;
 	result = read(fd, buffer, file_size);
-//	my_list = initialisation();
+	print_bool = 0;
+	my_list = malloc(sizeof(t_json_list));
+	my_list->type_value = -1;
+	my_list->first = NULL;
+	pp = malloc(sizeof(t_json_pushpop));
+	pp->type_value = -1;
+	pp->first = NULL;
+	pp->value = NULL;
+
+	curr_tree = json_new_tree();
+	root_tree = curr_tree;
+/*
+ptr = malloc(sizeof(t_json_list));
+json_push(ptr, 0);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+ptr = malloc(sizeof(t_json_object));
+json_push(ptr, 1);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+
+ptr = malloc(sizeof(t_json_array));
+json_push(ptr, 2);
+printf("%p %p %p\n", ptr, pp->value, pp->first->value);
+
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+curr = json_get();
+printf("%p %d\n", curr->value, curr->type_value);
+json_pop();
+*/
+
 	while ((result = json_get_char(&c)) )
 	{
 //		curr = malloc(sizeof(t_json_object));
@@ -529,5 +521,7 @@ int			json_print(t_json *js, char * file_name)
 //	js = (t_json *) my_list;
 	js = NULL;
 
+	curr_tree = root_tree;
+	json_print_tree();
 	return (0);
 }

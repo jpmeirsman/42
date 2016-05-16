@@ -313,7 +313,7 @@ int				my_key_on_maintain_funct(int keycode, t_data *data)
 	else if (keycode == 45)
 	{
 		clear_canvas(data);
-		data->scene_rot.y = pi;
+		data->scene_rot.y = 0;
 		render_fdf(data);
 		print_fdf(data);
 		switch_buffer(data);

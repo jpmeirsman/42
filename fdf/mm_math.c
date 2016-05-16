@@ -1,7 +1,7 @@
 #include "mm_math.h"
 #include "mm_basic.h"
 
-t_color4			new_color4(short r, short g, short b, short a)
+t_color4			new_color4(short a, short r, short g, short b)
 {
 	t_color4		tc;
 
