@@ -14,8 +14,8 @@ typedef struct			s_json
 
 void		json_indent();
 void		json_get_object();
-void		json_get_true();
-void		json_get_false();
+void		json_get_boolean(short bl);
+//void		json_get_false();
 void		json_get_array();
 void		json_get_string();
 void		json_get_number(char first_digit);
