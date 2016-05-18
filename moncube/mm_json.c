@@ -13,74 +13,6 @@
  * 8 : null
 */
 
-typedef struct					s_json_value
-{
-	short						type_value;
-	void						*value;
-}								t_json_value;
-
-typedef struct					s_json_string
-{
-	char						*s;;
-}								t_json_string;
-
-typedef struct					s_json_number
-{
-	double						nb;;
-}								t_json_number;
-
-typedef struct					s_json_boolean
-{
-	short						bl;
-}								t_json_boolean;
-
-typedef struct					s_json_null
-{
-	void						*p;
-}								t_json_null;
-
-typedef struct					s_json_array
-{
-	void						*value;
-	struct s_json_array			*next;
-	struct s_json_array			*last;
-}								t_json_array;
-
-typedef struct					s_json_object
-{
-	char						*s;
-	void						*value;
-	struct s_json_object		*next;
-	struct s_json_object		*last;
-}								t_json_object;
-
-typedef struct					s_json_list
-{
-	short						type_value;
-	struct s_json_list			*next;
-	struct s_json_list			*last;
-	struct s_json_tree			*leaf;
-}								t_json_list;
-
-typedef struct					s_json_tree
-{
-	short						type_value;
-	void						*value;
-	struct s_json_tree			*first;
-	struct s_json_tree			*last;
-	struct s_json_tree			*next;
-	struct s_json_tree			*previous;
-	struct s_json_tree			*parent;
-	struct s_json_tree			*child;
-}								t_json_tree;
-
-typedef struct					s_json_pushpop
-{
-	short						type_value;
-	void						*value;
-	struct s_json_pushpop		*first;
-}								t_json_pushpop;
-
 	int				indent;
 	long			file_size;
 	long			file_pos;
@@ -672,7 +604,7 @@ void				*json_search_item(char *s, short type_value)
 
 }
 
-int					json_print(t_json *js, char * file_name)
+int					json_load(t_data *data, char * file_name)
 {
 	int					fd;
 	char				c;
@@ -686,7 +618,10 @@ int					json_print(t_json *js, char * file_name)
 	int					uv_count;
 	int					vertices_step;
 	int					faces_count;
+	char				*name;
 
+	name = malloc(100);
+	strcpy(name, "Cube");
 	indent = 0;
 	if ((fd = open(file_name, O_RDONLY)) <= 0)
 		return (-1);
@@ -711,31 +646,27 @@ int					json_print(t_json *js, char * file_name)
 //	json_print_token();
 
 // Recherche d'un objet dans la liste
-	vertices_count = *(double *) json_search_item("meshes Cube verticesCount", 6);
+	vertices_count = *(double *) json_search_item("meshes Suzanne verticesCount", 6);
+	indices_count = *(double *) json_search_item("meshes Suzanne indexCount", 6);
+//	vertices_count = *(double *) json_search_item("meshes Cube verticesCount", 6);
+//	indices_count = *(double *) json_search_item("meshes Cube indexCount", 6);
+	faces_count = indices_count / 3;
+	data->my_meshes = new_meshes(1);
+//	data->my_meshes->m[0] = new_mesh("Cube", vertices_count, faces_count);
+	data->my_meshes->m[0] = new_mesh("Suzanne", vertices_count, faces_count);
+	data->my_meshes->m[0]->nb_vertices = vertices_count;
+	data->my_meshes->m[0]->nb_faces = faces_count;
 	printf("%d vertices\n", vertices_count);
-	indices_count = *(double *) json_search_item("meshes Cube indexCount", 6);
-	printf("%d indices\n", indices_count);
-	uv_count = *(double *) json_search_item("meshes Cube uvCount", 6);
+	printf("%d indices\n", indices_count / 3);
+//	uv_count = *(double *) json_search_item("meshes Cube uvCount", 6);
+	uv_count = *(double *) json_search_item("meshes Suzanne uvCount", 6);
 	printf("%d uvcount\n", uv_count);
-	tab_vertices = (double **) json_search_item("meshes Cube vertices", 3);
-	tab_indices = (double **) json_search_item("meshes Cube indices", 3);
-//	tab_vertices = (double *) json_search_item("meshes Suzanne vertices", 3);
-//	tab_indices = (double *) json_search_item("meshes Suzanne indices", 3);
+//	tab_vertices = (double **) json_search_item("meshes Cube vertices", 3);
+//	tab_indices = (double **) json_search_item("meshes Cube indices", 3);
+	tab_vertices = (double **) json_search_item("meshes Suzanne vertices", 3);
+	tab_indices = (double **) json_search_item("meshes Suzanne indices", 3);
 //	printf("%d indices\n", indices_count);
-	i = 0;
-	while (tab_vertices[i] != NULL)
-	{
-		printf("%le\t",(double) *tab_vertices[i]);
-		i++;
-	}
-	printf("\n");
-	i = 0;
-	while (tab_indices[i] != NULL)
-	{
-		printf("%le\t",(double) *tab_indices[i]);
-		i++;
-	}
-	printf("\n");
+data->bpp=1;
 
 	vertices_step = 1;
 	switch ((int) uv_count)
@@ -750,8 +681,27 @@ int					json_print(t_json *js, char * file_name)
 			vertices_step = 10;
 			break;
 	}
-	faces_count = indices_count / 3;
-js = NULL;
+	i = 0;
+//	while (tab_vertices[i] != NULL)
+	while (i < vertices_count)
+	{
+//		printf("%le\t",(double) *tab_vertices[i]);
+		data->my_meshes->m[0]->vertices[i].x = (double) * tab_vertices[i * vertices_step];
+		data->my_meshes->m[0]->vertices[i].y = (double) * tab_vertices[i * vertices_step + 1];
+		data->my_meshes->m[0]->vertices[i].z = (double) * tab_vertices[i * vertices_step + 2];
+		i++;
+	}
+		printf("%d\n",i);
+	i = 0;
+	while (i < faces_count)
+	{
+		data->my_meshes->m[0]->faces[i].a = (double) * tab_indices[i * 3];
+		data->my_meshes->m[0]->faces[i].b = (double) * tab_indices[i * 3 + 1];
+		data->my_meshes->m[0]->faces[i].c = (double) * tab_indices[i * 3 + 2];
+		i++;
+	}
+		printf("%d\n",i);
+
 	return (0);
 /*
 	print_bool2 = 0;

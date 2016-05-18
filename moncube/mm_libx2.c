@@ -155,7 +155,6 @@ void		clear_canvas(t_data *data)
 {
 	int		i;
 	int		j;
-
 	i = 0;
 	while (i < data->canvas_height)
 	{
@@ -169,15 +168,15 @@ void		clear_canvas(t_data *data)
 	}
 }
 
-void			drawing_loop(t_data *data, t_meshes *arr_mesh)
+void			drawing_loop(t_data *data)
 {
 	if (data->anime == 0)
 		return ;
 return;
-arr_mesh->m[0]->rotation.x += 0.01;
-arr_mesh->m[0]->rotation.y += 0.01;
+data->my_meshes->m[0]->rotation.x += 0.01;
+data->my_meshes->m[0]->rotation.y += 0.01;
 //printf("===%le\n",arr_mesh->m[0]->rotation.y);
-render(data, arr_mesh);
+render(data);
 }
 
 int				my_key_on_release_funct(int keycode, t_data *data)
@@ -230,228 +229,131 @@ int				my_key_on_maintain_funct(int keycode, t_data *data)
 {
 	if (keycode == 115)
 	{
-		clear_canvas(data);
 		data->ratio_cam -= data->step_cam;
-//		if (data->ratio_cam >0)
-//			data->ratio_cam = 0;
-		//data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		data->cam->position.z = data->ratio_cam;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 113)
 	{
-		clear_canvas(data);
 		data->ratio_cam += data->step_cam;
-//		if (data->ratio_cam >0)
-//			data->ratio_cam = 0;
-		//data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		data->cam->position.z = data->ratio_cam;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 100)
 	{
-		clear_canvas(data);
 		data->ratio_cam = data->ratio_init_cam;
-		//data->cam->position = set_vector3(0, 0, data->ratio_cam);
 		data->cam->position.z = data->ratio_cam;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 233)
 	{
-		clear_canvas(data);
 		data->scene_rot.x -= 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 38)
 	{
-		clear_canvas(data);
 		data->scene_rot.x += 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 34)
 	{
-		clear_canvas(data);
 		data->scene_rot.x = 0;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 39)
 	{
-		clear_canvas(data);
 		data->scene_rot.y += 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 40)
 	{
-		clear_canvas(data);
 		data->scene_rot.y -= 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 45)
 	{
-		clear_canvas(data);
 		data->scene_rot.y = pi;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 232)
 	{
-		clear_canvas(data);
 		data->scene_rot.z += 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 95)
 	{
-		clear_canvas(data);
 		data->scene_rot.z -= 0.01;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 231)
 	{
-		clear_canvas(data);
 		data->scene_rot.z = 0;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 114)
 	{
-		clear_canvas(data);
-		data->scene_pos.x -= 0.1 ;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		data->scene_pos.x -= 100 ;
+		render(data);
 		print_info(data);
 	}
 	else if (keycode == 116)
 	{
-		clear_canvas(data);
-		data->scene_pos.x += 0.1 ;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		data->scene_pos.x += 100 ;
+		render(data);
 		print_info(data);
 	}
 	else if (keycode == 121)
 	{
-		clear_canvas(data);
 		data->scene_pos.x = 0;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		render(data);
 		print_info(data);
 	}
 	else if (keycode == 102)
 	{
-		clear_canvas(data);
 		data->scene_pos.y += 0.1;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 103)
 	{
-		clear_canvas(data);
 		data->scene_pos.y -= 0.1;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 104)
 	{
-		clear_canvas(data);
 		data->scene_pos.y = 0;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 118)
 	{
-		clear_canvas(data);
 		data->scene_pos.z -= 0.1;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 98)
 	{
-		clear_canvas(data);
 		data->scene_pos.z += 0.1;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 110)
 	{
-		clear_canvas(data);
 		data->scene_pos.z = 0;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
 		print_info(data);
 	}
 	else if (keycode == 119)
 	{
-		clear_canvas(data);
 		data->coef_elev -= data->step_elev;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		render(data);
 		print_info(data);
 	}
 	else if (keycode == 120)
 	{
-		clear_canvas(data);
 		data->coef_elev += data->step_elev;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		render(data);
 		print_info(data);
 	}
 	else if (keycode == 99)
 	{
-		clear_canvas(data);
 		data->coef_elev = data->coef_init_elev;
-		render_fdf(data);
-		print_fdf(data);
-		switch_buffer(data);
+		render(data);
 		print_info(data);
 	}
 	return (0);
@@ -484,7 +386,7 @@ int				my_loop_funct(t_data *data)
 clear_canvas(data);
 data->my_meshes->m[0]->rotation.x += 0.01;
 data->my_meshes->m[0]->rotation.y += 0.01;
-render(data, data->my_meshes);
+render(data);
 switch_buffer(data);
 	return (0);
 }

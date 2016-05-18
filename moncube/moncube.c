@@ -65,25 +65,28 @@ void		print_my_cube(t_data *data)
 {
 	float			center_x;
 	float			center_y;
-	t_meshes		*my_meshes;
+//	t_meshes		*my_meshes;
 
-//printf("zzz\n");
+	json_load(data,"monkey.babylon");
 	center_x = (float) data->canvas_width / 2;
 	center_y = (float) data->canvas_height / 2;
-//	my_meshes = malloc(sizeof(t_meshes));
-	my_meshes = new_meshes(1);
-	data->my_meshes = my_meshes;
-	my_meshes->m[0] = new_cube("Mon Cube");
+//	my_meshes = new_meshes(1);
+//	data->my_meshes = my_meshes;
+//	my_meshes->m[0] = new_cube("Mon Cube");
 	data->cam = set_cam(zero_vector3(), zero_vector3());
+	data->ratio_init_cam = 10;
+	data->ratio_cam = data->ratio_init_cam;
+	data->step_cam = 1;
 	data->cam->position = set_vector3(0, 0 ,10);
 	data->cam->target = set_vector3(0, 0 ,0);
-	my_meshes->m[0]->rotation.x += 0.01;
-	my_meshes->m[0]->rotation.y += 0.01;
+	data->my_meshes->m[0]->rotation.x += 0.01;
+	data->my_meshes->m[0]->rotation.y += 0.01;
 
 	data->anime = 1;
+printf("aaa\n");
 printf("\n");
 //	render(data, arr_mesh);
-	drawing_loop(data, my_meshes);
+	drawing_loop(data);
 }
 
 //int main(int argc, char **argv)
@@ -91,10 +94,7 @@ int main()
 {
 	int			retour;
 	t_data		data;
-	t_json		js;
 
-	js.a= 0;
-	json_print(&js,"monkey.babylon");
 //	return (0);
 /*
 	if ( !(argc == 2 || argc == 3))

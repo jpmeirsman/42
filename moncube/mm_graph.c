@@ -93,7 +93,7 @@ void				printcube(t_mesh *my_cube)
 				my_cube->faces[i].b,my_cube->faces[i].c);
 }
 
-void 			render(t_data *data, t_meshes *meshes)
+void 			render(t_data *data)
 {
 	t_matrix	viewMatrix;
 	t_matrix	projectionMatrix;
@@ -104,15 +104,16 @@ void 			render(t_data *data, t_meshes *meshes)
 	long long	indexfaces;
 	t_mesh		*cMesh;
 	t_vector2	projectedPoint;
-	t_vector2	tv[12];
+	t_vector2	*tv;
 
 	viewMatrix = look_at_lh_matrix(data->cam->position, data->cam->target, 
 		up_vector3());
 	projectionMatrix = perspective_fov_lh_matrix(0.78, 
 		data->canvas_width / data->canvas_height, 0.01, 1);
-	for (index = 0; index < meshes->length; index++)
+	for (index = 0; index < data->my_meshes->length; index++)
 	{
-		cMesh = meshes->m[index];
+		cMesh = data->my_meshes->m[index];
+		tv = malloc(sizeof(t_vector2) * cMesh->nb_vertices);
 		worldMatrix = multiply_matrix(rot_yaw_pitch_roll_matrix(
 			cMesh->rotation.y, cMesh->rotation.x, cMesh->rotation.z),
 			translation_matrix(cMesh->position.x, cMesh->position.y, 
@@ -140,6 +141,7 @@ void 			render(t_data *data, t_meshes *meshes)
 		fdf_bline(data, tv[2].x, tv[2]. y,tv[7].x, tv[7].y, 0x00FFFFFF);
 		fdf_bline(data, tv[3].x, tv[3]. y,tv[6].x, tv[6].y, 0x00FFFFFF);
 */
+
 		for (indexfaces = 0; indexfaces < cMesh->nb_faces; indexfaces++)
 		{
 			fdf_bline(data,

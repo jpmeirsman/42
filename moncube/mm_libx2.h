@@ -9,7 +9,7 @@
 
 void		print_menu(t_data *data);
 void		print_info(t_data *data);
-void		drawing_loop(t_data *data, t_meshes *arr_mesh);
+void		drawing_loop(t_data *data);
 /*
 void		switch_buffer(t_data *data);
 */
