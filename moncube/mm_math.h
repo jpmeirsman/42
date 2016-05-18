@@ -25,9 +25,9 @@ typedef struct		s_vector2
 
 typedef struct		s_face
 {
-	double			a;
-	double			b;
-	double			c;
+	int				a;
+	int				b;
+	int				c;
 }					t_face;
 
 typedef struct		s_matrix
@@ -42,7 +42,8 @@ typedef struct		s_mesh
 	t_face			*faces;
 	t_vector3		rotation;
 	t_vector3		position;
-	long long		length;
+	long long		nb_vertices;//length;
+	long long				nb_faces;//length;
 }					t_mesh;
 
 typedef struct		s_meshes

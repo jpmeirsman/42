@@ -65,7 +65,7 @@ t_mesh				*new_cube(char *name)
 	my_cube->vertices[5] = set_vector3( 1,  1, -1);
 	my_cube->vertices[6] = set_vector3( 1, -1, -1);
 	my_cube->vertices[7] = set_vector3(-1, -1, -1);
-	my_cube->length = 8;
+	my_cube->nb_vertices = 8;
 	put_face(&my_cube->faces[0],  0, 1, 2);
 	put_face(&my_cube->faces[1],  1, 2, 3);
 	put_face(&my_cube->faces[2],  1, 3, 6);
@@ -78,6 +78,7 @@ t_mesh				*new_cube(char *name)
 	put_face(&my_cube->faces[9],  0, 4, 7);
 	put_face(&my_cube->faces[10], 4, 5, 6);
 	put_face(&my_cube->faces[11], 4, 6, 7);
+	my_cube->nb_faces = 12;
 	return my_cube;
 }
 
@@ -88,7 +89,7 @@ void				printcube(t_mesh *my_cube)
 		printf("Vertex n° %d : x=%f, y=%f, z=%f\n",i,my_cube->vertices[i].x,
 				my_cube->vertices[i].y,my_cube->vertices[i].z);
 	for(int i = 0 ; i < 12; i++)
-		printf("Face n° %d : A=%f, B=%f, C=%f\n",i,my_cube->faces[i].a,
+		printf("Face n° %d : A=%d, B=%d, C=%d\n",i,my_cube->faces[i].a,
 				my_cube->faces[i].b,my_cube->faces[i].c);
 }
 
@@ -100,6 +101,7 @@ void 			render(t_data *data, t_meshes *meshes)
 	t_matrix	transformMatrix;
 	long long	index;
 	long long	indexvertices;
+	long long	indexfaces;
 	t_mesh		*cMesh;
 	t_vector2	projectedPoint;
 	t_vector2	tv[12];
@@ -117,14 +119,14 @@ void 			render(t_data *data, t_meshes *meshes)
 			cMesh->position.z));
 			transformMatrix = multiply_matrix(worldMatrix,multiply_matrix(
 				viewMatrix,projectionMatrix));
-		for (indexvertices = 0; indexvertices < cMesh->length; indexvertices++)
+		for (indexvertices = 0; indexvertices < cMesh->nb_vertices; indexvertices++)
 		{
 			projectedPoint = project_device(data, 
 				cMesh->vertices[indexvertices], transformMatrix);
 //			draw_point_device (data, projectedPoint);
 			tv[indexvertices] = projectedPoint;
 		}
-
+/*
 		fdf_bline(data, tv[0].x, tv[0]. y,tv[1].x, tv[1].y, 0x00FFFFFF);
 		fdf_bline(data, tv[1].x, tv[1]. y,tv[3].x, tv[3].y, 0x00FFFFFF);
 		fdf_bline(data, tv[3].x, tv[3]. y,tv[2].x, tv[2].y, 0x00FFFFFF);
@@ -137,7 +139,26 @@ void 			render(t_data *data, t_meshes *meshes)
 		fdf_bline(data, tv[1].x, tv[1]. y,tv[5].x, tv[5].y, 0x00FFFFFF);
 		fdf_bline(data, tv[2].x, tv[2]. y,tv[7].x, tv[7].y, 0x00FFFFFF);
 		fdf_bline(data, tv[3].x, tv[3]. y,tv[6].x, tv[6].y, 0x00FFFFFF);
-
+*/
+		for (indexfaces = 0; indexfaces < cMesh->nb_faces; indexfaces++)
+		{
+			fdf_bline(data,
+				tv[cMesh->faces[indexfaces].a].x,
+				tv[cMesh->faces[indexfaces].a].y,
+				tv[cMesh->faces[indexfaces].b].x,
+				tv[cMesh->faces[indexfaces].b].y, 0x00FFFFFF);
+			fdf_bline(data,
+				tv[cMesh->faces[indexfaces].b].x,
+				tv[cMesh->faces[indexfaces].b].y,
+				tv[cMesh->faces[indexfaces].c].x,
+				tv[cMesh->faces[indexfaces].c].y, 0x00FFFFFF);
+			fdf_bline(data,
+				tv[cMesh->faces[indexfaces].c].x,
+				tv[cMesh->faces[indexfaces].c].y,
+				tv[cMesh->faces[indexfaces].a].x,
+				tv[cMesh->faces[indexfaces].a].y, 0x00FFFFFF);
+			
+		}
 	}
 }
 

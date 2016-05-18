@@ -483,7 +483,8 @@ t_mesh				*new_mesh(char *name, long long vertCount, long long nbface)
 	result->faces = (t_face *) malloc(sizeof(t_face) * nbface);
 	result->rotation = zero_vector3();
 	result->position = zero_vector3();
-	result->length = vertCount;
+	result->nb_vertices = vertCount;
+	result->nb_faces = nbface;
 	return (result);
 }
 

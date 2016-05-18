@@ -605,7 +605,7 @@ void				*json_found_token(t_json_list *curr, short type_value)
 				count++;
 				curr = curr->next;
 			}
-			printf("%d==\n", nb / 3);
+//			printf("%d==\n", nb / 3);
 			ptr = tab;
 			break;
 		case 4:
@@ -683,6 +683,9 @@ int					json_print(t_json *js, char * file_name)
 	double				**tab_vertices;
 	double				**tab_indices;
 	int					i;
+	int					uv_count;
+	int					vertices_step;
+	int					faces_count;
 
 	indent = 0;
 	if ((fd = open(file_name, O_RDONLY)) <= 0)
@@ -708,10 +711,12 @@ int					json_print(t_json *js, char * file_name)
 //	json_print_token();
 
 // Recherche d'un objet dans la liste
-	vertices_count = *(double *) json_search_item("meshes subMeshes verticesCount", 6);
+	vertices_count = *(double *) json_search_item("meshes Cube verticesCount", 6);
 	printf("%d vertices\n", vertices_count);
-	indices_count = *(double *) json_search_item("meshes subMeshes indexCount", 6);
+	indices_count = *(double *) json_search_item("meshes Cube indexCount", 6);
 	printf("%d indices\n", indices_count);
+	uv_count = *(double *) json_search_item("meshes Cube uvCount", 6);
+	printf("%d uvcount\n", uv_count);
 	tab_vertices = (double **) json_search_item("meshes Cube vertices", 3);
 	tab_indices = (double **) json_search_item("meshes Cube indices", 3);
 //	tab_vertices = (double *) json_search_item("meshes Suzanne vertices", 3);
@@ -732,7 +737,20 @@ int					json_print(t_json *js, char * file_name)
 	}
 	printf("\n");
 
-
+	vertices_step = 1;
+	switch ((int) uv_count)
+	{
+		case 0:
+			vertices_step = 6;
+			break;
+		case 1:
+			vertices_step = 8;
+			break;
+		case 2:
+			vertices_step = 10;
+			break;
+	}
+	faces_count = indices_count / 3;
 js = NULL;
 	return (0);
 /*

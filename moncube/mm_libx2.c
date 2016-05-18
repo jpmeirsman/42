@@ -176,7 +176,7 @@ void			drawing_loop(t_data *data, t_meshes *arr_mesh)
 return;
 arr_mesh->m[0]->rotation.x += 0.01;
 arr_mesh->m[0]->rotation.y += 0.01;
-printf("===%le\n",arr_mesh->m[0]->rotation.y);
+//printf("===%le\n",arr_mesh->m[0]->rotation.y);
 render(data, arr_mesh);
 }
 

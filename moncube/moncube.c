@@ -95,7 +95,7 @@ int main()
 
 	js.a= 0;
 	json_print(&js,"monkey.babylon");
-	return (0);
+//	return (0);
 /*
 	if ( !(argc == 2 || argc == 3))
 		return (-1);
